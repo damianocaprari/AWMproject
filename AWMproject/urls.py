@@ -15,8 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.utils.translation import gettext_lazy
+
+###
+# Overrides of default values of admin.site
+###
+# Text to put at the end of each page's <title>.
+admin.site.site_title = gettext_lazy('AWMproject site admin')
+
+# Text to put in each page's <h1>.
+admin.site.site_header = gettext_lazy('AWMproject administration')
+
+# Text to put at the top of the admin index page.
+#admin.site.index_title = gettext_lazy('Site administration')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('storefront/', include('storefront.urls'))
+    path('storefront/', include('storefront.urls', namespace='sf')),
 ]

@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
-    <title>Title</title>
+    {% block title %}{% endblock %} 
+    {% block meta %}{% endblock %} 
+    {% block style_head %}{% endblock %} 
+    {% block js_head %}{% endblock %} 
 </head>
 <body>
-HELLO WORLD storefront
+    {% block style_body_start %}{% endblock %} 
+    {% block js_body_start %}{% endblock %} 
+
+    {% block header %}{% endblock %} 
+    {% block main %}{% endblock %} 
+    {% block sections %}{% endblock %} 
+    {% block aside %}{% endblock %} 
+    {% block footer %}{% endblock %} 
+    {% block modals %}{% endblock %} 
+
+    {% block js_body_end %}{% endblock %} 
 </body>
 </html>
