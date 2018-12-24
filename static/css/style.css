@@ -1,0 +1,75 @@
+/* color palette */
+.primary-1 {
+    background-color: #28292b !important;
+    color: #ffffff;
+}
+
+nav.primary-1 li:hover {
+    background-color: #505154;
+}
+
+.primary-2 {
+    background-color: #505154 !important;
+}
+
+.primary-3 {
+    background-color: #000000 !important;
+}
+
+.secondary-1 {
+    background-color: #e50000 !important;
+    color: #ffffff;
+}
+
+.secondary-2 {
+    background-color: #ff5433 !important;
+}
+
+.secondary-3 {
+    background-color: #aa0000 !important;
+}
+
+body,
+.background {
+    background-color: #F5F4F6 !important;
+}
+
+.surface {
+    background-color: #E0E1E0 !important;
+}
+
+.divider-color {
+    border-color: #BDBDBD !important;
+}
+
+body,
+.text-primary {
+    color: #212121 !important;
+}
+
+.text-accent {
+    color: #e50000 !important;
+}
+
+.text-secondary {
+    color: #757575 !important;
+}
+
+.on-primary {
+    color: #ffffff !important;
+}
+
+.on-secondary {
+    color: #ffffff !important;
+}
+
+.tabs {
+    display: flex;
+}
+
+.tabs .tab {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+}

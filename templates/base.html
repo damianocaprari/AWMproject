@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		{% block meta %}
+			<meta charset="UTF-8">
+			<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		{% endblock %}
+
+		{% block title %}
+			<title>{{ title }} | {{ site_title|default:_('AWMproject') }}</title>
+		{% endblock %}
+
+		{% block style_head %}
+			<link rel="stylesheet" type="text/css" href="{% static "/css/materialize.min.css" %}" media="screen,projection">
+			<link rel="stylesheet" type="text/css" href="{% static "/css/materialize_icons.css" %}">
+			<link rel="stylesheet" type="text/css" href="{% static "/css/style.css" %}">
+		{% endblock %}
+		{% block extra_style %}{% endblock %}
+		{% block js_head %}{% endblock %}
+		{% block extrahead %}{% endblock %}
+	</head>
+
+	{% block body_block %}
+		<body class="{% block bodyclass %}{% endblock %}">
+			{% block js_body_start %}{% endblock %}
+
+			<nav class="nav-extended primary-1" role="navigation">
+				<div class="nav-wrapper container">
+					<!-- desktop menu -->
+					<a id="logo-container" href="#" class="brand-logo">Logo</a>
+					<ul class="right hide-on-med-and-down">
+						<li><a href="#">Log In</a></li>
+						<li><a href="#">Sign In</a></li>
+					</ul>
+
+					<!-- mobile menu -->
+
+					<a href="#" data-target="nav-mobile" class="sidenav-trigger">
+						<i class="material-icons">menu</i>
+					</a>
+				</div>
+
+				<div class="nav-content primary-2">
+					<div class="container">
+						<ul class="tabs tabs-transparent hide-on-med-and-down">
+							<li class="tab"><a href="{% url 'spells:index' %}">Spells</a></li>
+							<li class="tab"><a href="#">Navbar2.2</a></li>
+							<li class="tab"><a href="#">Navbar2.3</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+			<ul id="nav-mobile" class="sidenav">
+				<li><a href="#">Log In</a></li>
+				<li><a href="#">Sign In</a></li>
+				<li class="divider" tabindex="-1"></li>
+				<li><a href="{% url 'spells:index' %}">Spells</a></li>
+				<li><a href="#">Navbar2.2</a></li>
+				<li><a href="#">Navbar2.3</a></li>
+			</ul>
+
+			<div class="section" id="index-banner">
+				<div class="container">
+					<br><br>
+					<h1 class="header center text-accent">Starter Template</h1>
+					<div class="row center">
+						<h5 class="header col s12 text-secondary">A modern responsive front-end framework based on Material Design</h5>
+					</div>
+					<div class="row center">
+						<a href="#" class="btn-large waves-effect waves-light secondary-1">Get Started</a>
+					</div>
+					<br><br>
+				</div>
+			</div>
+
+			{% block sezionedariempire %}SEZIONE DA RIEMPIRE{% endblock %}
+
+			<div class="container">
+				<div class="section">
+					<!--	 Icon Section	 -->
+					<div class="row">
+						<div class="col s12 m4">
+							<div class="icon-block">
+								<h2 class="center text-accent"><i class="material-icons">flash_on</i></h2>
+								<h5 class="center">Speeds up development</h5>
+								<p class="text-secondary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur condimentum iaculis tortor, quis tincidunt orci imperdiet vel. Quisque turpis risus, viverra eu nisl vitae, aliquam gravida lorem. Nunc quis tellus id urna vulputate faucibus. Nam vehicula turpis et nisl suscipit maximus. Vestibulum id rhoncus purus. Cras ante neque, aliquam egestas interdum ut, vehicula ornare lorem. Mauris in ornare sapien, ac porttitor massa. Maecenas neque leo, ultricies ac mauris vel, posuere commodo felis. Etiam eleifend sapien quis augue molestie efficitur. Mauris pulvinar euismod quam, nec dictum orci viverra eget. Sed ullamcorper mattis nunc vel molestie.</p>
+							</div>
+						</div>
+
+						<div class="col s12 m4">
+							<div class="icon-block">
+								<h2 class="center text-accent"><i class="material-icons">group</i></h2>
+								<h5 class="center">User Experience Focused</h5>
+								<p class="text-secondary">Nam vehicula turpis et nisl suscipit maximus. Vestibulum id rhoncus purus. Cras ante neque, aliquam egestas interdum ut, vehicula ornare lorem. Mauris in ornare sapien, ac porttitor massa. Maecenas neque leo, ultricies ac mauris vel, posuere commodo felis. Etiam eleifend sapien quis augue molestie efficitur. Mauris pulvinar euismod quam, nec dictum orci viverra eget. Sed ullamcorper mattis nunc vel molestie.</p>
+							</div>
+						</div>
+
+						<div class="col s12 m4">
+							<div class="icon-block">
+								<h2 class="center text-accent"><i class="material-icons">settings</i></h2>
+								<h5 class="center">Easy to work with</h5>
+								<p class="text-secondary">Curabitur condimentum iaculis tortor, quis tincidunt orci imperdiet vel. Quisque turpis risus, viverra eu nisl vitae, aliquam gravida lorem. Nunc quis tellus id urna vulputate faucibus. Nam vehicula turpis et nisl suscipit maximus. Vestibulum id rhoncus purus.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br><br>
+			</div>
+
+			<footer class="page-footer primary-2">
+				<div class="container">
+					<div class="row">
+						<div class="col l6 s12">
+							<h5 class="">Company Bio</h5>
+							<p class="">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+						</div>
+						<div class="col l3 s12">
+							<h5 class="">Settings</h5>
+							<ul>
+								<li><a class="" href="#!">Link 1</a></li>
+								<li><a class="" href="#!">Link 2</a></li>
+								<li><a class="" href="#!">Link 3</a></li>
+								<li><a class="" href="#!">Link 4</a></li>
+							</ul>
+						</div>
+						<div class="col l3 s12">
+							<h5 class="">Connect</h5>
+							<ul>
+								<li><a class="" href="#!">Link 1</a></li>
+								<li><a class="" href="#!">Link 2</a></li>
+								<li><a class="" href="#!">Link 3</a></li>
+								<li><a class="" href="#!">Link 4</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="footer-copyright primary-1">
+					<div class="container">
+						Made by <a class="" href="#!">Damiano Caprari</a>
+					</div>
+				</div>
+			</footer>
+
+			<div class="drag-target"></div>
+
+			{% block js_body_end %}
+				<script type="text/javascript" src="{% static "/js/jquery.3.3.1.min.js" %}"></script>
+				<script type="text/javascript" src="{% static "/js/materialize.min.js" %}"></script>
+				<script type="text/javascript" src="{% static "/js/init.js" %}"></script>
+			{% endblock %}
+		</body>
+	{% endblock %}
+</html>

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extrastyle %}
+    {{ block.super }}
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}
+    {{ block.super }} dashboard
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    HOMEPAGE di AWMproject
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        <h2>sidebar</h2>
+        <h3>sidebar-2</h3>
+    </div>
+</div>
+{% endblock %}

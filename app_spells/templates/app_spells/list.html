@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block sezionedariempire %}
+
+	CAMBIA USANDO LE LISTE DI MATERIALIZE
+	FAI ANCHE LA PAGINA DI DETAIL
+
+	<ul>
+		{% for spell in spells %}
+			<li>{{ spell.name }}</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

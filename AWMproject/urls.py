@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.utils.translation import gettext_lazy
+from . import views
 
 ###
 # Overrides of default values of admin.site
@@ -29,8 +30,13 @@ admin.site.site_header = gettext_lazy('AWMproject administration')
 # Text to put at the top of the admin index page.
 #admin.site.index_title = gettext_lazy('Site administration')
 
+# URL for the "View site" link at the top of each admin page.
+#admin.site.site_url = '/storefront/'
+
 
 urlpatterns = [
+    path('', views.index, name='root'),
     path('admin/', admin.site.urls),
-    path('storefront/', include('storefront.urls', namespace='sf')),
+    path('spells/', include('app_spells.urls', namespace='spells')),
+    path('storefront/', include('app_storefront.urls', namespace='storefront')),
 ]
