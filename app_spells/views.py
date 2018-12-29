@@ -3,7 +3,7 @@ from app_spells.models import Spell
 
 
 def index(request):
-    spells = Spell.objects.order_by('level')
+    spells = Spell.objects.all()
     context = {
         'spells': spells,
     }
