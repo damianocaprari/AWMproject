@@ -41,9 +41,9 @@ PREREQ_APPS = [
 
 PROJECT_APPS = [
     'rest_framework',
-    'app_storefront.apps.StorefrontConfig',
+    'app_characterclasses.apps.CharacterClassesConfig',
     'app_spells.apps.SpellsConfig',
-    'app_classes.apps.ClassesConfig',
+    'app_api.apps.ApiConfig',
 ]
 
 INSTALLED_APPS = PROJECT_APPS + PREREQ_APPS
@@ -140,3 +140,9 @@ STATICFILES_DIRS = [
 
 # for static files tied to apps
 STATIC_URL = '/static/'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}

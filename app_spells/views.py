@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from app_spells.models import Spell
+
 
 def index(request):
     spells = Spell.objects.order_by('level')

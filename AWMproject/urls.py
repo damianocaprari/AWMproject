@@ -38,5 +38,6 @@ urlpatterns = [
     path('', views.index, name='root'),
     path('admin/', admin.site.urls),
     path('spells/', include('app_spells.urls', namespace='spells')),
-    path('storefront/', include('app_storefront.urls', namespace='storefront')),
+    path('api/', include('rest_framework.urls')),
+    path('api/', include('app_api.urls', namespace='api')),
 ]

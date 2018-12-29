@@ -1,13 +1,40 @@
 {% extends "base.html" %}
 
-{% block sezionedariempire %}
+{% block section %}
 
-	CAMBIA USANDO LE LISTE DI MATERIALIZE
-	FAI ANCHE LA PAGINA DI DETAIL
+	<div class="section">
+		<div class="container">
+			<h1 class="header center text-accent">Spell List</h1>
+			<div class="row center">
+				<h5 class="header col s12 text-secondary">//TODO aggiungi dei filtri di ricerca qui</h5>
+			</div>
+			<div class="row center">
+				<a href="#" class="btn-large waves-effect waves-light secondary-1">SEARCH</a>
+			</div>
+			<br><br>
+		</div>
+	</div>
 
-	<ul>
+	<ul class="collapsible expandable popout">
 		{% for spell in spells %}
-			<li>{{ spell.name }}</li>
+			<li>
+				<div class="collapsible-header">
+					<i class="material-icons">flare</i>{{ spell.get_level_display }} - {{ spell.name }}
+				</div>
+				<div class="collapsible-body">
+					<span>{{ spell.description }}</span>
+				</div>
+			</li>
 		{% endfor %}
 	</ul>
+
+	  <ul class="pagination">
+    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+    <li class="active"><a href="#!">1</a></li>
+    <li class="waves-effect"><a href="#!">2</a></li>
+    <li class="waves-effect"><a href="#!">3</a></li>
+    <li class="waves-effect"><a href="#!">4</a></li>
+    <li class="waves-effect"><a href="#!">5</a></li>
+    <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+  </ul>
 {% endblock %}

@@ -2,7 +2,9 @@
   $(function(){
 
     $('.sidenav').sidenav();
-    $(".dropdown-trigger").dropdown();
+    $('.dropdown-trigger').dropdown();
+    $('.collapsible').collapsible();
+    $('.collapsible.expandable').collapsible({"accordion":false});
 
   }); // end of document ready
 })(jQuery); // end of jQuery name space
