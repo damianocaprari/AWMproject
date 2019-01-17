@@ -23,7 +23,7 @@ class Spell(models.Model):
         ('1_MINUTE', '1 Minute'),
         ('10_MINUTES', '10 Minutes'),
         ('1_HOUR', '1 Hour'),
-        ('2_HOURS', '2 Hour'),
+        ('2_HOURS', '2 Hours'),
         ('8_HOURS', '8 Hours'),
         ('24_HOURS', '24 Hours'),
         ('7_DAYS', '7 Days'),
@@ -107,6 +107,7 @@ class Spell(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.level, self.name)
 
+    # Validate the model as a whole
     def clean(self):
         if self.casting_time == 'OTHER':
             if self.casting_time_other is None:
