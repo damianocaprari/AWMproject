@@ -44,6 +44,7 @@ PROJECT_APPS = [
     'app_characterclasses.apps.CharacterClassesConfig',
     'app_spells.apps.SpellsConfig',
     'app_api.apps.ApiConfig',
+    'app_conditions.apps.ConditionsConfig',
 ]
 
 INSTALLED_APPS = PROJECT_APPS + PREREQ_APPS
