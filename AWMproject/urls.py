@@ -40,4 +40,5 @@ urlpatterns = [
     path('spells/', include('app_spells.urls', namespace='spells')),
     path('api/', include('rest_framework.urls')),
     path('api/', include('app_api.urls', namespace='api')),
+    path('conditions/', include('app_conditions.urls', namespace='conditions')),
 ]
