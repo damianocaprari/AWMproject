@@ -1,4 +1,16 @@
-/* color palette */
+/* start - make the footer sticky to the bottom even when the page is really short */
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+/* end */
+
+/* start - site main color palette */
 .primary-1 {
     background-color: #28292b !important;
     color: #ffffff;
@@ -73,3 +85,4 @@ body,
     -ms-flex-positive: 1;
     flex-grow: 1;
 }
+/* end */
