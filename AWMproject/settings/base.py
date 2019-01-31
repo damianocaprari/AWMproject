@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -66,9 +66,12 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join('', 'templates'),
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'storefront/templates'),
+            os.path.join(BASE_DIR, 'app_api/templates'),
+            os.path.join(BASE_DIR, 'app_api/templates'),
+            os.path.join(BASE_DIR, 'app_characterclasses/templates'),
+            os.path.join(BASE_DIR, 'app_conditions/templates'),
+            os.path.join(BASE_DIR, 'app_spells/templates'),
              ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -114,7 +117,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_URL = '/storefront/login/'
+#TODO
+#LOGIN_URL = '/storefront/login/'
 
 
 # Internationalization
@@ -136,14 +140,15 @@ USE_TZ = True
 
 # for static files NOT tied to apps
 STATICFILES_DIRS = [
-    os.path.join('', 'static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 # for static files tied to apps
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20,
 }
