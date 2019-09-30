@@ -41,4 +41,5 @@ urlpatterns = [
     path('api/', include('rest_framework.urls')),
     path('api/', include('app_api.urls', namespace='api')),
     path('conditions/', include('app_conditions.urls', namespace='conditions')),
+    path('', )
 ]
