@@ -3,52 +3,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-class Spell_SourceBook_Model
-
-class Spell_Tag_Model(models.Model):
-    tag = models.CharField(max_length=50, blank=True, null=True)
-
-class Spell_AdditionalInfo_Model(models.Model):
-    CONE = 'CONE'
-    CUBE = 'CUBE'
-    CYLINDER = 'CYLINDER'
-    LINE = 'LINE'
-    SPHERE = 'SPHERE'
-    SQUARE = 'SQUARE'
-    AOE_TYPE_CHOICES = (
-      (CONE, 'Cone'),
-      (CUBE, 'Cube'),
-      (CYLINDER, 'Cylinder')
-      (LINE, 'Line'),
-      (SPHERE, 'Sphere'),
-      (SQUARE, 'Square'),
-    )
-
-    STR = 'STR'
-    CON = 'CON'
-    DEX = 'DEX'
-    INT = 'INT'
-    WIS = 'WIS'
-    CHA = 'CHA'
-    SAVE_TYPE_CHOICES = (
-      (STR, STR),
-      (CON, CON),
-      (DEX, DEX),
-      (INT, INT),
-      (WIS, WIS),
-      (CHA, CHA),
-    )
-
-    avatar = models.ImageField(blank=True, null=True, upload_to='avatars')
-    aoe_type = models.CharField(max_length=50, choices=AOE_TYPE_CHOICES, blank=True, null=True)
-    aoe_size = models.PositiveSmallIntegerField(null=True, blank=True)
-    part_of_weapon_attack = models.BooleanField(default=False)
-    save_type = models.CharField(max_length=50, choices=SAVE_TYPE_CHOICES, blank=True, null=True)
-    source_book             = models.CharField(max_length=5, choices=SOURCE_BOOK_CHOICES, null=True, blank=True)
-    source_book_other       = models.CharField(max_length=50, null=True, blank=True)
-    source_page_number      = models.PositiveSmallIntegerField(null=True, blank=True)
-    spell_list              = models.ManyToManyField(CharacterClass, related_name='spells')
-    tags = models.ManyToManyField(Spell_Tag_Model, related_name='spell_additional_info', blank=True, null=True)
 
 class Spell_Model(models.Model):
     LEVEL_CHOICES = (
@@ -62,6 +16,25 @@ class Spell_Model(models.Model):
       (7, '7th'),
       (8, '8th'),
       (9, '9th'),
+    )
+
+    ABJURATION = 'Abjuration'
+    CONJURATION = 'Conjuration'
+    DIVINATION = 'Divination'
+    ENCHANTMENT = 'Enchantment'
+    EVOCATION = 'Evocation'
+    ILLUSION = 'Illusion'
+    NECROMANCY = 'Necromancy'
+    TRANSMUTATION = 'Transmutation'
+    SCHOOL_CHOICES = (
+        (ABJURATION, 'Abjuration'),
+        (CONJURATION, 'Conjuration'),
+        (DIVINATION, 'Divination'),
+        (ENCHANTMENT, 'Enchantment'),
+        (EVOCATION, 'Evocation'),
+        (ILLUSION, 'Illusion'),
+        (NECROMANCY, 'Necromancy'),
+        (TRANSMUTATION, 'Transmutation'),
     )
 
     ACTION = 'ACTION'
@@ -120,10 +93,14 @@ class Spell_Model(models.Model):
       (DAY, 'Day'),
     )
 
-    name = models.CharField(max_length=256, min_length=2)
+    author = models.ForeignKey('auth.User', related_name='spells_v2', on_delete=models.SET_NULL, null=True)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    name = models.CharField(max_length=256)
     version = models.CharField(max_length=256, null=True, blank=True)
     level = models.PositiveSmallIntegerField(choices=LEVEL_CHOICES)
-    school = models.CharField(max_length=256, min_length=2)
+    school = models.CharField(max_length=256, choices=SCHOOL_CHOICES)
     casting_time_amount = models.PositiveSmallIntegerField()
     casting_time_unit = models.CharField(max_length=50, choices=CASTING_TIME_UNIT_CHOICES)
     casting_time_description = models.CharField(max_length=256, null=True, blank=True)
@@ -132,39 +109,41 @@ class Spell_Model(models.Model):
     component_material = models.BooleanField(default=False)
     component_material_description = models.CharField(max_length=1024, null=True, blank=True)
     range_type = models.CharField(max_length=50, choices=RANGE_TYPE_CHOICES)
-    range_size = models.PositiveSmallIntegerField(null=True, blank=True)
+    range_distance = models.PositiveSmallIntegerField(null=True, blank=True)
     duration_type = models.CharField(max_length=50, choices=DURATION_TYPE_CHOICES)
     duration_amount = models.PositiveSmallIntegerField(null=True, blank=True)
     duration_unit = models.CharField(max_length=50, choices=DURATION_UNIT_CHOICES, null=True, blank=True)
-    description = models.TextField(max_length=8192, min_length=2)
+    description = models.TextField(max_length=8192)
     ritual = models.BooleanField(default=False)
     higher_level = models.BooleanField(default=False)
-    classes = models.ManyToManyField(CharacterClass, related_name='spells')
-
-    author = models.ForeignKey('auth.User', related_name='spells', on_delete=models.SET_NULL, null=True)
-
-
+    classes = models.ManyToManyField(CharacterClass, related_name='spells_v2')
 
     fields = [
-        'owner',
+        'author',
         'name',
+        'version',
         'level',
         'school',
-        'spell_list',
-        'casting_time',
-        'casting_time_other',
-        'ritual',
-        'range',
-        'concentration',
-        'duration',
-        'duration_other',
+        'casting_time_amount',
+        'casting_time_unit',
+        'casting_time_description',
         'component_verbal',
         'component_somatic',
         'component_material',
+        'component_material_description',
+        'range_type',
+        'range_distance',
+        'duration_type',
+        'duration_amount',
+        'duration_unit',
         'description',
-        'source_book',
-        'source_book_other',
-        'source_page_number',
+        'ritual',
+        'higher_level',
+        'classes',
+    ]
+    readonly_fields = [
+      'creation_time',
+      'last_modified',
     ]
 
     def __str__(self):
@@ -172,25 +151,123 @@ class Spell_Model(models.Model):
 
     # Validate the model as a whole
     def clean(self):
-        if self.casting_time == 'OTHER':
-            if self.casting_time_other is None:
-                raise ValidationError(_('OTHER has been selected for Casting Time but no additional description has been provided.'))
-        else:
-            self.casting_time_other = None
+        if self.casting_time_unit == self.REACTION:
+            if self.casting_time_description is None:
+                raise ValidationError(_('casting_time_description is required when casting_time_unit is set to Reaction.'))
 
-        if self.duration == 'OTHER':
-            if self.duration_other is None:
-                raise ValidationError(_('OTHER has been selected for Duration but no additional description has been provided.'))
-        else:
-            self.duration_other = None
+        if self.component_material == True:
+            if self.component_material_description is None:
+                raise ValidationError(_('component_material_description is required when component_material is set to True.'))
 
-        if self.source_book == 'OTHER':
-            if self.source_book_other is None:
-                raise ValidationError(_('OTHER has been selected for Source Book but no additional description has been provided.'))
-        else:
-            self.source_book_other = None
+        if self.range_type == self.RANGED:
+            if self.range_distance is None:
+                raise ValidationError(_('range_distance is required when range_type is set to Ranged.'))
 
+        if self.duration_type == self.CONCENTRATION \
+        or self.duration_type == self.SPECIAL \
+        or self.duration_type == self.TIME:
+            if self.duration_amount is None:
+                raise ValidationError(_('duration_amount is required when duration_type is set to Concentration, Special or Time.'))
+            if self.duration_unit is None:
+                raise ValidationError(_('duration_unit is required when duration_type is set to Concentration, Special or Time.'))
 
     class Meta(object):
         ordering = ['level', 'name']
         unique_together = ('name', 'version')
+
+
+class Spell_CA(models.Model):
+    spell = models.ForeignKey(Spell_Model, related_name='custom_attributes', on_delete=models.CASCADE)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    name = models.CharField(max_length=1024)
+    value = models.TextField(max_length=8192)
+
+    fields = [
+      'spell',
+      'name',
+      'value',
+    ]
+    readonly_fields = [
+      'creation_time',
+      'last_modified',
+    ]
+
+
+class Spell_Tag_Model(models.Model):
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    tag = models.CharField(max_length=256)
+
+    fields = [
+      'tag',
+    ]
+    readonly_fields = [
+      'creation_time',
+      'last_modified',
+    ]
+
+
+class Spell_AdditionalInfo_Model(models.Model):
+    CONE = 'CONE'
+    CUBE = 'CUBE'
+    CYLINDER = 'CYLINDER'
+    LINE = 'LINE'
+    SPHERE = 'SPHERE'
+    SQUARE = 'SQUARE'
+    AOE_TYPE_CHOICES = (
+      (CONE, 'Cone'),
+      (CUBE, 'Cube'),
+      (CYLINDER, 'Cylinder'),
+      (LINE, 'Line'),
+      (SPHERE, 'Sphere'),
+      (SQUARE, 'Square'),
+    )
+
+    STR = 'STR'
+    CON = 'CON'
+    DEX = 'DEX'
+    INT = 'INT'
+    WIS = 'WIS'
+    CHA = 'CHA'
+    SAVE_TYPE_CHOICES = (
+      (STR, STR),
+      (CON, CON),
+      (DEX, DEX),
+      (INT, INT),
+      (WIS, WIS),
+      (CHA, CHA),
+    )
+
+    spell = models.OneToOneField(Spell_Model, related_name='spell_additional_info', on_delete=models.CASCADE)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    avatar = models.ImageField(blank=True, null=True, upload_to='avatars')
+    aoe_type = models.CharField(max_length=50, choices=AOE_TYPE_CHOICES, blank=True, null=True)
+    aoe_size = models.PositiveSmallIntegerField(null=True, blank=True)
+    part_of_weapon_attack = models.BooleanField(default=False)
+    save_type = models.CharField(max_length=50, choices=SAVE_TYPE_CHOICES, blank=True, null=True)
+    tags = models.ManyToManyField(Spell_Tag_Model, related_name='spell_additional_info')
+
+    fields = [
+        'spell',
+        'avatar',
+        'aoe_type',
+        'aoe_size',
+        'part_of_weapon_attack',
+        'save_type',
+        'tags',
+    ]
+    readonly_fields = [
+      'creation_time',
+      'last_modified',
+    ]
+
+    # Validate the model as a whole
+    def clean(self):
+        if self.aoe_size is not None:
+            if self.aoe_type is None:
+                raise ValidationError(_('aoe_type is required when aoe_size is set.'))
