@@ -109,7 +109,7 @@ class Spell_Model(models.Model):
     component_material = models.BooleanField(default=False)
     component_material_description = models.CharField(max_length=1024, null=True, blank=True)
     range_type = models.CharField(max_length=50, choices=RANGE_TYPE_CHOICES)
-    range_distance = models.PositiveSmallIntegerField(null=True, blank=True)
+    range_distance = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name="Range distance (ft)")
     duration_type = models.CharField(max_length=50, choices=DURATION_TYPE_CHOICES)
     duration_amount = models.PositiveSmallIntegerField(null=True, blank=True)
     duration_unit = models.CharField(max_length=50, choices=DURATION_UNIT_CHOICES, null=True, blank=True)
@@ -153,23 +153,23 @@ class Spell_Model(models.Model):
     def clean(self):
         if self.casting_time_unit == self.REACTION:
             if self.casting_time_description is None:
-                raise ValidationError(_('casting_time_description is required when casting_time_unit is set to Reaction.'))
+                raise ValidationError(_('"Casting time description" is required when "Casting time unit" is set to "Reaction".'))
 
         if self.component_material == True:
             if self.component_material_description is None:
-                raise ValidationError(_('component_material_description is required when component_material is set to True.'))
+                raise ValidationError(_('"Component material description" is required when "Component material" is set to "True".'))
 
         if self.range_type == self.RANGED:
             if self.range_distance is None:
-                raise ValidationError(_('range_distance is required when range_type is set to Ranged.'))
+                raise ValidationError(_('"Range distance" is required when "Range type" is set to "Ranged".'))
 
         if self.duration_type == self.CONCENTRATION \
         or self.duration_type == self.SPECIAL \
         or self.duration_type == self.TIME:
             if self.duration_amount is None:
-                raise ValidationError(_('duration_amount is required when duration_type is set to Concentration, Special or Time.'))
+                raise ValidationError(_('"Duration amount" is required when "Duration type" is set to "Concentration", "Special" or "Time".'))
             if self.duration_unit is None:
-                raise ValidationError(_('duration_unit is required when duration_type is set to Concentration, Special or Time.'))
+                raise ValidationError(_('"Duration unit" is required when "Duration type" is set to "Concentration", "Special" or "Time".'))
 
     class Meta(object):
         ordering = ['level', 'name']
@@ -270,4 +270,4 @@ class Spell_AdditionalInfo_Model(models.Model):
     def clean(self):
         if self.aoe_size is not None:
             if self.aoe_type is None:
-                raise ValidationError(_('aoe_type is required when aoe_size is set.'))
+                raise ValidationError(_('"Aoe type" is required when "Aoe size" has a value.'))
