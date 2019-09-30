@@ -3,15 +3,15 @@ from django.urls import path, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework import routers
 
-
 app_name = 'api'
 
 router = routers.DefaultRouter()
 router.register('characterclasses', views.CharacterClassView)
 router.register('spells', views.SpellView)
 router.register('users', views.UserView)
+router.register('conditions', views.ConditionsView)
 
-#router.register('users-detail', views.UserView)
+# router.register('users-detail', views.UserView)
 
 urlpatterns = [
     # path('', views.api_root),
@@ -25,3 +25,4 @@ urlpatterns = [
 ]
 
 #urlpatterns = format_suffix_patterns(urlpatterns)
+

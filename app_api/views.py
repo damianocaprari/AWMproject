@@ -1,15 +1,18 @@
 from .serializers import CharacterClassSerializer
 from .serializers import SpellSerializer
 from .serializers import UserSerializer
+from .serializers import ConditionSerializer
+
 from .permissions import IsOwnerOrReadOnly
-from app_spells.models import Spell
-from app_characterclasses.models import CharacterClass
 from django.contrib.auth.models import User
 from rest_framework import generics, permissions, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
+from app_spells.models import Spell
+from app_characterclasses.models import CharacterClass
+from app_conditions.models import Condition
 
 # @api_view(['GET'])
 # def api_root(request, format=None):
@@ -81,3 +84,7 @@ class CharacterClassView(viewsets.ModelViewSet):
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class ConditionsView(viewsets.ModelViewSet):
+    serializer_class = ConditionSerializer
+    queryset = Condition.objects.all()

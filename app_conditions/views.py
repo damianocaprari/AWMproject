@@ -2,7 +2,7 @@ from django.shortcuts import render
 from app_conditions.models import Condition
 
 #####
-#from django.http import HttpResponse
+# from django.http import HttpResponse
 ####
 
 def index(request):

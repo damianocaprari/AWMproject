@@ -41,6 +41,7 @@ PREREQ_APPS = [
 
 PROJECT_APPS = [
     'rest_framework',
+    'corsheaders',
     'app_characterclasses.apps.CharacterClassesConfig',
     'app_spells.apps.SpellsConfig',
     'app_api.apps.ApiConfig',
@@ -51,6 +52,7 @@ INSTALLED_APPS = PROJECT_APPS + PREREQ_APPS
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',                    # NUXT
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +61,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)                                                               # NUXT
+
 
 ROOT_URLCONF = 'AWMproject.urls'
 
@@ -146,10 +154,11 @@ STATICFILES_DIRS = [
 # for static files tied to apps
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# -- NUXT
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',

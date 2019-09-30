@@ -33,6 +33,11 @@ admin.site.site_header = gettext_lazy('AWMproject administration')
 # URL for the "View site" link at the top of each admin page.
 #admin.site.site_url = '/storefront/'
 
+from django.contrib import admin
+from django.urls import path, include        # add this
+from django.conf import settings             # add this
+from django.conf.urls.static import static   # add this
+
 
 urlpatterns = [
     path('', views.index, name='root'),
@@ -40,5 +45,13 @@ urlpatterns = [
     path('spells/', include('app_spells.urls', namespace='spells')),
     path('api/', include('rest_framework.urls')),
     path('api/', include('app_api.urls', namespace='api')),
-    path('conditions/', include('app_conditions.urls', namespace='conditions')),
+    path('api/', include('app_conditions.urls', namespace='conditions')),
+
+    # path('conditions/', include('app_conditions.urls', namespace='conditions')),
+    # path('', )
 ]
+
+
+# add this
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
