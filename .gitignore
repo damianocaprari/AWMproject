@@ -1,3 +1,6 @@
-.idea/
 dumpdata/
 utility_scripts/
+/.idea/
+/venv/lib/python3.6/site-packages/
+/.idea/*
+/venv/lib/python3.6/site-packages/*
