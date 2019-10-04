@@ -24,7 +24,7 @@ export default {
   /*
   ** Global CSS
   */
-  css: [
+  css: ['~/assets/css/transitions.css',
   ],
   /*
   ** Plugins to load before mounting the App
@@ -41,7 +41,14 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios'
   ],
+
+  // add this Axios object
+  axios: {
+    baseURL: "http://localhost:8000/api"
+  },
+
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
