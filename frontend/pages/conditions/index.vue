@@ -31,8 +31,11 @@
   },
   async asyncData({ $axios, params }) {
     try {
-      let conditions = await $axios.$get(`/conditions/`);
-      return { conditions };
+      let query = await $axios.$get(`/conditions/`);
+      if (query.count > 0){
+          return { conditions: query.results }
+      }
+      return { conditions: [] };
     } catch (e) {
       return { conditions: [] };
     }

@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class Spell_Model(models.Model):
+class SpellModel(models.Model):
     LEVEL_CHOICES = (
       (0, 'Cantrip'),
       (1, '1st'),
@@ -147,7 +147,7 @@ class Spell_Model(models.Model):
     ]
 
     def __str__(self):
-        return '{} - {}'.format(self.level, self.name)
+        return self.name
 
     # Validate the model as a whole
     def clean(self):
@@ -155,7 +155,7 @@ class Spell_Model(models.Model):
             if self.casting_time_description is None:
                 raise ValidationError(_('"Casting time description" is required when "Casting time unit" is set to "Reaction".'))
 
-        if self.component_material == True:
+        if self.component_material is True:
             if self.component_material_description is None:
                 raise ValidationError(_('"Component material description" is required when "Component material" is set to "True".'))
 
@@ -176,13 +176,13 @@ class Spell_Model(models.Model):
         unique_together = ('name', 'version')
 
 
-class Spell_CA(models.Model):
-    spell = models.ForeignKey(Spell_Model, related_name='custom_attributes', on_delete=models.CASCADE)
+class SpellCAModel(models.Model):
+    spell = models.ForeignKey(SpellModel, related_name='custom_attributes', on_delete=models.CASCADE)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
-    name = models.CharField(max_length=1024)
-    value = models.TextField(max_length=8192)
+    name = models.CharField(max_length=2048)
+    value = models.CharField(max_length=8192)
 
     fields = [
       'spell',
@@ -194,12 +194,14 @@ class Spell_CA(models.Model):
       'last_modified',
     ]
 
-
-class Spell_Tag_Model(models.Model):
+class SpellTagModel(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
-    tag = models.CharField(max_length=256)
+    tag = models.CharField(max_length=256, unique=True)
+
+    def __str__(self):
+        return self.tag
 
     fields = [
       'tag',
@@ -210,7 +212,7 @@ class Spell_Tag_Model(models.Model):
     ]
 
 
-class Spell_AdditionalInfo_Model(models.Model):
+class SpellAdditionalInfoModel(models.Model):
     CONE = 'CONE'
     CUBE = 'CUBE'
     CYLINDER = 'CYLINDER'
@@ -241,7 +243,7 @@ class Spell_AdditionalInfo_Model(models.Model):
       (CHA, CHA),
     )
 
-    spell = models.OneToOneField(Spell_Model, related_name='spell_additional_info', on_delete=models.CASCADE)
+    spell = models.OneToOneField(SpellModel, related_name='spell_additional_info', on_delete=models.CASCADE)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
@@ -250,7 +252,7 @@ class Spell_AdditionalInfo_Model(models.Model):
     aoe_size = models.PositiveSmallIntegerField(null=True, blank=True)
     part_of_weapon_attack = models.BooleanField(default=False)
     save_type = models.CharField(max_length=50, choices=SAVE_TYPE_CHOICES, blank=True, null=True)
-    tags = models.ManyToManyField(Spell_Tag_Model, related_name='spell_additional_info')
+    tags = models.ManyToManyField(SpellTagModel, related_name='spell_additional_info', blank=True)
 
     fields = [
         'spell',
@@ -271,3 +273,6 @@ class Spell_AdditionalInfo_Model(models.Model):
         if self.aoe_size is not None:
             if self.aoe_type is None:
                 raise ValidationError(_('"Aoe type" is required when "Aoe size" has a value.'))
+
+
+
