@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="344" class="mx-auto condition-card">
+  <v-card class="condition-card ">
     <v-card-title>{{ condition.name }}</v-card-title>
     <v-card-text>{{ condition.description }}</v-card-text>
     <div class="action-buttons">
@@ -20,5 +20,6 @@
 <style>
   .condition-card {
     box-shadow: 0 1rem 1.5rem rgba(0,0,0,.6);
+    width: 100%;
   }
 </style>
