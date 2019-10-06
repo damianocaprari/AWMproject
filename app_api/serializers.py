@@ -6,18 +6,6 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 
-class SpellSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='api:spell-detail')
-    owner = serializers.HyperlinkedRelatedField(view_name='api:user-detail',
-                                                read_only=True)
-    spell_list = serializers.HyperlinkedRelatedField(view_name='api:characterclass-detail',
-                                                     many=True,
-                                                     queryset=CharacterClass.objects.all())
-    class Meta:
-        model = Spell
-        fields = ['id', 'url'] + Spell.fields
-
-
 class CharacterClassSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='api:characterclass-detail')
     spells = serializers.HyperlinkedRelatedField(view_name='api:spell-detail',

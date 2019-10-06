@@ -1,0 +1,132 @@
+from app_characterclasses.models import CharacterClass
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+
+class SpellOLD(models.Model):
+    CASTING_TIME_CHOICES = (
+        ('1_ACTION', '1 Action'),
+        ('1_BONUS', '1 Bonus Action'),
+        ('1_REACTION', '1 Reaction'),
+        ('1_MINUTE', '1 Minute'),
+        ('10_MINUTES', '10 Minutes'),
+        ('1_HOUR', '1 Hour'),
+        ('8_HOURS', '8 Hours'),
+        ('12_HOURS', '12 Hours'),
+        ('24_HOURS', '24 Hours'),
+        ('OTHER', 'Other'),
+    )
+    DURATION_CHOICES = (
+        ('INSTANTANEOUS', 'Instantaneous'),
+        ('1_ROUND', '1 Round'),
+        ('1_MINUTE', '1 Minute'),
+        ('10_MINUTES', '10 Minutes'),
+        ('1_HOUR', '1 Hour'),
+        ('2_HOURS', '2 Hours'),
+        ('8_HOURS', '8 Hours'),
+        ('24_HOURS', '24 Hours'),
+        ('7_DAYS', '7 Days'),
+        ('10_DAYS', '10 Days'),
+        ('30_DAYS', '30 Days'),
+        ('UNTIL_DISPELLED', 'Until Dispelled'),
+        ('OTHER', 'Other'),
+    )
+    LEVEL_CHOICES = (
+        (0, 'Cantrip'),
+        (1, '1st'),
+        (2, '2nd'),
+        (3, '3rd'),
+        (4, '4th'),
+        (5, '5th'),
+        (6, '6th'),
+        (7, '7th'),
+        (8, '8th'),
+        (9, '9th'),
+    )
+    SCHOOL_CHOICES = (
+        ('ABJ', 'Abjuration'),
+        ('CON', 'Conjuration'),
+        ('DIV', 'Divination'),
+        ('ENC', 'Enchantment'),
+        ('EVO', 'Evocation'),
+        ('ILL', 'Illusion'),
+        ('NEC', 'Necromancy'),
+        ('TRA', 'Transmutation'),
+    )
+    SOURCE_BOOK_CHOICES = (
+        ('PHB', 'Player\'s Handbook'),
+        ('EE', 'Elemental Evil Player\'s Companion'),
+        ('SCAG', 'Sword Coast Adventurer\'s Guide'),
+        ('XGE', 'Xanathar\'s Guide to Everything'),
+        ('OTHER', 'Other'),
+    )
+
+    owner = models.ForeignKey('auth.User', related_name='spells', on_delete=models.CASCADE)
+    casting_time            = models.CharField(max_length=10, choices=CASTING_TIME_CHOICES)
+    casting_time_other      = models.CharField(max_length=50, null=True, blank=True)
+    component_material      = models.CharField(max_length=400, null=True, blank=True)
+    description             = models.TextField(max_length=4000)
+    duration                = models.CharField(max_length=15, choices=DURATION_CHOICES)
+    duration_other          = models.CharField(max_length=50, null=True, blank=True)
+    level                   = models.PositiveSmallIntegerField(choices=LEVEL_CHOICES)
+    name                    = models.CharField(max_length=50, unique=True)
+    range                   = models.CharField(max_length=15)
+    component_verbal        = models.BooleanField()
+    component_somatic       = models.BooleanField()
+    concentration           = models.BooleanField()
+    ritual                  = models.BooleanField()
+    school                  = models.CharField(max_length=4, choices=SCHOOL_CHOICES)
+    source_book             = models.CharField(max_length=5, choices=SOURCE_BOOK_CHOICES, null=True, blank=True)
+    source_book_other       = models.CharField(max_length=50, null=True, blank=True)
+    source_page_number      = models.PositiveSmallIntegerField(null=True, blank=True)
+    spell_list              = models.ManyToManyField(CharacterClass, related_name='spells')
+
+    fields = [
+        'owner',
+        'name',
+        'level',
+        'school',
+        'spell_list',
+        'casting_time',
+        'casting_time_other',
+        'ritual',
+        'range',
+        'concentration',
+        'duration',
+        'duration_other',
+        'component_verbal',
+        'component_somatic',
+        'component_material',
+        'description',
+        'source_book',
+        'source_book_other',
+        'source_page_number',
+    ]
+
+    def __str__(self):
+        return '{} - {}'.format(self.level, self.name)
+
+    # Validate the model as a whole
+    def clean(self):
+        if self.casting_time == 'OTHER':
+            if self.casting_time_other is None:
+                raise ValidationError(_('OTHER has been selected for Casting Time but no additional description has been provided.'))
+        else:
+            self.casting_time_other = None
+
+        if self.duration == 'OTHER':
+            if self.duration_other is None:
+                raise ValidationError(_('OTHER has been selected for Duration but no additional description has been provided.'))
+        else:
+            self.duration_other = None
+
+        if self.source_book == 'OTHER':
+            if self.source_book_other is None:
+                raise ValidationError(_('OTHER has been selected for Source Book but no additional description has been provided.'))
+        else:
+            self.source_book_other = None
+
+
+    class Meta(object):
+        ordering = ['level', 'name']

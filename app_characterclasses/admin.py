@@ -4,7 +4,7 @@ from django.contrib import admin
 
 
 class SpellInline(admin.TabularInline):
-    model = Spell.spell_list.through
+    model = Spell.classes.through
 
 
 class CharacterClassAdmin(admin.ModelAdmin):

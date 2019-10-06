@@ -1,5 +1,4 @@
 from .serializers import CharacterClassSerializer
-from .serializers import SpellSerializer
 from .serializers import UserSerializer
 from .serializers import ConditionSerializer
 
@@ -73,9 +72,6 @@ from app_conditions.models import Condition
 #     queryset = User.objects.all()
 #     serializer_class = UserSerializer
 
-class SpellView(viewsets.ModelViewSet):
-    queryset = Spell.objects.all()
-    serializer_class = SpellSerializer
 
 class CharacterClassView(viewsets.ModelViewSet):
     queryset = CharacterClass.objects.all()
