@@ -25,8 +25,7 @@
           </v-list-item>
       </v-list>
     </div>
-
-    <v-btn class="ma-2" v-scroll="onScroll" absolute right fab bottom fixed color="black" @click="toTop">
+    <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="black" @click="toTop">
       <v-icon>mdi-arrow-up</v-icon>
     </v-btn>
     <!--
