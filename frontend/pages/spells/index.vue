@@ -1,3 +1,10 @@
+
+<!--
+  TODO: Creare SpellCard con poche info.
+  TODO: ritornare info di spell dalla API
+  TODO: Creare pagina singola per la spell (recipes)
+-->
+
 <template>
   <div class="col-12 text-right mb-4">
     <div class="d-flex justify-content-between">
