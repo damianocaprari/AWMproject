@@ -1,7 +1,7 @@
 <template>
   <div class="col-12 text-right mb-4">
     <div class="d-flex justify-content-between">
-      <h1 class="text-white">Conditions</h1>
+      <h1>Spells</h1>
     </div>
 
     <div>
@@ -97,5 +97,4 @@
   ul {
     list-style-type:  none;
   }
-
 </style>

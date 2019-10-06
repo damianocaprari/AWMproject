@@ -3,11 +3,12 @@
     <div class="text-box">
       <h1>DnD 5.0</h1>
       <p class="mt-3">A simple wiki of the best rpg ever! </p>
-      <p>
-        <nuxt-link to="/conditions">
-          <v-btn>View Conditions</v-btn>
-        </nuxt-link>
-      </p>
+
+      <v-col class="text-center" cols="">
+        <div style="margin-bottom: 10px;"> <v-btn to="/conditions" block>View Conditions</v-btn> </div>
+        <div style="margin-bottom: 10px;"> <v-btn to="/spells" block>View Spells</v-btn> </div>
+      </v-col>
+
     </div>
   </header>
 </template>
