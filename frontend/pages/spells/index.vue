@@ -2,7 +2,8 @@
 <!--
   TODO: Creare SpellCard con poche info.
   TODO: ritornare info di spell dalla API
-  TODO: Creare pagina singola per la spell (recipes)
+  TODO: fai i filtri ricerca
+  TODO: Creare pagina singola per la spell (recipes) o che si apra una tendina
 -->
 
 <template>
@@ -11,12 +12,16 @@
       <h1>Spells</h1>
     </div>
 
+    <!-- SEARCH AREA -->
     <div>
-      <!--
-      <input type="text" v-model="search" placeholder="search conditions"/>
-      -->
-      <v-text-field v-model="search" label="Search conditions" outlined dense></v-text-field>
+      <v-row>
+        <v-text-field v-model="search"      label="Search spells for name" outlined dense></v-text-field>
+        <v-text-field v-model="search_desc" label="Search spells for descriptions" outlined dense></v-text-field>
+        <v-text-field v-model="search_desc" label="Search spells for level" outlined dense></v-text-field>
+      </v-row>
     </div>
+
+
 
     <div>
       <v-list v-for="condition in filteredConditions" :key="condition.id" >
@@ -25,15 +30,11 @@
           </v-list-item>
       </v-list>
     </div>
+
+
     <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="black" @click="toTop">
       <v-icon>mdi-arrow-up</v-icon>
     </v-btn>
-    <!--
-    <v-btn v-scroll="onScroll" v-show="fab" fab dark fixed bottom right color="primary"
-            @click="toTop">
-          <v-icon>keyboard_arrow_up</v-icon>
-    </v-btn>
-    -->
   </div>
 </template>
 
@@ -43,8 +44,7 @@
  export default {
   head() {
     return {
-      title: "Conditions list",
-      search: ''
+      title: "Conditions list"
     };
   },
   components: {
@@ -63,7 +63,9 @@
   },
   data() {
     return {
-      conditions: []
+      conditions: [],
+      search: '',
+      search_desc: ''
     };
   },
   methods: {
@@ -90,7 +92,12 @@
  computed: {
   filteredConditions: function(){
     return this.conditions.filter((condition) => {
-      return condition.name.match(this.search)
+      if(this.search_desc.length > 0)
+        return condition.description.toLowerCase().match(this.search_desc.toLowerCase())
+      if(this.search.length > 0)
+        return condition.name.toLowerCase().match(this.search.toLowerCase())
+      else
+        return this.conditions
     });
   }
  }
