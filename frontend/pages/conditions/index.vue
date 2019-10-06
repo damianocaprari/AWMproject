@@ -37,8 +37,7 @@
  export default {
   head() {
     return {
-      title: "Conditions list",
-      search: ''
+      title: "Conditions list"
     };
   },
   components: {
@@ -57,7 +56,8 @@
   },
   data() {
     return {
-      conditions: []
+      conditions: [],
+      search: ''
     };
   },
   methods: {
@@ -84,7 +84,7 @@
  computed: {
   filteredConditions: function(){
     return this.conditions.filter((condition) => {
-      return condition.name.match(this.search)
+      return condition.name.toLowerCase().match(this.search.toLowerCase())
     });
   }
  }
