@@ -163,6 +163,10 @@ class Spell(models.Model):
             if self.range_distance is None:
                 raise ValidationError(_('"Range distance" is required when "Range type" is set to "Ranged".'))
 
+        if self.range_distance is not None:
+            if self.range_type != self.RANGED:
+                self.range_distance = None
+
         if self.duration_type == self.CONCENTRATION \
         or self.duration_type == self.SPECIAL \
         or self.duration_type == self.TIME:

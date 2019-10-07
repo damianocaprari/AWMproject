@@ -4,6 +4,8 @@
   TODO: ritornare info di spell dalla API
   TODO: fai i filtri ricerca
   TODO: Creare pagina singola per la spell (recipes) o che si apra una tendina
+
+  TODO DAMI: se metto NON RANGED io non dovrei mettere la distanza
 -->
 
 <template>
@@ -13,14 +15,40 @@
     </div>
 
     <!-- SEARCH AREA -->
-    <div>
+    <v-container>
       <v-row>
         <v-text-field v-model="search"      label="Search spells for name" outlined dense></v-text-field>
         <v-text-field v-model="search_desc" label="Search spells for descriptions" outlined dense></v-text-field>
-        <v-text-field v-model="search_desc" label="Search spells for level" outlined dense></v-text-field>
+        <v-text-field v-model="search_lvl" label="Search spells for level" outlined dense></v-text-field>
       </v-row>
-    </div>
+    </v-container>
 
+    <v-container>
+      <v-row >
+        <v-col>Level</v-col>
+        <v-col>Name</v-col>
+        <v-col>Casting time</v-col>
+        <v-col>Casting time unit</v-col>
+        <v-col>Duration</v-col>
+      </v-row>
+
+      <v-expansion-panels multiple focusable>
+        <v-expansion-panel v-for="condition in filteredConditions" :key="condition.id">
+          <v-expansion-panel-header>
+            <v-row  >
+              <v-col >{{condition.level}}</v-col>
+              <v-col >{{condition.name}}</v-col>
+              <v-col>{{ condition.casting_time_amount }}</v-col>
+              <v-col>{{ condition.casting_time_unit.toLowerCase() }}</v-col>
+              <v-col>{{ condition.duration_type.toLowerCase() }}</v-col>
+            </v-row>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            {{ condition.description}}
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-container>
 
 
     <div>
@@ -52,7 +80,7 @@
   },
   async asyncData({ $axios, params }) {
     try {
-      let query = await $axios.$get(`/conditions/`);
+      let query = await $axios.$get(`/spells/`);
       if (query.count > 0){
           return { conditions: query.results }
       }
@@ -65,7 +93,8 @@
     return {
       conditions: [],
       search: '',
-      search_desc: ''
+      search_desc: '',
+      search_lvl: ''
     };
   },
   methods: {
@@ -92,10 +121,13 @@
  computed: {
   filteredConditions: function(){
     return this.conditions.filter((condition) => {
-      if(this.search_desc.length > 0)
-        return condition.description.toLowerCase().match(this.search_desc.toLowerCase())
-      if(this.search.length > 0)
+      if (this.search.length > 0)
         return condition.name.toLowerCase().match(this.search.toLowerCase())
+      if(this.search_desc.length > 0) {
+        return condition.description.toLowerCase().match(this.search_desc.toLowerCase())
+      }
+      if(this.search_lvl.length > 0)
+        return condition.level == this.search_lvl
       else
         return this.conditions
     });
