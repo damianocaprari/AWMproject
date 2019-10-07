@@ -142,8 +142,8 @@ class Spell(models.Model):
         'classes',
     ]
     readonly_fields = [
-      'creation_time',
-      'last_modified',
+        'creation_time',
+        'last_modified',
     ]
 
     def __str__(self):
@@ -193,6 +193,7 @@ class SpellCA(models.Model):
         'creation_time',
         'last_modified',
     ]
+
 
 class SpellTag(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)

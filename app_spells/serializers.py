@@ -3,30 +3,30 @@ from app_characterclasses.models import CharacterClass
 from rest_framework import serializers
 
 
-class SpellCASerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='api:spellca-detail')  # TODO forse spellca ??
+class SpellCASerializer(serializers.ModelSerializer):
+    #url = serializers.HyperlinkedIdentityField(view_name='api:spellca-detail')
 
     class Meta:
         model = SpellCA
-        fields = ['id', 'url'] + SpellCA.fields + SpellCA.readonly_fields
+        fields = ['id',] + SpellCA.fields + SpellCA.readonly_fields
 
 
 class SpellTagSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='api:spelltag-detail')  # TODO forse spelltag ??
+    url = serializers.HyperlinkedIdentityField(view_name='api:spelltag-detail')
 
     class Meta:
         model = SpellTag
         fields = ['id', 'url'] + SpellTag.fields + SpellTag.readonly_fields
 
 
-class SpellAdditionalInfoSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='api:spelladditionalinfo-detail')  # TODO forse spelladditionalinfo ??
-    spell = serializers.HyperlinkedIdentityField(view_name='api:spell-detail')
+class SpellAdditionalInfoSerializer(serializers.ModelSerializer):
+    #url = serializers.HyperlinkedIdentityField(view_name='api:spelladditionalinfo-detail')
+    #spell = serializers.PrimaryKeyRelatedField(queryset=Spell.objects.all())
     tags = SpellTagSerializer(many=True)
 
     class Meta:
         model = SpellAdditionalInfo
-        fields = ['id', 'url'] + SpellAdditionalInfo.fields + SpellAdditionalInfo.readonly_fields + ['tags',]
+        fields = ['id', ] + SpellAdditionalInfo.fields + SpellAdditionalInfo.readonly_fields + ['tags',]
 
 
 class SpellSerializer(serializers.HyperlinkedModelSerializer):

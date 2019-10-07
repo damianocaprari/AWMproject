@@ -1,9 +1,18 @@
 from rest_framework import serializers
-from .models import  Condition
+from app_conditions.models import  Condition, ConditionCA
 
 
-class ConditionSerializer(serializers.ModelSerializer):
+class ConditionCASerializer(serializers.ModelSerializer):
 
-  class Meta:
-    model = Condition
-    fields = ("id", "name", "description", "source_page_number")
+    class Meta:
+        model = ConditionCA
+        fields = ['id', ] + ConditionCA.fields + ConditionCA.readonly_fields
+
+
+class ConditionSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='api:condition-detail')
+    custom_attributes = ConditionCASerializer(many=True)
+
+    class Meta:
+        model = Condition
+        fields = ['id', 'url',] + Condition.fields + Condition.readonly_fields + ['custom_attributes',]

@@ -1,21 +1,42 @@
 from django.db import models
 
-# Create your models here.
 
 class Condition(models.Model):
-    name                = models.CharField(max_length=50, unique=True)
-    description         = models.TextField(max_length=4000)
-    source_page_number  = models.PositiveSmallIntegerField(null=True, blank=True)
+    name = models.CharField(max_length=156, unique=True)
+    description = models.TextField(max_length=8192)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     fields = [
         'name',
         'description',
-        'source_page_number',
+    ]
+    readonly_fields = [
+        'creation_time',
+        'last_modified',
     ]
 
     def __str__(self):
-        return '{}'.format(self.name)
+        return self.name
 
-    #per ordinare in base a nome??
     class Meta(object):
         ordering = ['name']
+
+
+class ConditionCA(models.Model):
+    condition = models.ForeignKey(Condition, related_name='custom_attributes', on_delete=models.CASCADE)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    name = models.CharField(max_length=2048)
+    value = models.CharField(max_length=8192)
+
+    fields = [
+        'condition',
+        'name',
+        'value',
+    ]
+    readonly_fields = [
+        'creation_time',
+        'last_modified',
+    ]
