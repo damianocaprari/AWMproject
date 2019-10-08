@@ -23,41 +23,68 @@
       </v-row>
     </v-container>
 
+
     <v-container>
+
       <v-row >
-        <v-col>Level</v-col>
-        <v-col>Name</v-col>
-        <v-col>Casting time</v-col>
-        <v-col>Casting time unit</v-col>
-        <v-col>Duration</v-col>
+        <v-col>LEVEL</v-col>
+        <v-col>NAME</v-col>
+        <v-col>CASTING TIME</v-col>
+        <v-col>DURATION</v-col>
+        <v-col>RANGE/AREA</v-col>
       </v-row>
 
       <v-expansion-panels multiple focusable>
-        <v-expansion-panel v-for="condition in filteredConditions" :key="condition.id">
+        <v-expansion-panel v-for="spell in filteredSpells" :key="spell.id">
           <v-expansion-panel-header>
-            <v-row  >
-              <v-col >{{condition.level}}</v-col>
-              <v-col >{{condition.name}}</v-col>
-              <v-col>{{ condition.casting_time_amount }}</v-col>
-              <v-col>{{ condition.casting_time_unit.toLowerCase() }}</v-col>
-              <v-col>{{ condition.duration_type.toLowerCase() }}</v-col>
+            <v-row >
+              <v-col >{{spell.level}}</v-col>
+              <v-col >{{spell.name}}</v-col>
+              <v-col >{{ spell.casting_time_amount }} {{ spell.casting_time_unit.toLowerCase() }}</v-col>
+              <v-col >{{ spell.duration_type.toLowerCase() }}</v-col>
+              <v-col v-if="spell.range_type.match('RANGED')">
+                {{ spell.range_type.toLowerCase() }} ({{ spell.range_distance}} ft)
+              </v-col>
+              <v-col v-else>{{ spell.range_type.toLowerCase() }}</v-col>
             </v-row>
           </v-expansion-panel-header>
+
           <v-expansion-panel-content>
-            {{ condition.description}}
+            <v-container class="grey lighten-5">
+              <v-row>
+
+
+                <v-col class="bold text-center">LEVEL <v-col class="regular text-center">{{spell.level}}</v-col> </v-col>
+                <v-col class="bold text-center">CASTING TIME <v-col class="regular text-center">{{spell.casting_time_amount}}  {{ spell.casting_time_unit.toLowerCase() }}</v-col> </v-col>
+                <v-col class="bold text-center">RANGE/AREA
+                  <v-col class="regular text-center" v-if="spell.range_type.match('RANGED')">
+                    {{ spell.range_type.toLowerCase() }} ({{ spell.range_distance}} ft)
+                  </v-col>
+                </v-col>
+                <v-col class="bold text-center">COMPONTENTS
+                  <v-col class="regular text-center">
+                    <span v-if="spell.component_verbal == true">V</span>
+                    <span v-if="spell.component_somatic == true">S </span>
+                    <span v-if="spell.component_material == true">M </span>
+                  </v-col>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="bold text-center">DURATION<v-col class="regular text-center">{{spell.casting_time_amount}}  {{ spell.casting_time_unit.toLowerCase() }}</v-col> </v-col>
+                <v-col>Column</v-col>
+                <div class="w-100"></div>
+                <v-col>Column</v-col>
+                <v-col>Column</v-col>
+              </v-row>
+            </v-container>
+            <v-divider></v-divider>
+            <v-container>
+              {{ spell.description}}
+            </v-container>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
     </v-container>
-
-
-    <div>
-      <v-list v-for="condition in filteredConditions" :key="condition.id" >
-          <v-list-item>
-            <condition-card :onDelete="deleteCondition" :condition="condition"></condition-card>
-          </v-list-item>
-      </v-list>
-    </div>
 
 
     <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="black" @click="toTop">
@@ -72,7 +99,7 @@
  export default {
   head() {
     return {
-      title: "Conditions list"
+      title: "Spells list"
     };
   },
   components: {
@@ -82,27 +109,27 @@
     try {
       let query = await $axios.$get(`/spells/`);
       if (query.count > 0){
-          return { conditions: query.results }
+          return { spells: query.results }
       }
-      return { conditions: [] };
+      return { spells: [] };
     } catch (e) {
-      return { conditions: [] };
+      return { spells: [] };
     }
   },
   data() {
     return {
-      conditions: [],
+      spells: [],
       search: '',
       search_desc: '',
-      search_lvl: ''
+      search_lvl: '',
     };
   },
   methods: {
-    async deleteCondition(condition_id) {
+    async deleteSpell(spell_id) {
         try {
-            await this.$axios.$delete(`/conditions/${condition_id}/`); // delete condition
-            let newCondition = await this.$axios.$get("/conditions/"); // get new list of conditions
-            this.conditions = newConditions; // update list of conditions
+            await this.$axios.$delete(`/spells/${spell_id}/`); // delete spell
+            let newSpell = await this.$axios.$get("/spells/"); // get new list of cspells
+            this.spells = newSpells; // update list of spells
         } catch (e) {
             console.log(e);
         }
@@ -119,17 +146,17 @@
   },
 
  computed: {
-  filteredConditions: function(){
-    return this.conditions.filter((condition) => {
+  filteredSpells: function(){
+    return this.spells.filter((spell) => {
       if (this.search.length > 0)
-        return condition.name.toLowerCase().match(this.search.toLowerCase())
+        return spell.name.toLowerCase().match(this.search.toLowerCase())
       if(this.search_desc.length > 0) {
-        return condition.description.toLowerCase().match(this.search_desc.toLowerCase())
+        return spell.description.toLowerCase().match(this.search_desc.toLowerCase())
       }
       if(this.search_lvl.length > 0)
-        return condition.level == this.search_lvl
+        return spell.level == this.search_lvl
       else
-        return this.conditions
+        return this.spells
     });
   }
  }
@@ -142,4 +169,7 @@
   ul {
     list-style-type:  none;
   }
+  .bold { font-weight: bold;}
+  .text-center {text-align: center;}
+  .regular { font-weight: normal; }
 </style>

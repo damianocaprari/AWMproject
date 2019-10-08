@@ -40,7 +40,8 @@ from django.conf.urls.static import static   # add this
 
 
 urlpatterns = [
-    path('', views.index, name='root'),
+    #path('', views.index, name='root'),
+    path('', admin.site.urls),
     path('admin/', admin.site.urls),
     #path('api/', include('app_spells.urls', namespace='spells')),
     path('api/', include('rest_framework.urls')),
