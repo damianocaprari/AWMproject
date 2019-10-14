@@ -33,16 +33,17 @@ admin.site.site_header = gettext_lazy('AWMproject administration')
 # URL for the "View site" link at the top of each admin page.
 #admin.site.site_url = '/storefront/'
 
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path, include
+from django.views.generic.base import RedirectView
 
 from rest_framework_jwt.views import obtain_jwt_token
 
 
 urlpatterns = [
-    path('', admin.site.urls),
+    path('', RedirectView.as_view(url='/admin')),
     path('admin/', admin.site.urls),
     path('api/', include('rest_framework.urls')),  # todo da rimuovere
     path('api/', include('app_api.urls', namespace='api')),
