@@ -5,9 +5,7 @@ from rest_framework import routers
 
 app_name = 'spells'
 
-#router = routers.DefaultRouter()
-#router.register('spells', views.SpellView)
-#router.register('spell_tags', views.SpellTagView)
+# !!! url is managed in app_api !!!
 
 #urlpatterns = [
 #    path('', include(router.urls)),

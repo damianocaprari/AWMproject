@@ -4,5 +4,8 @@ from . import views
 
 app_name = 'characterclasses'
 
-urlpatterns = [
-]
+# !!! url is managed in app_api !!!
+
+#urlpatterns = [
+#    path('', include(router.urls)),
+#]

@@ -34,22 +34,20 @@ admin.site.site_header = gettext_lazy('AWMproject administration')
 #admin.site.site_url = '/storefront/'
 
 from django.contrib import admin
-from django.urls import path, include        # add this
-from django.conf import settings             # add this
-from django.conf.urls.static import static   # add this
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
+from rest_framework_jwt.views import obtain_jwt_token
 
 
 urlpatterns = [
-    #path('', views.index, name='root'),
     path('', admin.site.urls),
     path('admin/', admin.site.urls),
-    #path('api/', include('app_spells.urls', namespace='spells')),
-    path('api/', include('rest_framework.urls')),
+    path('api/', include('rest_framework.urls')),  # todo da rimuovere
     path('api/', include('app_api.urls', namespace='api')),
-    #path('api/', include('app_conditions.urls', namespace='conditions')),
-
-    # path('conditions/', include('app_conditions.urls', namespace='conditions')),
-    # path('', )
+    # todo da aggiungere api/ per altri apps
+    path('auth/', obtain_jwt_token),
 ]
 
 

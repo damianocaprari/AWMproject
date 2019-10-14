@@ -5,9 +5,8 @@ from rest_framework import routers
 
 app_name = 'conditions'
 
-#router = DefaultRouter()
-#router.register(r'conditions', ConditionViewSet)
+# !!! url is managed in app_api !!!
 
 #urlpatterns = [
-#    path("", include(router.urls))
+#    path('', include(router.urls)),
 #]

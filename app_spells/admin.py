@@ -21,6 +21,7 @@ class SpellCAInline(admin.TabularInline):
 # ---- MODEL-ADMINS ---- #
 class SpellAdmin(admin.ModelAdmin):
     list_display = ('level', 'name', 'author', 'creation_time', 'last_modified')
+    list_display_links = ('name')
     fields = (
         ('author', 'creation_time', 'last_modified',),
         ('name', 'version',),
