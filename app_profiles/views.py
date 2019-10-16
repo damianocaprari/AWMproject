@@ -13,13 +13,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class ProfileCAViewSet(viewsets.ModelViewSet):
     queryset = ProfileCA.objects.all()
     serializer_class = ProfileCASerializer
-    permission_classes = (permissions.IsAuthenticated,)  # todo da cambiare con il livello appropriato
+    permission_classes = (permissions.IsAdminUser,)  # todo da cambiare con il livello appropriato
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated,)  # todo da cambiare con il livello appropriato
+    permission_classes = (permissions.IsAdminUser,)  # todo da cambiare con il livello appropriato
 
 
 class UserCAViewSet(viewsets.ModelViewSet):
