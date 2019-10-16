@@ -4,6 +4,7 @@ from rest_framework import permissions, viewsets
 
 
 class CharacterClassViewSet(viewsets.ModelViewSet):
+
     queryset = CharacterClass.objects.all()
     serializer_class = CharacterClassSerializer
-    permission_classes = (permissions.IsAdminUser,)  # todo da cambiare con il livello appropriato
+    permission_classes = (permissions.AllowAny,)  # todo da cambiare con il livello appropriato
