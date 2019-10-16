@@ -1,6 +1,5 @@
 from app_characterclasses.models import CharacterClass
 from app_characterclasses.serializers import CharacterClassSerializer
-
 from rest_framework import permissions, viewsets
 
 

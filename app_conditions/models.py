@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Condition(models.Model):
-    name = models.CharField(max_length=156, unique=True)
+    name = models.CharField(max_length=256, unique=True)
     description = models.TextField(max_length=8192)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -24,7 +24,7 @@ class Condition(models.Model):
 
 
 class ConditionCA(models.Model):
-    condition = models.ForeignKey(Condition, related_name='custom_attributes', on_delete=models.CASCADE)
+    owner = models.ForeignKey(Condition, related_name='custom_attributes', on_delete=models.CASCADE)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
@@ -32,7 +32,7 @@ class ConditionCA(models.Model):
     value = models.CharField(max_length=8192)
 
     fields = [
-        'condition',
+        'owner',
         'name',
         'value',
     ]

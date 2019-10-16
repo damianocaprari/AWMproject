@@ -1,8 +1,7 @@
-from .serializers import CharacterClassSerializer
-from .serializers import UserSerializer
-from .serializers import ConditionSerializer
-
-from .permissions import IsOwnerOrReadOnly
+from app_api.serializers import CharacterClassSerializer
+from app_api.serializers import UserSerializer
+from app_api.serializers import ConditionSerializer
+from app_api.permissions import IsOwnerOrReadOnly
 from django.contrib.auth.models import User
 from rest_framework import generics, permissions, viewsets
 from rest_framework.decorators import api_view

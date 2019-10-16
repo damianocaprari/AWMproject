@@ -13,10 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from AWMproject import views
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.utils.translation import gettext_lazy
-from . import views
+from django.views.generic.base import RedirectView
+from rest_framework_jwt.views import obtain_jwt_token
 
 ###
 # Overrides of default values of admin.site
@@ -32,14 +36,6 @@ admin.site.site_header = gettext_lazy('AWMproject administration')
 
 # URL for the "View site" link at the top of each admin page.
 #admin.site.site_url = '/storefront/'
-
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib import admin
-from django.urls import path, include
-from django.views.generic.base import RedirectView
-
-from rest_framework_jwt.views import obtain_jwt_token
 
 
 urlpatterns = [

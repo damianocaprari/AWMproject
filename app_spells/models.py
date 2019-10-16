@@ -181,7 +181,7 @@ class Spell(models.Model):
 
 
 class SpellCA(models.Model):
-    spell = models.ForeignKey(Spell, related_name='custom_attributes', on_delete=models.CASCADE)
+    owner = models.ForeignKey(Spell, related_name='custom_attributes', on_delete=models.CASCADE)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
@@ -189,7 +189,7 @@ class SpellCA(models.Model):
     value = models.CharField(max_length=8192)
 
     fields = [
-        'spell',
+        'owner',
         'name',
         'value',
     ]
@@ -252,7 +252,7 @@ class SpellAdditionalInfo(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
-    avatar = models.ImageField(blank=True, null=True, upload_to='avatars')
+    avatar = models.ImageField(blank=True, null=True, upload_to='avatars/spell')
     aoe_type = models.CharField(max_length=50, choices=AOE_TYPE_CHOICES, blank=True, null=True)
     aoe_size = models.PositiveSmallIntegerField(null=True, blank=True)
     part_of_weapon_attack = models.BooleanField(default=False)

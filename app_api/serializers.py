@@ -1,7 +1,6 @@
 from app_spells.models import Spell
 from app_characterclasses.models import CharacterClass
 from app_conditions.models import Condition
-
 from django.contrib.auth.models import User
 from rest_framework import serializers
 

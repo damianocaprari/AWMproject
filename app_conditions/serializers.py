@@ -1,5 +1,5 @@
+from app_conditions.models import Condition, ConditionCA
 from rest_framework import serializers
-from app_conditions.models import  Condition, ConditionCA
 
 
 class ConditionCASerializer(serializers.ModelSerializer):

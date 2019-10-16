@@ -1,4 +1,4 @@
-from .models import CharacterClass
+from app_characterclasses.models import CharacterClass
 from app_spells.models import Spell
 from django.contrib import admin
 

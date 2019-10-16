@@ -1,5 +1,4 @@
 from app_conditions.models import Condition, ConditionCA
-
 from django.contrib import admin
 
 

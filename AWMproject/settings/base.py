@@ -45,9 +45,10 @@ PROJECT_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'app_characterclasses.apps.CharacterClassesConfig',
+    'app_conditions.apps.ConditionsConfig',
+    'app_profiles.apps.ProfilesConfig',
     'app_spells.apps.SpellsConfig',
     'app_api.apps.ApiConfig',
-    'app_conditions.apps.ConditionsConfig',
 ]
 
 INSTALLED_APPS = PROJECT_APPS + PREREQ_APPS
@@ -89,7 +90,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'app_api/templates'),
             os.path.join(BASE_DIR, 'app_api/templates'),
             os.path.join(BASE_DIR, 'app_characterclasses/templates'),
             os.path.join(BASE_DIR, 'app_conditions/templates'),
@@ -139,8 +139,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#TODO
-#LOGIN_URL = '/storefront/login/'
+
+# LOGIN_URL = '/storefront/login/'
 
 
 # Internationalization
@@ -182,6 +182,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework.authentication.TokenAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',

@@ -1,6 +1,5 @@
-from app_conditions.serializers import ConditionSerializer, ConditionCASerializer
 from app_conditions.models import Condition, ConditionCA
-
+from app_conditions.serializers import ConditionSerializer, ConditionCASerializer
 from rest_framework import viewsets, permissions
 
 
