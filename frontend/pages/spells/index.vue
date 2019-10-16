@@ -9,10 +9,21 @@
 -->
 
 <template>
-  <div class="col-12 text-right mb-4">
-    <div class="d-flex justify-content-between">
+  <v-container class="col-15">
+    <v-container class="justify-content-between">
       <h1>Spells</h1>
-    </div>
+    </v-container>
+
+    <!-- FILTER AREA from CHARACTER CLASS -->
+    <v-container>
+      <v-col align="center" class="text-center">
+          <v-col>
+            <v-btn class="ma-2" v-for="characterclass in characterclasses" :key="characterclass.id" @click="filterSpells">
+              {{characterclass.name}}
+            </v-btn>
+          </v-col>
+      </v-col>
+    </v-container>
 
     <!-- SEARCH AREA -->
     <v-container>
@@ -23,9 +34,7 @@
       </v-row>
     </v-container>
 
-
     <v-container>
-
       <v-row >
         <v-col>LEVEL</v-col>
         <v-col>NAME</v-col>
@@ -52,8 +61,6 @@
           <v-expansion-panel-content>
             <v-container class="grey lighten-5">
               <v-row>
-
-
                 <v-col class="bold text-center">LEVEL <v-col class="regular text-center">{{spell.level}}</v-col> </v-col>
                 <v-col class="bold text-center">CASTING TIME <v-col class="regular text-center">{{spell.casting_time_amount}}  {{ spell.casting_time_unit.toLowerCase() }}</v-col> </v-col>
                 <v-col class="bold text-center">RANGE/AREA
@@ -71,10 +78,13 @@
               </v-row>
               <v-row>
                 <v-col class="bold text-center">DURATION<v-col class="regular text-center">{{spell.casting_time_amount}}  {{ spell.casting_time_unit.toLowerCase() }}</v-col> </v-col>
-                <v-col>Column</v-col>
-                <div class="w-100"></div>
-                <v-col>Column</v-col>
-                <v-col>Column</v-col>
+                <v-col class="bold text-center">SCHOOL<v-col class="regular text-center">{{spell.school}}</v-col></v-col>
+                <v-col class="bold text-center">ATTACK/SAVE
+                  <v-col class="regular text-center" v-if="spell.spell_additional_info != null">
+                    {{spell.spell_additional_info.save_type}}
+                  </v-col>
+                </v-col>
+                <v-col class="bold text-center">DAMAGE/EFFECT<v-col class="regular text-center">{{spell['tag']}}</v-col></v-col>
               </v-row>
             </v-container>
             <v-divider></v-divider>
@@ -87,43 +97,53 @@
     </v-container>
 
 
-    <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="black" @click="toTop">
+    <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">
       <v-icon>mdi-arrow-up</v-icon>
     </v-btn>
-  </div>
+  </v-container>
 </template>
 
 
 <script>
-    import ConditionCard from "~/components/ConditionCard.vue";
  export default {
   head() {
     return {
       title: "Spells list"
     };
   },
+
   components: {
-    ConditionCard
+
   },
+
   async asyncData({ $axios, params }) {
+    let retval = { spells: [], characterclasses: []}
     try {
-      let query = await $axios.$get(`/spells/`);
-      if (query.count > 0){
-          return { spells: query.results }
+      let query_spell = await $axios.$get(`/spells/`);
+      let query_characterclasses = await $axios.$get(`/characterclasses/`);
+
+      if (query_spell.count > 0) {
+          retval.spells = query_spell.results
       }
-      return { spells: [] };
+      if (query_characterclasses.count > 0) {
+          retval.characterclasses = query_characterclasses.results
+      }
     } catch (e) {
-      return { spells: [] };
+      console.log(e);
     }
+    return retval
   },
+
   data() {
     return {
       spells: [],
       search: '',
       search_desc: '',
       search_lvl: '',
+      characterclasses: [],
     };
   },
+
   methods: {
     async deleteSpell(spell_id) {
         try {
@@ -134,6 +154,7 @@
             console.log(e);
         }
     },
+
     onScroll (e) {
       if (typeof window === 'undefined')
           return
@@ -142,24 +163,27 @@
     },
     toTop () {
       this.$vuetify.goTo(0)
+    },
+
+    filterSpells () {
+      return this.spells.filter((spell) => {
+      if (this.search.length > 0)
+        return spell.name.toLowerCase().match(this.search.toLowerCase())
+      if(this.search_desc.length > 0)
+        return spell.description.toLowerCase().match(this.search_desc.toLowerCase())
+      if(this.search_lvl.length > 0)
+        return spell.level == this.search_lvl
+      else
+        return this.spells
+      })
     }
   },
 
  computed: {
   filteredSpells: function(){
-    return this.spells.filter((spell) => {
-      if (this.search.length > 0)
-        return spell.name.toLowerCase().match(this.search.toLowerCase())
-      if(this.search_desc.length > 0) {
-        return spell.description.toLowerCase().match(this.search_desc.toLowerCase())
-      }
-      if(this.search_lvl.length > 0)
-        return spell.level == this.search_lvl
-      else
-        return this.spells
-    });
+    return this.filterSpells()
   }
- }
+ },
 
 };
 </script>
@@ -169,7 +193,9 @@
   ul {
     list-style-type:  none;
   }
+  /*
   .bold { font-weight: bold;}
   .text-center {text-align: center;}
   .regular { font-weight: normal; }
+   */
 </style>
