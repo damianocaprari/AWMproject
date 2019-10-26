@@ -12,4 +12,4 @@ class ConditionViewSet(viewsets.ModelViewSet):
 class ConditionCAViewSet(viewsets.ModelViewSet):
     queryset = ConditionCA.objects.all()
     serializer_class = ConditionCASerializer
-    permission_classes = (permissions.IsAdminUser,)  # todo da cambiare con il livello appropriato
+    permission_classes = (permissions.AllowAny,)  # todo da cambiare con il livello appropriato

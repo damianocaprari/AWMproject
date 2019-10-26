@@ -1,25 +1,23 @@
 <template>
-  <div class="col-12 text-right mb-4">
-    <div class="d-flex justify-content-between">
-      <h1 class="text-white">Conditions</h1>
-    </div>
+  <v-container>
+    <v-container class="justify-content-between">
+      <h1>Conditions</h1>
+    </v-container>
 
-    <div>
-      <!--
-      <input type="text" v-model="search" placeholder="search conditions"/>
-      -->
+    <v-container>
+      <!--  <input type="text" v-model="search" placeholder="search conditions"/>  -->
       <v-text-field v-model="search" label="Search conditions" outlined dense></v-text-field>
-    </div>
+    </v-container>
 
-    <div>
+    <v-container>
       <v-list v-for="condition in filteredConditions" :key="condition.id" >
           <v-list-item>
             <condition-card :onDelete="deleteCondition" :condition="condition"></condition-card>
           </v-list-item>
       </v-list>
-    </div>
+    </v-container>
 
-    <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="black" @click="toTop">
+    <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">
       <v-icon>mdi-arrow-up</v-icon>
     </v-btn>
     <!--
@@ -28,7 +26,7 @@
           <v-icon>keyboard_arrow_up</v-icon>
     </v-btn>
     -->
-  </div>
+  </v-container>
 </template>
 
 
@@ -44,8 +42,10 @@
     ConditionCard
   },
   async asyncData({ $axios, params }) {
+    console.log("prima del try")
     try {
       let query = await $axios.$get(`/conditions/`);
+      console.log("dentro try", query)
       if (query.count > 0){
           return { conditions: query.results }
       }

@@ -26,7 +26,7 @@ SECRET_KEY = '_rhepc(jcgh3u_dg-#i59x0-=c%$f_y)uy_youww-c0_n3&_6_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", ""]
 
 
 # Application definition
