@@ -33,7 +33,7 @@
                     <v-container fluid>
                         <v-row>
                             <!-- Filter for spell name -->
-                            <v-col cols="12" md="6">
+                            <v-col cols="12" md="4">
                                 <v-row class="pa-3">
                                     <v-text-field
                                             v-model="spellFilterValue"
@@ -44,7 +44,7 @@
                             </v-col>
 
                             <!-- Filter for levels -->
-                            <v-col cols="12" md="6">
+                            <v-col cols="12" md="4">
                                 <v-row class="pa-3">
                                     <v-select
                                             :items="levelsList"
@@ -53,6 +53,20 @@
                                     ></v-select>
                                 </v-row>
                             </v-col>
+
+                            <!-- Filter for tags -->
+                            <v-col cols="12" md="4">
+                                <v-row class="pa-3">
+                                    <v-select
+                                            :items="spelltags"
+                                            v-model="spelltagsFilterValue"
+                                            label="Spell tags"
+                                    ></v-select>
+                                </v-row>
+                            </v-col>
+
+                            <!-- FAI SEARCH FOR CLASSES con lista spuntata-->
+
 
                         </v-row>
                     </v-container>
@@ -85,9 +99,10 @@
                         </v-row>
                         <v-row>
                             <v-col class="bold text-center">DURATION
-                                <v-col class="regular text-center">{{item.casting_time_amount}} {{
-                                    item.casting_time_unit.toLowerCase() }}
+                                <v-col class="regular text-center" v-if="item.duration_type.match('TIME')">
+                                    {{item.duration_amount}} {{item.duration_unit.toLowerCase()}}
                                 </v-col>
+                                <v-col class="regular text-center" v-else>{{item.duration_type.toLowerCase()}}</v-col>
                             </v-col>
 
                             <v-col class="bold text-center">SCHOOL
@@ -104,17 +119,22 @@
 
                             <v-col class="bold text-center">DAMAGE/EFFECT
                                 <v-col class="regular text-center"
-                                        v-if="item.spell_additional_info != null &&
+                                       v-if="item.spell_additional_info != null &&
                                         item.spell_additional_info.tags != null ">
-                                    <span v-for="tag in item.spell_additional_info.tags" :key="tag.id">{{tag.tag}}</span>
+                                    <span v-for="tag in item.spell_additional_info.tags"
+                                          :key="tag.id">{{tag.tag}} </span>
                                 </v-col>
                                 <v-col class="regular text-center" v-else>-</v-col>
-
                             </v-col>
                         </v-row>
+
                         <v-divider></v-divider>
+
                         <v-container>
                             {{ item.description}}
+                        </v-container>
+                        <v-container>
+                            Classes: {{item.class_list}}
                         </v-container>
                     </td>
 
@@ -251,22 +271,70 @@
         components: {},
 
         async asyncData({$axios, params}) {
-            let retval = {spells: [], characterclasses: []}
+            let retval = {spells: [], characterclasses: [], spelltags: []}
             try {
                 let query_spell = await $axios.$get(`/spells/`);
                 let query_characterclasses = await $axios.$get(`/characterclasses/`);
+                let query_spelltags = await $axios.$get(`/spelltags/`);
+
+                if (query_characterclasses.count > 0) {
+                    retval.characterclasses = query_characterclasses.results
+                }
 
                 if (query_spell.count > 0) {
                     retval.spells = query_spell.results
-                    // -- add casting_time value --
+                    // -- Add casting_time value
                     retval.spells.forEach(spell => {
                         let casting_time = "" + spell.casting_time_amount + " " + spell.casting_time_unit.toLowerCase()
                         spell['casting_time'] = casting_time
                     })
+
+                    // -- Add tags
+                    retval.spells.forEach(spell => {
+                        if (spell.spell_additional_info != null) {
+                            if (spell.spell_additional_info.tags != null) {
+                                // let tag_list = "" + spell.spell_additional_info.tags[0].tag
+                                let tag_list = ""
+                                for (var cnt in spell.spell_additional_info.tags) {
+                                    tag_list = tag_list.concat(spell.spell_additional_info.tags[cnt].tag)
+                                    tag_list = tag_list.concat(" ")
+                                }
+                                spell['tag_list'] = tag_list
+                            } else
+                                spell['tag_list'] = '-'
+                        } else {
+                            spell['tag_list'] = '-'
+                        }
+                    })
+
+                    // -- Add classes name
+                    retval.spells.forEach(spell => {
+                        if (spell.classes != null) {
+                            let class_list = ""
+                            for (var cnt in spell.classes) {
+                                for (var cl in query_characterclasses.results) {
+                                    var a = query_characterclasses.results[cl].url
+                                    if (a.match(spell.classes[cnt])) {
+                                        class_list = class_list.concat(query_characterclasses.results[cl].name)
+                                        class_list = class_list.concat(" ")
+                                    }
+                                }
+                            }
+                            spell['class_list'] = class_list
+                        }
+                    })
+
+
                 }
 
-                if (query_characterclasses.count > 0) {
-                    retval.characterclasses = query_characterclasses.results
+
+                if (query_spelltags.count > 0) {
+                    let v = {text: "All", value: null}
+                    retval.spelltags.push(v)
+                    for (var i = 0; i < query_spelltags.count; i++) {
+                        let v = {text: query_spelltags.results[i].tag, value: query_spelltags.results[i].tag}
+                        retval.spelltags.push(v)
+                    }
                 }
             } catch (e) {
                 console.log(e);
@@ -300,16 +368,18 @@
                 // Filter models
                 spellFilterValue: '',
                 levelsFilterValue: null,
+                spelltagsFilterValue: null,
 
                 // v-data-table
                 headers: [
                     {text: 'LEVEL', value: 'level', align: 'left', filter: this.levelsFilter},
-                    {text: 'NAME', value: 'name', align: 'center', filter: this.nameFilter},
+                    {text: 'NAME', value: 'name', align: 'center', filter: this.nameFilter,},
                     {text: 'CASTING TIME', value: 'casting_time', align: 'center', sortable: false},
+                    {text: 'TAGS', value: 'tag_list', align: 'center', filter: this.spelltagsFilter},
                     {text: ' ', value: 'data-table-expand', align: 'left'}
                 ],
-
                 expanded: [],
+                spelltags: []       // For tags
 
 
             };
@@ -361,7 +431,7 @@
             */
 
             // ----- NEW FILTER -----
-            // Filter for spell name col
+            // -- Filter for spell name col
             nameFilter(value) {
                 if (!this.spellFilterValue) {
                     return true;
@@ -369,12 +439,20 @@
                 return value.toLowerCase().includes(this.spellFilterValue.toLowerCase());
             },
 
-            // Filter for level col
+            // -- Filter for level col
             levelsFilter(value) {
                 if (!this.levelsFilterValue) {
                     return true;
                 }
                 return value == this.levelsFilterValue;
+            },
+
+            // -- Filter for spell tags col
+            spelltagsFilter(value) {
+                if (!this.spelltagsFilterValue) {
+                    return true;
+                }
+                return value.toLowerCase().includes(this.spelltagsFilterValue.toLowerCase());
             },
 
             // Expand row
@@ -393,10 +471,6 @@
             },
             */
 
-            returnedSpells: function () {
-
-                return this.spells
-            },
 
         },
 
