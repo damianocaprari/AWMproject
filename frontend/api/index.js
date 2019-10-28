@@ -1,13 +1,16 @@
-import axios from 'axios'
-
-console.log('api/index.js')
-
 export default {
   auth: {
-    me: (userId) => axios.get(`api/users/${userId}/`),
-    login: (data) => axios.post('auth/', {
-      username: data.email,
+    me: ($axios, userId) => $axios.$get(`users/${userId}/`),
+    login: ($axios, data) => $axios.$post('auth/', {
+      username: data.username,
       password: data.password
+    }),
+    register: ($axios, data) => $axios.$post('users/', {
+      username: data.username,
+      password: data.password,
+      email: data.email,
+      first_name: data.first_name,
+      last_name: data.last_name
     })
   }
 }

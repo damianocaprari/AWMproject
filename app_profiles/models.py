@@ -26,7 +26,7 @@ class Profile(models.Model):
 
 
 class ProfileCA(models.Model):
-    owner = models.ForeignKey(Profile, related_name='custom_attributes', on_delete=models.CASCADE)
+    owner = models.ForeignKey(Profile, related_name='custom_attributes', on_delete=models.CASCADE, blank=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
@@ -45,7 +45,7 @@ class ProfileCA(models.Model):
 
 
 class UserCA(models.Model):
-    owner = models.ForeignKey('auth.User', related_name='custom_attributes', on_delete=models.CASCADE)
+    owner = models.ForeignKey('auth.User', related_name='custom_attributes', on_delete=models.CASCADE, blank=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 

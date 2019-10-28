@@ -35,7 +35,7 @@ class SpellSerializer(serializers.HyperlinkedModelSerializer):
     classes = serializers.HyperlinkedRelatedField(view_name='api:characterclass-detail', many=True,
                                                   queryset=CharacterClass.objects.all())
     spell_additional_info = SpellAdditionalInfoSerializer()
-    custom_attributes = SpellCASerializer(many=True)
+    custom_attributes = SpellCASerializer(many=True, allow_null=True, required=False)
 
     class Meta:
         model = Spell

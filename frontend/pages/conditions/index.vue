@@ -73,7 +73,7 @@
     onScroll (e) {
       if (typeof window === 'undefined')
           return
-      const top = window.pageYOffset ||   e.target.scrollTop || 0
+      const top = window.pageYOffset || e.target.scrollTop || 0
       this.fab = top > 20
     },
     toTop () {
@@ -81,22 +81,16 @@
     },
   },
 
- computed: {
-  filteredConditions: function(){
-    return this.conditions.filter((condition) => {
-      return condition.name.toLowerCase().match(this.search.toLowerCase())
-    });
-  }
- }
+  computed: {
+    filteredConditions: function(){
+      return this.conditions.filter((condition) => {
+        return condition.name.toLowerCase().match(this.search.toLowerCase())
+      });
+    }
+   }
 };
-
-
 </script>
 
 
 <style scoped>
-  ul {
-    list-style-type:  none;
-  }
-
 </style>

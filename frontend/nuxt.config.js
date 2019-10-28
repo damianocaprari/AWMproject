@@ -18,7 +18,7 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/d20_favicon.jpg' }
     ]
   },
   /*
@@ -34,6 +34,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/api/init.js',
+    '~/plugins/axios.js'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -62,6 +64,22 @@ export default {
     theme: {
       dark: false,
       themes: {
+        light: {
+          primary: colors.grey.darken4,
+          onprimary: colors.shades.white,
+          accent: colors.red.accent4,
+          onaccent: colors.shades.white,
+          secondary: colors.grey.darken2,
+          onsecondary: colors.shades.white,
+          success: colors.green.accent3,
+          onsuccess: colors.shades.black,
+          info: colors.lightBlue.lighten1,
+          oninfo: colors.shades.black,
+          warning: colors.amber.base,
+          onwarning: colors.shades.black,
+          error: colors.deepOrange.accent4,
+          onerror: colors.shades.white
+        },
         dark: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,
@@ -85,6 +103,8 @@ export default {
     }
   },
   router: {
-    middleware: ['auth']
+    middleware: [
+      'auth',
+    ]
   }
 }

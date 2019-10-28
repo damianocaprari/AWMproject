@@ -11,7 +11,7 @@ class ConditionCASerializer(serializers.ModelSerializer):
 
 class ConditionSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='api:condition-detail')
-    custom_attributes = ConditionCASerializer(many=True)
+    custom_attributes = ConditionCASerializer(many=True, allow_null=True, required=False)
 
     class Meta:
         model = Condition

@@ -92,8 +92,8 @@
                             <v-col class="bold text-center">COMPONTENTS
                                 <v-col class="regular text-center">
                                     <span v-if="item.component_verbal == true">V</span>
-                                    <span v-if="item.component_somatic == true">S </span>
-                                    <span v-if="item.component_material == true">M </span>
+                                    <span v-if="item.component_somatic == true">S</span>
+                                    <span v-if="item.component_material == true">M</span>
                                 </v-col>
                             </v-col>
                         </v-row>
@@ -283,6 +283,12 @@
 
                 if (query_spell.count > 0) {
                     retval.spells = query_spell.results
+                    retval.spells.concat(retval.spells)
+                    retval.spells.concat(retval.spells)
+                    retval.spells.concat(retval.spells)
+                    retval.spells.concat(retval.spells)
+                    retval.spells.concat(retval.spells)
+                    retval.spells.concat(retval.spells)
                     // -- Add casting_time value
                     retval.spells.forEach(spell => {
                         let casting_time = "" + spell.casting_time_amount + " " + spell.casting_time_unit.toLowerCase()

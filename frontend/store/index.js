@@ -4,24 +4,23 @@ import { setAuthToken, resetAuthToken } from '~/utils/auth'
 export const actions = {
   nuxtServerInit ({ dispatch }, context) {
     return new Promise((resolve, reject) => {
-      console.log('store/index.js nuxtServerInit()')
+      //console.log('store/index.js nuxtServerInit()')
       const cookies = cookie.parse(context.req.headers.cookie || '')
-      console.log('cookies.hasOwnProperty(Authorization): ', cookies.hasOwnProperty('Authorization'))
-      console.log(cookies)
+      //console.log('cookies.hasOwnProperty(Authorization): ', cookies.hasOwnProperty('Authorization'))
       if (cookies.hasOwnProperty('Authorization') &&
       cookies.hasOwnProperty('userId')) {
-        setAuthToken(cookies['Authorization'])
+        setAuthToken(this.$axios, cookies['Authorization'])
         dispatch('auth/fetch', cookies['userId'])
           .then(result => {
             resolve(true)
           })
           .catch(error => {
             console.log('Provided token is invalid:', error.response)
-            resetAuthToken()
+            resetAuthToken(this.$axios)
             resolve(false)
           })
       } else {
-        resetAuthToken()
+        resetAuthToken(this.$axios)
         resolve(false)
       }
     })
