@@ -25,6 +25,7 @@
                     item-key="name"
                     show-expand
                     class="elevation-1"
+
                     @click:row="expandRow"
             >
 
@@ -33,7 +34,7 @@
                     <v-container fluid>
                         <v-row>
                             <!-- Filter for spell name -->
-                            <v-col cols="12" md="4">
+                            <v-col cols="15" md="3">
                                 <v-row class="pa-3">
                                     <v-text-field
                                             v-model="spellFilterValue"
@@ -44,7 +45,7 @@
                             </v-col>
 
                             <!-- Filter for levels -->
-                            <v-col cols="12" md="4">
+                            <v-col cols="15" md="3">
                                 <v-row class="pa-3">
                                     <v-select
                                             :items="levelsList"
@@ -55,7 +56,7 @@
                             </v-col>
 
                             <!-- Filter for tags -->
-                            <v-col cols="12" md="4">
+                            <v-col cols="15" md="3">
                                 <v-row class="pa-3">
                                     <v-select
                                             :items="spelltags"
@@ -65,7 +66,17 @@
                                 </v-row>
                             </v-col>
 
-                            <!-- FAI SEARCH FOR CLASSES con lista spuntata-->
+                            <!-- SEARCH FOR CLASSES con lista spuntata-->
+                            <v-col cols="15" md="3">
+                                <v-row class="pa-3">
+                                    <v-select
+                                            :items="characterclasses"
+                                            v-model="characterclassesFilterValue"
+                                            label="Character classes"
+
+                                    ></v-select>
+                                </v-row>
+                            </v-col>
 
 
                         </v-row>
@@ -277,10 +288,6 @@
                 let query_characterclasses = await $axios.$get(`/characterclasses/`);
                 let query_spelltags = await $axios.$get(`/spelltags/`);
 
-                if (query_characterclasses.count > 0) {
-                    retval.characterclasses = query_characterclasses.results
-                }
-
                 if (query_spell.count > 0) {
                     retval.spells = query_spell.results
                     retval.spells.concat(retval.spells)
@@ -295,7 +302,7 @@
                         spell['casting_time'] = casting_time
                     })
 
-                    // -- Add tags
+                    // -- Add tags in spells
                     retval.spells.forEach(spell => {
                         if (spell.spell_additional_info != null) {
                             if (spell.spell_additional_info.tags != null) {
@@ -313,7 +320,7 @@
                         }
                     })
 
-                    // -- Add classes name
+                    // -- Add classes name in spells
                     retval.spells.forEach(spell => {
                         if (spell.classes != null) {
                             let class_list = ""
@@ -342,6 +349,21 @@
                         retval.spelltags.push(v)
                     }
                 }
+
+
+                if (query_characterclasses.count > 0) {
+                    let v = {text: "All", value: null}
+                    retval.characterclasses.push(v)
+                    for (var i = 0; i < query_characterclasses.count; i++) {
+                        let v = {
+                            text: query_characterclasses.results[i].name,
+                            value: query_characterclasses.results[i].name
+                        }
+                        retval.characterclasses.push(v)
+                    }
+                }
+
+
             } catch (e) {
                 console.log(e);
             }
@@ -375,6 +397,7 @@
                 spellFilterValue: '',
                 levelsFilterValue: null,
                 spelltagsFilterValue: null,
+                characterclassesFilterValue: null,
 
                 // v-data-table
                 headers: [
@@ -382,10 +405,13 @@
                     {text: 'NAME', value: 'name', align: 'center', filter: this.nameFilter,},
                     {text: 'CASTING TIME', value: 'casting_time', align: 'center', sortable: false},
                     {text: 'TAGS', value: 'tag_list', align: 'center', filter: this.spelltagsFilter},
+                    {text: 'CLASSES', value: 'class_list', align: ' d-none', filter: this.characterclassesFilter},
+
                     {text: ' ', value: 'data-table-expand', align: 'left'}
                 ],
                 expanded: [],
-                spelltags: []       // For tags
+                // For filters
+                spelltags: [],       // For tags
 
 
             };
@@ -460,6 +486,15 @@
                 }
                 return value.toLowerCase().includes(this.spelltagsFilterValue.toLowerCase());
             },
+
+            // -- Filter for character classes
+            characterclassesFilter(value) {
+                if (!this.characterclassesFilterValue) {
+                    return true;
+                }
+                return value.toLowerCase().includes(this.characterclassesFilterValue.toLowerCase());
+            },
+
 
             // Expand row
             expandRow(item) {

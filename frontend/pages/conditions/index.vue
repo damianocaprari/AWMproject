@@ -42,10 +42,8 @@
     ConditionCard
   },
   async asyncData({ $axios, params }) {
-    console.log("prima del try")
     try {
       let query = await $axios.$get(`/conditions/`);
-      console.log("dentro try", query)
       if (query.count > 0){
           return { conditions: query.results }
       }

@@ -16,6 +16,7 @@ router.register('profiles', ProfileViewSet)
 router.register('spells', SpellViewSet)
 router.register('spelltags', SpellTagViewSet)
 router.register('users', UserViewSet)
+#router.register('monsters', MonsterViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
