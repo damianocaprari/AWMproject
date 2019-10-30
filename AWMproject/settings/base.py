@@ -48,7 +48,9 @@ PROJECT_APPS = [
     'app_conditions.apps.ConditionsConfig',
     'app_profiles.apps.ProfilesConfig',
     'app_spells.apps.SpellsConfig',
+    'app_monsters.apps.MonstersConfig',
     'app_api.apps.ApiConfig',
+
 ]
 
 INSTALLED_APPS = PROJECT_APPS + PREREQ_APPS

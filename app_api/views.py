@@ -11,6 +11,7 @@ from rest_framework.reverse import reverse
 from app_spells.models import Spell
 from app_characterclasses.models import CharacterClass
 from app_conditions.models import Condition
+from app_monsters.models import Monster
 
 # @api_view(['GET'])
 # def api_root(request, format=None):
@@ -81,5 +82,11 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 class ConditionsView(viewsets.ModelViewSet):
-    serializer_class = ConditionSerializer
     queryset = Condition.objects.all()
+    serializer_class = ConditionSerializer
+
+"""
+class MonstersView(viewsets.ModelViewSet):
+    queryset = Monster.objects.all()
+    serializer_class = MonstersSerializer
+"""
