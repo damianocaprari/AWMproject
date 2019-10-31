@@ -17,5 +17,9 @@ export default {
     email: data.email,
     first_name: data.first_name,
     last_name: data.last_name
-  })
+  }),
+
+  createMonster: ($axios, data) => $axios.$post( `monsters/`, data)
+    // o gli passi data così come' se tutti i nomi sono uguali, oppure mappi come sopra con le graffe intorno perche oggetto
+
 }

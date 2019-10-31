@@ -60,7 +60,8 @@
         clipped: false,
         items: [
           { title: 'Conditions', to: '/conditions' },
-          { title: 'Spells', to: '/spells' }
+          { title: 'Spells', to: '/spells' },
+          { title: 'Monsters', to:'/monsters'}
         ],
         rightDrawer: false,
         title: 'AWM project',

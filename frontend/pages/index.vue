@@ -6,6 +6,7 @@
     <v-col class="text-center" cols="">
       <div style="margin-bottom: 10px;"> <v-btn to="/conditions" block>View Conditions</v-btn> </div>
       <div style="margin-bottom: 10px;"> <v-btn to="/spells" block>View Spells</v-btn> </div>
+      <div style="margin-bottom: 10px;"> <v-btn to="/monsters" block>View Monsters</v-btn> </div>
     </v-col>
 
   </div>

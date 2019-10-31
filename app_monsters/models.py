@@ -55,7 +55,8 @@ class Monster(models.Model):
     SIZE_CHOICES = (
       ('Fine', 'Fine'),
       ('Diminutive', 'Diminutive'),
-      ('Small', 'Tiny'),
+      ('Tiny', 'Tiny'),
+      ('Small', 'Small'),
       ('Medium', 'Medium'),
       ('Large', 'Large'),
       ('Huge', 'Huge'),
@@ -70,6 +71,9 @@ class Monster(models.Model):
     version = models.CharField(max_length=256, null=True, blank=True)
 
     name = models.CharField(max_length=256, unique=True)
+
+    image = models.ImageField(null=True, blank=True, upload_to='avatars/monsters')
+
     size = models.CharField(max_length=256, choices=SIZE_CHOICES)
     type = models.CharField(max_length=256, null=True, blank=True)
     subtype = models.CharField(max_length=256, null=True, blank=True)
@@ -85,6 +89,7 @@ class Monster(models.Model):
     ability_con = models.PositiveSmallIntegerField()
     ability_int = models.PositiveSmallIntegerField()
     ability_wis = models.PositiveSmallIntegerField()
+    ability_cha = models.PositiveSmallIntegerField()
     # ## ability_cha = models.PositiveSmallIntegerField()
     # saves
     # skills
@@ -110,6 +115,7 @@ class Monster(models.Model):
     fields = [
       'author',
       'name',
+      'image',
       'version',
       'size',
       'type',
@@ -126,6 +132,7 @@ class Monster(models.Model):
       'ability_con',
       'ability_int',
       'ability_wis',
+      'ability_cha',
       # ## ability_cha = models.PositiveSmallIntegerField()
       # saves
       # skills
@@ -139,6 +146,7 @@ class Monster(models.Model):
       # special_abilities
       # actions
       # legendary_actions
+      # reaction
     ]
 
     readonly_fields = [
@@ -288,11 +296,18 @@ class MonsterReaction(models.Model):
   monster = models.ForeignKey(Monster, related_name='reactions', on_delete=models.CASCADE)
   content = models.TextField(max_length=4000, null=True, blank=True)
   name = models.CharField(max_length=50, null=True, blank=True)
+
   creation_time = models.DateTimeField(auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True)
   readonly_fields = [
     'creation_time',
     'last_modified',
+  ]
+
+  fields = [
+    'monster',
+    'content',
+    'name',
   ]
 
 
@@ -322,6 +337,11 @@ class MonsterSense(models.Model):
   readonly_fields = [
     'creation_time',
     'last_modified',
+  ]
+
+  fields = [
+    'monster',
+    'sense',
   ]
 
 
@@ -390,14 +410,11 @@ class MonsterTrait(models.Model):
     'creation_time',
     'last_modified',
   ]
-
-
-fields = [
+  fields = [
   'monster',
   'name',
   'content',
-
-]
+  ]
 
 
 
@@ -429,6 +446,13 @@ class MonsterSpecialAbilities(models.Model):
   readonly_fields = [
     'creation_time',
     'last_modified',
+  ]
+
+  fields = [
+    'monster',
+    'desc',
+    'name',
+    'attack_bonus',
   ]
 
 ##### -- FAI N_CLEAN CON MESSAGGI DI ERRORE

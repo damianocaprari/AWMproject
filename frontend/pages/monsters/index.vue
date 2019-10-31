@@ -1,0 +1,205 @@
+<template>
+    <v-container>
+        <v-container class="col-15">
+            <v-container class="justify-content-between">
+                <h1>Monsters</h1>
+            </v-container>
+
+
+            <v-data-table
+                    :headers="headers"
+                    :items="monsters"
+                    :items-per-page="5"
+
+                    item-key="name"
+                    class="elevation-1"
+                    @click:row="goToSinglePage"
+            >
+
+                <template v-slot:top>
+                    <v-container fluid>
+                        <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
+                        <v-row>
+                            <!-- filter for name -->
+                            <v-col cols="12" md="3">
+                                <v-row class="pa-3">
+                                    <v-text-field
+                                            v-model="monsterFilterValue"
+                                            type="text"
+                                            label="Name"
+                                    ></v-text-field>
+                                </v-row>
+                            </v-col>
+
+                            <!-- Filter for challenge rating -->
+                            <v-col cols="12" md="3">
+                                <v-row class="pa-3">
+                                    <v-select
+                                            :items="CRList"
+                                            v-model="CRFilterValue"
+                                            label="Challenge rating (CR)"
+                                    ></v-select>
+                                </v-row>
+                            </v-col>
+
+                            <!-- Filter for ALIGNMENT -->
+                            <v-col cols="12" md="3">
+                                <v-row class="pa-3">
+                                    <v-select
+                                            :items="AlignmentList"
+                                            v-model="AlignmentFilterValue"
+                                            label="Alignment"
+                                    ></v-select>
+                                </v-row>
+                            </v-col>
+
+                        </v-row>
+                    </v-container>
+                </template>
+
+            </v-data-table>
+
+
+        </v-container>
+    </v-container>
+
+</template>
+
+
+<script>
+    export default {
+        head() {
+            return {
+                title: "Monsters list",
+            };
+        },
+
+        components: {},
+
+        async asyncData({$axios, params}) {
+            let retval = {monsters: []}
+            try {
+                let query_monster = await $axios.$get(`/monsters/`);
+                if (query_monster.count > 0) {
+                    retval.monsters = query_monster.results
+
+                    retval.monsters.forEach(monster => {
+                        let armor_class_total = "" + monster.armor_class
+                        if(monster.armor_class_notes != ""){
+                            armor_class_total = armor_class_total+ " ("+ monster.armor_class_notes +")"
+                        }
+                        monster['armor_class_total'] = armor_class_total
+                    })
+                }
+
+
+            } catch (e) {
+                console.log(e);
+            }
+            return retval
+        },
+
+        data() {
+            return {
+                monsters: [],
+
+                CRList: [
+                    {text: "All", value: null},
+                    {text: "1/8", value: "1/8"},
+                    {text: "1/4", value: "1/4"},
+                    {text: "1/2", value: "1/2"},
+                    {text: "1", value: "1"},
+                    {text: "2", value: "2"},
+                    {text: "3", value: "3"},
+                    {text: "4", value: "4"},
+                    {text: "5", value: "5"},
+                    {text: "6", value: "6"},
+                    {text: "7", value: "7"},
+                    {text: "8", value: "8"},
+                    {text: "9", value: "9"},
+                    {text: "10", value: "10"},
+                    {text: "11", value: "11"},
+                    {text: "12", value: "12"},
+                    {text: "13", value: "13"},
+                    {text: "14", value: "14"},
+                    {text: "15", value: "15"},
+                    {text: "16", value: "16"},
+                    {text: "17", value: "17"},
+                    {text: "18", value: "18"},
+                    {text: "19", value: "19"},
+                    {text: "20", value: "20"},
+                ],
+                AlignmentList: [
+                    {text: "All", value: null},
+                    {text: "Good", value: "Good"},
+                    {text: "Neutral", value: "Neutral"},
+                    {text: "Evil", value: "Evil"},
+                    {text: "Lawful", value: "Lawful"},
+                    {text: "Chaotic", value: "Chaotic"},
+                ],
+
+
+                // Filter models
+                monsterFilterValue: '',
+                CRFilterValue: '',
+                AlignmentFilterValue: '',
+
+                // v-data-table
+                headers: [
+                    {text: 'NAME', value: 'name', align: 'left', filter: this.nameFilter},
+                    {text: 'HIT POINTS', value: 'hit_point', align: 'center'},
+                    {text: 'ARMOR CLASS', value: 'armor_class_total', align: 'center'},
+                    {text: 'CHALLENG RATING', value: 'challenge_rating', align: 'center', filter: this.crFilter},
+                    {text: 'ALIGNMENT', value: 'alignment', align: 'center', filter: this.alignmentFilter},
+
+                ],
+            };
+        },
+
+        methods: {
+            // -- Filter for name
+            nameFilter(value) {
+                if (!this.monsterFilterValue) {
+                    return true;
+                }
+                return value.toLowerCase().includes(this.monsterFilterValue.toLowerCase());
+            },
+
+            // -- Filter for challenge rating
+            crFilter(value) {
+                if (!this.CRFilterValue) {
+                    return true;
+                }
+                return value == this.CRFilterValue;
+            },
+
+            // -- Filter for ALIGNMENT
+            alignmentFilter(value) {
+                if (!this.AlignmentFilterValue) {
+                    return true;
+                }
+                return value.toLowerCase().includes(this.AlignmentFilterValue.toLowerCase())
+            },
+
+
+
+            // go to single page
+            goToSinglePage(item){
+                console.log("ASDASDD")
+                console.log(item.id)
+                let number = item.id
+                let link = "/monsters/"+ item.id
+                console.log(link)
+                window.location.replace(link)
+            }
+
+
+        },
+
+
+    };
+</script>
+
+<style scoped>
+
+</style>
