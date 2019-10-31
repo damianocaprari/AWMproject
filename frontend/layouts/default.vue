@@ -25,7 +25,9 @@
     </v-navigation-drawer>
 
     <v-app-bar app class="primary onprimary--text" :clipped-left="clipped">
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-toolbar-title>
+        <v-btn text color="onprimary" x-large to="/">{{ title }}</v-btn>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         class="primary onprimary--text"
@@ -61,7 +63,7 @@
           { title: 'Spells', to: '/spells' }
         ],
         rightDrawer: false,
-        title: 'AWM project'
+        title: 'AWM project',
       }
     },
     beforeCreate() {

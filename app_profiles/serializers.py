@@ -18,6 +18,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id',] + Profile.fields + Profile.readonly_fields + ['custom_attributes',]
+        read_only_fields = ['id', 'user', ]
 
 
 class UserCASerializer(serializers.ModelSerializer):

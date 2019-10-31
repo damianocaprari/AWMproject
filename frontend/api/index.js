@@ -12,5 +12,10 @@ export default {
       first_name: data.first_name,
       last_name: data.last_name
     })
-  }
+  },
+  updateUserProfile: ($axios, userId, data) => $axios.$put(`users/${userId}/`, {
+    email: data.email,
+    first_name: data.first_name,
+    last_name: data.last_name
+  })
 }

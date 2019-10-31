@@ -21,4 +21,10 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework.renderers.JSONRenderer',
     ],
+    #'DEFAULT_PARSERS_CLASSES' : [
+#        'rest_framework.parsers.JSONParser',
+#        'rest_framework.parsers.FileUploadParser',
+#        'rest_framework.parsers.MultiPartParser',
+#        'rest_framework.parsers.FormParser',
+#    ]
 }

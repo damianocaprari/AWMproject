@@ -25,7 +25,9 @@
     </v-navigation-drawer>
 
     <v-app-bar app class="primary onprimary--text" :clipped-left="clipped">
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-toolbar-title>
+        <v-btn id="go-to-hp" text color="onprimary" x-large to="/">{{ title }}</v-btn>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         class="primary onprimary--text"
@@ -80,5 +82,8 @@
       background-position: right;
       background-size: cover;
       position: relative;
+  }
+  #go-to-hp.v-btn:before {
+    background-color: unset;
   }
 </style>
