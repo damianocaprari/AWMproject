@@ -2,37 +2,50 @@
     <v-container>
         <h1>{{ monster.name }}</h1>
 
-        <!-- TODO: add image-->
+        <v-divider></v-divider>
+
+
         <!-- TODO: togli virgole nei for -->
 
         <v-container>
             <v-row>
-                <span>{{monster.size}} </span>
-                <span v-if="monster.type != null">, {{monster.type}}</span>
-                <span v-if="monster.subtype != null">, {{monster.subtype}}</span>
-            </v-row>
+                <v-col>
+                    <v-row>
+                        <span>{{monster.size}} </span>
+                        <span v-if="monster.type != null">, {{monster.type}}</span>
+                        <span v-if="monster.subtype != null">, {{monster.subtype}}</span>
+                    </v-row>
 
-            <v-divider></v-divider>
+                    <v-row>
+                        <span class="boldedname">Armor Class:</span>
+                        <span>{{monster.armor_class}}</span>
+                        <span v-if="monster.armor_class_notes != null"> ({{monster.armor_class_notes}})</span>
+                    </v-row>
 
-            <v-row>
-                <span class="boldedname">Armor Class:</span>
-                <span>{{monster.armor_class}}</span>
-                <span v-if="monster.armor_class_notes != null"> ({{monster.armor_class_notes}})</span>
-            </v-row>
-
-            <v-row>
-                <span class="boldedname">Hit Points:</span>
-                <span>{{monster.hit_point}} ({{monster.hit_dice}})</span>
-            </v-row>
+                    <v-row>
+                        <span class="boldedname">Hit Points:</span>
+                        <span>{{monster.hit_point}} ({{monster.hit_dice}})</span>
+                    </v-row>
 
 
-            <v-row v-if="monster.speeds.length > 0">
-                <span class="boldedname">Speed:</span>
-                <span v-for="(item, index) in monster.speeds" :key="item.id">
+                    <v-row v-if="monster.speeds.length > 0">
+                        <span class="boldedname">Speed:</span>
+                        <span v-for="(item, index) in monster.speeds" :key="item.id">
                     {{item.speed}}
                         <span v-if="index+1 < monster.speeds.length">,</span>
                 </span>
+                    </v-row>
+                </v-col>
+
+                <v-col v-if="monster.image != null">
+                    <v-img
+                            :src="monster.image"
+                            max-width="200">
+                    </v-img>
+                </v-col>
+
             </v-row>
+
 
             <v-divider></v-divider>
 
