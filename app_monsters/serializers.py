@@ -5,6 +5,11 @@ from app_monsters.models import Monster, MonsterAction, MonsterCA, MonsterCondit
 from rest_framework import serializers
 
 
+class MonsterActionSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = MonsterAction
+    fields = ['id', ] + MonsterAction.fields + MonsterAction.readonly_fields
+
 class MonsterSpeedSerializer(serializers.ModelSerializer):
   class Meta:
     model = MonsterSpeed
@@ -109,6 +114,7 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
   senses = MonsterSenseSerializer(many=True)
   special_abilities = MonsterSpecialAbilitiesSerializer(many=True)
   traits = MonsterTraitSerializer(many=True)
+  actions = MonsterActionSerializer(many=True)
   legendary_actions = MonsterLegendaryActionSerializer(many=True)
 
   custom_attributes = MonsterCASerializer(many=True, allow_null=True, required=False)
@@ -120,7 +126,7 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
                                                                          'condition_immunities', 'damage_immunities',
                                                                          'languages', 'reactions', 'senses',
                                                                          'special_abilities',
-                                                                         'traits', 'legendary_actions',
+                                                                         'traits', 'actions', 'legendary_actions',
                                                                          'custom_attributes']
 
   def create(self, validated_data):
