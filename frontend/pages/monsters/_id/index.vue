@@ -4,9 +4,6 @@
 
         <v-divider></v-divider>
 
-
-        <!-- TODO: togli virgole nei for -->
-
         <v-container>
             <v-row>
                 <v-col>
