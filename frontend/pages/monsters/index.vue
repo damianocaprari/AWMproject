@@ -53,6 +53,17 @@
                                 </v-row>
                             </v-col>
 
+                            <!-- Filter for SIZE -->
+                            <v-col cols="12" md="3">
+                                <v-row class="pa-3">
+                                    <v-select
+                                            :items="SizeList"
+                                            v-model="SizeFilterValue"
+                                            label="Size"
+                                    ></v-select>
+                                </v-row>
+                            </v-col>
+
                         </v-row>
                     </v-container>
                 </template>
@@ -85,8 +96,8 @@
 
                     retval.monsters.forEach(monster => {
                         let armor_class_total = "" + monster.armor_class
-                        if(monster.armor_class_notes != ""){
-                            armor_class_total = armor_class_total+ " ("+ monster.armor_class_notes +")"
+                        if (monster.armor_class_notes != null) {
+                            armor_class_total = armor_class_total + " (" + monster.armor_class_notes + ")"
                         }
                         monster['armor_class_total'] = armor_class_total
                     })
@@ -137,12 +148,25 @@
                     {text: "Lawful", value: "Lawful"},
                     {text: "Chaotic", value: "Chaotic"},
                 ],
+                SizeList: [
+                    {text: "All", value: null},
+                    {text: "Fine", value: "Fine"},
+                    {text: "Diminutive", value: "Diminutive"},
+                    {text: "Tiny", value: "Tiny"},
+                    {text: "Small", value: "Small"},
+                    {text: "Medium", value: "Medium"},
 
+                    {text: "Large", value: "Large"},
+                    {text: "Huge", value: "Huge"},
+                    {text: "Gargantuan", value: "Gargantuan"},
+                    {text: "Colossal", value: "Colossal"},
+                ],
 
                 // Filter models
                 monsterFilterValue: '',
                 CRFilterValue: '',
                 AlignmentFilterValue: '',
+                SizeFilterValue: '',
 
                 // v-data-table
                 headers: [
@@ -151,6 +175,7 @@
                     {text: 'ARMOR CLASS', value: 'armor_class_total', align: 'center'},
                     {text: 'CHALLENG RATING', value: 'challenge_rating', align: 'center', filter: this.crFilter},
                     {text: 'ALIGNMENT', value: 'alignment', align: 'center', filter: this.alignmentFilter},
+                    {text: 'SIZE', value: 'size', align: ' d-none', filter: this.sizeFilter},
 
                 ],
             };
@@ -181,14 +206,21 @@
                 return value.toLowerCase().includes(this.AlignmentFilterValue.toLowerCase())
             },
 
+            // -- Filter for SIZE
+            sizeFilter(value) {
+                if (!this.SizeFilterValue) {
+                    return true;
+                }
+                return value.toLowerCase().includes(this.SizeFilterValue.toLowerCase())
+            },
 
 
             // go to single page
-            goToSinglePage(item){
+            goToSinglePage(item) {
                 console.log("ASDASDD")
                 console.log(item.id)
                 let number = item.id
-                let link = "/monsters/"+ item.id
+                let link = "/monsters/" + item.id
                 console.log(link)
                 window.location.replace(link)
             }
