@@ -6,6 +6,7 @@
 
         <v-container>
             <v-row>
+
                 <v-col>
                     <v-row>
                         <span>{{monster.size}} </span>
@@ -28,50 +29,51 @@
                     <v-row v-if="monster.speeds.length > 0">
                         <span class="boldedname">Speed:</span>
                         <span v-for="(item, index) in monster.speeds" :key="item.id">
-                    {{item.speed}}
-                        <span v-if="index+1 < monster.speeds.length">,</span>
-                </span>
+                            {{item.speed}}
+                            <span v-if="index+1 < monster.speeds.length">,</span>
+                         </span>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <v-row>STR</v-row>
+                            <v-row>{{monster.ability_str}}</v-row>
+                        </v-col>
+                        <v-col>
+                            <v-row>DEX</v-row>
+                            <v-row>{{monster.ability_dex}}</v-row>
+                        </v-col>
+                        <v-col>
+                            <v-row>CON</v-row>
+                            <v-row>{{monster.ability_con}}</v-row>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-row>INT</v-row>
+                            <v-row>{{monster.ability_int}}</v-row>
+                        </v-col>
+                        <v-col>
+                            <v-row>WIS</v-row>
+                            <v-row>{{monster.ability_wis}}</v-row>
+                        </v-col>
+                        <v-col>
+                            <v-row>CHA</v-row>
+                            <v-row>{{monster.ability_cha}}</v-row>
+                        </v-col>
                     </v-row>
                 </v-col>
 
                 <v-col v-if="monster.image != null">
                     <v-img
                             :src="monster.image"
-                            max-width="200">
+                            max-width="250">
                     </v-img>
                 </v-col>
 
+
             </v-row>
 
-
-            <v-divider></v-divider>
-
-            <v-row>
-                <v-col>
-                    <v-row>STR</v-row>
-                    <v-row>{{monster.ability_str}}</v-row>
-                </v-col>
-                <v-col>
-                    <v-row>DEX</v-row>
-                    <v-row>{{monster.ability_dex}}</v-row>
-                </v-col>
-                <v-col>
-                    <v-row>CON</v-row>
-                    <v-row>{{monster.ability_con}}</v-row>
-                </v-col>
-                <v-col>
-                    <v-row>INT</v-row>
-                    <v-row>{{monster.ability_int}}</v-row>
-                </v-col>
-                <v-col>
-                    <v-row>WIS</v-row>
-                    <v-row>{{monster.ability_wis}}</v-row>
-                </v-col>
-                <v-col>
-                    <v-row>CHA</v-row>
-                    <v-row>{{monster.ability_cha}}</v-row>
-                </v-col>
-            </v-row>
 
             <v-divider></v-divider>
 
