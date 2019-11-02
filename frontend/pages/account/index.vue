@@ -75,7 +75,7 @@
     </v-row>
     <!-- EO PROFILE -->
 
-    <!-- CREATED SPELLS --
+    <!-- CREATED SPELLS -->
     <v-row wrap>
       <v-col>
         <v-card
@@ -84,230 +84,181 @@
         >
           <v-card-title class="secondary onsecondary--text"><h3>My Spells</h3></v-card-title>
           <v-card-text>
-            <v-list>
-              <v-list-group
-                v-for="item in spells"
-                :key="item.title"
-                v-model="item.active"
-                :prepend-icon="item.action"
-                no-action
-              >
-                <template v-slot:activator>
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
-                  </v-list-item-content>
-                </template>
-
-                <v-list-item
-                  v-for="subItem in item.items"
-                  :key="subItem.title"
-                  @click=""
-                >
-                  <v-list-item-content>
-                    <v-list-item-title v-text="subItem.title"></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-group>
-            </v-list>
+            <spells-table :spells="my_spells" :spelltags="spelltags" :characterclasses="characterclasses"></spells-table>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
-    !-- EO CREATED SPELLS -->
+    <!-- EO CREATED SPELLS -->
+
+    <!-- CREATED MONSTERS -->
+    <v-row wrap>
+      <v-col>
+        <v-card
+          max-width="768"
+          class="mx-auto"
+        >
+          <v-card-title class="secondary onsecondary--text"><h3>My Monsters</h3></v-card-title>
+          <v-card-text>
+            Qui ci vuole il component della tabella dei mostri
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+    <!-- EO CREATED MONSTERS -->
+
 
   </v-container>
 </template>
 
 <script>
-  import api from '~/api'
-  import FormData from 'form-data'
-  export default {
-    async asyncData(context) {
-      try {
-        let userId = context.store.state.auth.user.id
-        let user = await context.$axios.$get(`/users/${userId}`);
-        if (user != undefined){
-          console.log("/account/index asyncData() user", user)
-          return {
-            user: user,
-            avatar: user.profile.avatar,
-            form_data: {
-              email: user.email,
-              first_name: user.first_name,
-              last_name: user.last_name,
-            },
+    import api from '~/api'
+    import FormData from 'form-data'
+    import SpellsTable from '~/components/SpellsTable'
 
-              spells: [
-          {
-            action: 'local_activity',
-            title: 'Attractions',
-            items: [
-              { title: 'List Item' },
-            ],
-          },
-          {
-            action: 'restaurant',
-            title: 'Dining',
-            active: true,
-            items: [
-              { title: 'Breakfast & brunch' },
-              { title: 'New American' },
-              { title: 'Sushi' },
-            ],
-          },
-          {
-            action: 'school',
-            title: 'Education',
-            items: [
-              { title: 'List Item' },
-            ],
-          },
-          {
-            action: 'directions_run',
-            title: 'Family',
-            items: [
-              { title: 'List Item' },
-            ],
-          },
-          {
-            action: 'healing',
-            title: 'Health',
-            items: [
-              { title: 'List Item' },
-            ],
-          },
-          {
-            action: 'content_cut',
-            title: 'Office',
-            items: [
-              { title: 'List Item' },
-            ],
-          },
-          {
-            action: 'local_offer',
-            title: 'Promotions',
-            items: [
-              { title: 'List Item' },
-            ],
-          },
-        ],
-
-
-          }
-        }
-      } catch (e) {
-        context.redirect('/account/login')
-      }
-    },
-    data: () => ({
-      isEditing: false,
-      user: {},
-      avatar: '/images/image-placeholder.png',
-      form_data: {
-          email: '',
-          first_name: '',
-          last_name: ''
-      },
-      emailRules: [
-        v => (!v || /.+@.+\..+/.test(v))  || 'Email must be valid',
-      ],
-      alert: null,
-      loading: false
-    }),
-    methods: {
-      resetFormData() {
-        this.form_data = {
-          email: this.user.email,
-          first_name: this.user.first_name,
-          last_name: this.user.last_name,
-        }
-        this.isEditing = false
-      },
-      parseDate(dateTimeString) {
-        try {
-            let date = new Date(dateTimeString)
-            return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-        }
-        catch (e1) {
-          try {
-            let date = dateTimeString.split("T")[0]
-            let dateparams = date.split("-")
-            return `${dateparams[2]}-${dateparams[1]}-${dateparams[0]}`
-          }
-          catch (e2) {
-            return ""
-          }
-        }
-      },
-      submit () {
-        if (this.isEditing == false) return
-        this.alert = null
-        this.loading = true
-        api.updateUserProfile(this.$axios, this.user.id, this.form_data)
-          .then(result => {
-            //console.log('/account/index.vue .then() result', result)
-            this.alert = {type: 'success', message: result.message || 'Success'}
-            this.loading = false
-            this.isEditing = false
-            this.user.first_name = this.form_data.first_name
-            this.user.last_name = this.form_data.last_name
-            this.user.email = this.form_data.email
-          })
-        .catch(error => {
-          console.log('/account/index.vue .catch() error', error)
-          console.log('/account/index.vue .catch() error.response', error.response)
-          this.loading = false
-          if (error.response && error.response.data) {
-            this.alert = {
-              type: 'error',
-              message: error.response.data || 'Error'
+    export default {
+        components: {
+            SpellsTable,
+        },
+        async asyncData(context) {
+            let retval = {}
+            let userId = context.store.state.auth.user.id
+            try {
+                let user = await context.$axios.$get(`/users/${userId}`);
+                if (user != undefined){
+                    //console.log("/account/index asyncData() user", user)
+                    retval['user'] = user
+                    retval['avatar'] = user.profile.avatar
+                    retval['form_data'] = {
+                        email: user.email,
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                    }
+                }
+            } catch (e) {
+                console.log('/account/index.vue asyncData() catch(e)', e)
+                context.redirect('/account/login')
             }
-          }
-        })
-      },
-      pickImage() {
-        this.$refs.image.click()
-      },
-      onImagePicked (e) {
-        console.clear()
-        const files = e.target.files
-        if(files[0] !== undefined) {
-          if(files[0].name.lastIndexOf('.') <= 0) {
-            console.log('/account/index.vue onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
-            return
-          }
-          const fr = new FileReader ()
-          fr.readAsDataURL(files[0])
-          fr.addEventListener('load', () => {
-            let form_data = new FormData()
-            form_data.append('avatar', files[0], files[0].name)
-            this.$axios.$put(`profiles/${this.user.profile.id}/`,
-                             form_data,
-                             { headers: {'Content-Type': 'multipart/form-data'}})
-              .then(data => {
-                console.log('then data', data)
-              })
-              .catch(error => {
-                console.log('/account/index.vue onImagePicked() .catch error', error)
-                console.log('/account/index.vue onImagePicked() .catch error.response', error.response)
-              })
-            this.avatar = fr.result
-          })
-        } else {
-          this.avatar = '/images/image-placeholder.png'
-        }
-      }
-    },
-  }
+            try {
+                let my_spells = await context.app.getMySpells(userId)
+                return Object.assign(retval, my_spells)
+            } catch (e2) {
+                console.log('/account/index.vue asyncData() catch(e2)', e2)
+                return retval
+            }
+        },
+
+        data: () => ({
+            isEditing: false,
+            user: {},
+            my_spells: [],
+            characterclasses: [],
+            spelltags: [],
+            avatar: '/images/image-placeholder.png',
+            form_data: {
+                email: '',
+                first_name: '',
+                last_name: ''
+            },
+            emailRules: [
+                v => (!v || /.+@.+\..+/.test(v))  || 'Email must be valid',
+            ],
+            alert: null,
+            loading: false
+        }),
+        methods: {
+            resetFormData() {
+                this.form_data = {
+                    email: this.user.email,
+                    first_name: this.user.first_name,
+                    last_name: this.user.last_name,
+                }
+                this.isEditing = false
+            },
+            parseDate(dateTimeString) {
+                try {
+                    let date = new Date(dateTimeString)
+                    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+                }
+                catch (e1) {
+                    try {
+                        let date = dateTimeString.split("T")[0]
+                        let dateparams = date.split("-")
+                        return `${dateparams[2]}-${dateparams[1]}-${dateparams[0]}`
+                    }
+                    catch (e2) {
+                        return ""
+                    }
+                }
+            },
+            submit () {
+                if (this.isEditing == false) return
+                this.alert = null
+                this.loading = true
+                api.updateUserProfile(this.$axios, this.user.id, this.form_data)
+                    .then(result => {
+                        //console.log('/account/index.vue .then() result', result)
+                        this.alert = {type: 'success', message: result.message || 'Success'}
+                        this.loading = false
+                        this.isEditing = false
+                        this.user.first_name = this.form_data.first_name
+                        this.user.last_name = this.form_data.last_name
+                        this.user.email = this.form_data.email
+                    })
+                    .catch(error => {
+                        console.log('/account/index.vue .catch() error', error)
+                        console.log('/account/index.vue .catch() error.response', error.response)
+                        this.loading = false
+                        if (error.response && error.response.data) {
+                            this.alert = {
+                                type: 'error',
+                                message: error.response.data || 'Error'
+                            }
+                        }
+                    })
+            },
+            pickImage() {
+                this.$refs.image.click()
+            },
+            onImagePicked (e) {
+                const files = e.target.files
+                if(files[0] !== undefined) {
+                    if(files[0].name.lastIndexOf('.') <= 0) {
+                        console.log('/account/index.vue onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
+                        return
+                    }
+                    const fr = new FileReader ()
+                    fr.readAsDataURL(files[0])
+                    fr.addEventListener('load', () => {
+                        let form_data = new FormData()
+                        form_data.append('avatar', files[0], files[0].name)
+                        this.$axios.$put(`profiles/${this.user.profile.id}/`,
+                            form_data,
+                            { headers: {'Content-Type': 'multipart/form-data'}})
+                            .then(data => {
+                                //console.log('then data', data)
+                            })
+                            .catch(error => {
+                                console.log('/account/index.vue onImagePicked() .catch error', error)
+                                console.log('/account/index.vue onImagePicked() .catch error.response', error.response)
+                            })
+                        this.avatar = fr.result
+                    })
+                } else {
+                    this.avatar = '/images/image-placeholder.png'
+                }
+            }
+        },
+    }
 </script>
 
 <style scoped>
-.v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
-  opacity: .75;
-  position: absolute;
-  width: 100%;
-}
+  .v-card--reveal {
+    align-items: center;
+    bottom: 0;
+    justify-content: center;
+    opacity: .75;
+    position: absolute;
+    width: 100%;
+  }
 </style>

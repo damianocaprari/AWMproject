@@ -35,7 +35,8 @@ export default {
   */
   plugins: [
     '~/api/init.js',
-    '~/plugins/axios.js'
+    '~/plugins/axios.js',
+    '~/plugins/utils.js',
   ],
   /*
   ** Nuxt.js dev-modules
