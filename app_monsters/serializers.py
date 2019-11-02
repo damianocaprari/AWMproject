@@ -97,25 +97,25 @@ class MonsterCASerializer(serializers.ModelSerializer):
 
 class MonsterSerializer(serializers.HyperlinkedModelSerializer):
   url = serializers.HyperlinkedIdentityField(view_name='api:monster-detail')
-  author = serializers.HyperlinkedRelatedField(view_name='api:user-detail', read_only=True)
+  author = serializers.HyperlinkedRelatedField(view_name='api:user-detail', read_only=True, default=serializers.CurrentUserDefault())
   # classes = serializers.HyperlinkedRelatedField(view_name='api:characterclass-detail', many=True, queryset=CharacterClass.objects.all())
 
   # spell_additional_info = SpellAdditionalInfoSerializer()
   # custom_attributes = SpellCASerializer(many=True, allow_null=True, required=False)
-  speeds = MonsterSpeedSerializer(many=True)
-  saves = MonsterSaveSerializer(many=True)
-  skills = MonsterSkillSerializer(many=True)
-  damage_vulnerabilities = MonsterDamageVulnerabilitySerializer(many=True)
-  damage_resistances = MonsterDamageResistanceSerializer(many=True)
-  condition_immunities = MonsterConditionImmunitySerializer(many=True)
-  damage_immunities = MonsterDamageImmunitySerializer(many=True)
-  languages = MonsterLanguageSerializer(many=True)
-  reactions = MonsterReactionSerializer(many=True)
-  senses = MonsterSenseSerializer(many=True)
-  special_abilities = MonsterSpecialAbilitiesSerializer(many=True)
-  traits = MonsterTraitSerializer(many=True)
-  actions = MonsterActionSerializer(many=True)
-  legendary_actions = MonsterLegendaryActionSerializer(many=True)
+  speeds = MonsterSpeedSerializer(many=True, allow_null=True, required=False)
+  saves = MonsterSaveSerializer(many=True, allow_null=True, required=False)
+  skills = MonsterSkillSerializer(many=True, allow_null=True, required=False)
+  damage_vulnerabilities = MonsterDamageVulnerabilitySerializer(many=True, allow_null=True, required=False)
+  damage_resistances = MonsterDamageResistanceSerializer(many=True, allow_null=True, required=False)
+  condition_immunities = MonsterConditionImmunitySerializer(many=True, allow_null=True, required=False)
+  damage_immunities = MonsterDamageImmunitySerializer(many=True, allow_null=True, required=False)
+  languages = MonsterLanguageSerializer(many=True, allow_null=True, required=False)
+  reactions = MonsterReactionSerializer(many=True, allow_null=True, required=False)
+  senses = MonsterSenseSerializer(many=True, allow_null=True, required=False)
+  special_abilities = MonsterSpecialAbilitiesSerializer(many=True, allow_null=True, required=False)
+  traits = MonsterTraitSerializer(many=True, allow_null=True, required=False)
+  actions = MonsterActionSerializer(many=True, allow_null=True, required=False)
+  legendary_actions = MonsterLegendaryActionSerializer(many=True, allow_null=True, required=False)
 
   custom_attributes = MonsterCASerializer(many=True, allow_null=True, required=False)
 
@@ -130,7 +130,110 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
                                                                          'custom_attributes']
 
   def create(self, validated_data):
-    monster = Monster.object.create()  # (name = validate_data['name'], etc per ogni elemento
+    actions_validated_data = validated_data.pop('actions')
+    saves_validated_data = validated_data.pop('saves')
+    skills_validated_data = validated_data.pop('skills')
+    speeds_validated_data = validated_data.pop('speeds')
+    damage_resistances_validated_data = validated_data.pop('damage_resistances')
+    damage_vulnerabilities_validated_data = validated_data.pop('damage_vulnerabilities')
+    damage_immunities_validated_data = validated_data.pop('damage_immunities')
+    condition_immunities_validated_data = validated_data.pop('condition_immunities')
+    languages_validated_data = validated_data.pop('languages')
+    reactions_validated_data = validated_data.pop('reactions')
+    senses_validated_data = validated_data.pop('senses')
+    special_abilities_validated_data = validated_data.pop('special_abilities')
+    traits_validated_data = validated_data.pop('traits')
+    legendary_actions_validated_data = validated_data.pop('legendary_actions')
+    custom_attributes_validated_data = validated_data.pop('custom_attributes')
+
+    user = self.context['request'].user
+    print("\n\n\n", user,"\n\n\n\n")
+
+    monster = Monster.objects.create(**validated_data)
+    monster.author = user
+
+    actions_set_serializer = self.fields['actions']
+    for each in actions_validated_data:
+      each['owner'] = monster
+    actions = actions_set_serializer.create(actions_validated_data)
+
+
+    speeds_set_serializer = self.fields['speeds']
+    for each in speeds_validated_data:
+      each['owner'] = monster
+    speeds = speeds_set_serializer.create(speeds_validated_data)
+
+    saves_set_serializer = self.fields['saves']
+    for each in saves_validated_data:
+      each['owner'] = monster
+    saves = saves_set_serializer.create(saves_validated_data)
+
+    skills_set_serializer = self.fields['skills']
+    for each in skills_validated_data:
+      each['owner'] = monster
+    skills = skills_set_serializer.create(skills_validated_data)
+
+    damage_vulnerabilities_set_serializer = self.fields['damage_vulnerabilities']
+    for each in damage_vulnerabilities_validated_data:
+      each['owner'] = monster
+    damage_vulnerabilities = damage_vulnerabilities_set_serializer.create(damage_vulnerabilities_validated_data)
+
+    damage_resistances_set_serializer = self.fields['damage_resistances']
+    for each in damage_resistances_validated_data:
+      each['owner'] = monster
+    damage_resistances = damage_resistances_set_serializer.create(damage_resistances_validated_data)
+
+    condition_immunities_set_serializer = self.fields['condition_immunities']
+    for each in condition_immunities_validated_data:
+      each['owner'] = monster
+    condition_immunities = condition_immunities_set_serializer.create(condition_immunities_validated_data)
+
+    damage_immunities_set_serializer = self.fields['damage_immunities']
+    for each in damage_immunities_validated_data:
+      each['owner'] = monster
+    damage_immunities = damage_immunities_set_serializer.create(damage_immunities_validated_data)
+
+    languages_set_serializer = self.fields['languages']
+    for each in languages_validated_data:
+      each['owner'] = monster
+    languages = languages_set_serializer.create(languages_validated_data)
+
+    reactions_set_serializer = self.fields['reactions']
+    for each in reactions_validated_data:
+      each['owner'] = monster
+    reactions = reactions_set_serializer.create(reactions_validated_data)
+
+    senses_set_serializer = self.fields['senses']
+    for each in senses_validated_data:
+      each['owner'] = monster
+    senses = senses_set_serializer.create(senses_validated_data)
+
+    special_abilities_set_serializer = self.fields['special_abilities']
+    for each in special_abilities_validated_data:
+      each['owner'] = monster
+    special_abilities = special_abilities_set_serializer.create(special_abilities_validated_data)
+
+    traits_set_serializer = self.fields['traits']
+    for each in traits_validated_data:
+      each['owner'] = monster
+    traits = traits_set_serializer.create(traits_validated_data)
+
+    legendary_actions_set_serializer = self.fields['legendary_actions']
+    for each in legendary_actions_validated_data:
+      each['owner'] = monster
+    legendary_actions = legendary_actions_set_serializer.create(legendary_actions_validated_data)
+
+    custom_attributes_set_serializer = self.fields['custom_attributes']
+    for each in custom_attributes_validated_data:
+      each['owner'] = monster
+    custom_attributes = custom_attributes_set_serializer.create(custom_attributes_validated_data)
+
+    return monster
+
+
+"""
+  def create(self, validated_data):
+    monster = Monster.objects.create()  # (name = validate_data['name'], etc per ogni elemento
 
     # QUESTI SOTTO LI FAI PER QUELLI NON OBBLIGATORI
     '''
@@ -144,4 +247,17 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
     user = self.context['request'].user
     monster.author = user  # cosi carico id di user che l'ha creato
 
+    monster.name = validated_data.get['name']
+    monster.armor_class = validated_data.get['armor_class']
+    monster.name = validated_data.get['name']
+    monster.name = validated_data.get['name']
+    monster.name = validated_data.get['name']
+    monster.name = validated_data.get['name']
+    monster.name = validated_data.get['name']
+    monster.name = validated_data.get['name']
+    monster.name = validated_data.get['name']
+
+    #fai per opzionali
+
     user.save()
+"""

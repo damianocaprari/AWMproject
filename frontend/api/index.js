@@ -19,7 +19,11 @@ export default {
     last_name: data.last_name
   }),
 
-  createMonster: ($axios, data) => $axios.$post( `monsters/`, data)
+  createMonster: ($axios, data) => $axios.$post( `monsters/`, data, {
+    headers: {
+      Accept: "text/html"
+    }
+  })
     // o gli passi data così come' se tutti i nomi sono uguali, oppure mappi come sopra con le graffe intorno perche oggetto
 
 }

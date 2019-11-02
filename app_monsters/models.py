@@ -171,7 +171,7 @@ class Monster(models.Model):
 
 
 class MonsterAction(models.Model):
-  monster = models.ForeignKey(Monster, related_name='actions', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='actions', on_delete=models.CASCADE)
   desc = models.TextField(max_length=4000, null=True, blank=True)
   name = models.CharField(max_length=256, null=True, blank=True)
   attack_bonus = models.SmallIntegerField(default=0)
@@ -187,7 +187,7 @@ class MonsterAction(models.Model):
   ]
 
   fields = [
-    'monster',
+    'owner',
     'name',
     'desc',
     'attack_bonus',
@@ -197,7 +197,7 @@ class MonsterAction(models.Model):
 
 
 class MonsterConditionImmunity(models.Model):
-  monster = models.ForeignKey(Monster, related_name='condition_immunities', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='condition_immunities', on_delete=models.CASCADE)
   condition_immunity = models.CharField(max_length=256, null=True, blank=True)
 
   creation_time = models.DateTimeField(auto_now_add=True)
@@ -208,13 +208,13 @@ class MonsterConditionImmunity(models.Model):
   ]
 
   fields = [
-    'monster',
+    'owner',
     'condition_immunity',
   ]
 
 
 class MonsterDamageImmunity(models.Model):
-  monster = models.ForeignKey(Monster, related_name='damage_immunities', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='damage_immunities', on_delete=models.CASCADE)
   damage_immunity = models.CharField(max_length=256, null=True, blank=True)
   creation_time = models.DateTimeField(auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True)
@@ -223,13 +223,13 @@ class MonsterDamageImmunity(models.Model):
     'last_modified',
   ]
   fields = [
-    'monster',
+    'owner',
     'damage_immunity',
   ]
 
 
 class MonsterDamageResistance(models.Model):
-  monster = models.ForeignKey(Monster, related_name='damage_resistances', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='damage_resistances', on_delete=models.CASCADE)
   damage_resistance = models.CharField(max_length=256, null=True, blank=True)
   creation_time = models.DateTimeField(auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True)
@@ -238,13 +238,13 @@ class MonsterDamageResistance(models.Model):
     'last_modified',
   ]
   fields = [
-    'monster',
+    'owner',
     'damage_resistance',
   ]
 
 
 class MonsterDamageVulnerability(models.Model):
-  monster = models.ForeignKey(Monster, related_name='damage_vulnerabilities', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='damage_vulnerabilities', on_delete=models.CASCADE)
   damage_vulnerability = models.CharField(max_length=256, null=True, blank=True)
   creation_time = models.DateTimeField(auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True)
@@ -253,13 +253,13 @@ class MonsterDamageVulnerability(models.Model):
     'last_modified',
   ]
   fields = [
-    'monster',
+    'owner',
     'damage_vulnerability',
   ]
 
 
 class MonsterLanguage(models.Model):
-  monster = models.ForeignKey(Monster, related_name='languages', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='languages', on_delete=models.CASCADE)
   language = models.CharField(max_length=256, null=True, blank=True)
   creation_time = models.DateTimeField(auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True)
@@ -268,13 +268,13 @@ class MonsterLanguage(models.Model):
     'last_modified',
   ]
   fields = [
-    'monster',
+    'owner',
     'language',
   ]
 
 
 class MonsterLegendaryAction(models.Model):
-  monster = models.ForeignKey(Monster, related_name='legendary_actions', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='legendary_actions', on_delete=models.CASCADE)
   attack_bonus = models.SmallIntegerField(default=0)
   content = models.TextField(max_length=4000, null=True, blank=True)
   name = models.CharField(max_length=256, null=True, blank=True)
@@ -285,7 +285,7 @@ class MonsterLegendaryAction(models.Model):
     'last_modified',
   ]
   fields = [
-    'monster',
+    'owner',
     'attack_bonus',
     'content',
     'name',
@@ -293,7 +293,7 @@ class MonsterLegendaryAction(models.Model):
 
 
 class MonsterReaction(models.Model):
-  monster = models.ForeignKey(Monster, related_name='reactions', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='reactions', on_delete=models.CASCADE)
   content = models.TextField(max_length=4000, null=True, blank=True)
   name = models.CharField(max_length=50, null=True, blank=True)
 
@@ -305,14 +305,14 @@ class MonsterReaction(models.Model):
   ]
 
   fields = [
-    'monster',
+    'owner',
     'content',
     'name',
   ]
 
 
 class MonsterSave(models.Model):
-  monster = models.ForeignKey(Monster, related_name='saves', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='saves', on_delete=models.CASCADE)
   modifier = models.SmallIntegerField(null=True, blank=True)
   name = models.CharField(max_length=256, null=True, blank=True)
   creation_time = models.DateTimeField(auto_now_add=True)
@@ -323,14 +323,14 @@ class MonsterSave(models.Model):
   ]
 
   fields = [
-    'monster',
+    'owner',
     'modifier',
     'name'
   ]
 
 
 class MonsterSense(models.Model):
-  monster = models.ForeignKey(Monster, related_name='senses', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='senses', on_delete=models.CASCADE)
   sense = models.CharField(max_length=256, null=True, blank=True)
   creation_time = models.DateTimeField(auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True)
@@ -340,7 +340,7 @@ class MonsterSense(models.Model):
   ]
 
   fields = [
-    'monster',
+    'owner',
     'sense',
   ]
 
@@ -366,7 +366,7 @@ class MonsterSkill(models.Model):
     ('Performance', 'Performance'),
     ('Persuasion', 'Persuasion'),
   )
-  monster = models.ForeignKey(Monster, related_name='skills', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='skills', on_delete=models.CASCADE)
   modifier = models.SmallIntegerField(null=True, blank=True)
   name = models.CharField(max_length=256, null=True, blank=True, choices=SKILLS_CHOICES)
   creation_time = models.DateTimeField(auto_now_add=True)
@@ -377,15 +377,15 @@ class MonsterSkill(models.Model):
   ]
 
   fields = [
-    'monster',
+    'owner',
     'modifier',
     'name'
   ]
 
 
 class MonsterSpeed(models.Model):
-  monster = models.ForeignKey(Monster, related_name='speeds', on_delete=models.CASCADE)
-  speed = models.CharField(max_length=256, null=True, blank=True)
+  owner = models.ForeignKey(Monster, related_name='speeds', on_delete=models.CASCADE)
+  value = models.CharField(max_length=256, null=True, blank=True)
   creation_time = models.DateTimeField(auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True)
 
@@ -395,13 +395,13 @@ class MonsterSpeed(models.Model):
   ]
 
   fields = [
-    'monster',
-    'speed',
+    'owner',
+    'value',
   ]
 
 
 class MonsterTrait(models.Model):
-  monster = models.ForeignKey(Monster, related_name='traits', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='traits', on_delete=models.CASCADE)
   content = models.TextField(max_length=4000, null=True, blank=True)
   name = models.CharField(max_length=50, null=True, blank=True)
   creation_time = models.DateTimeField(auto_now_add=True)
@@ -411,7 +411,7 @@ class MonsterTrait(models.Model):
     'last_modified',
   ]
   fields = [
-  'monster',
+  'owner',
   'name',
   'content',
   ]
@@ -437,7 +437,7 @@ class MonsterCA(models.Model):
 
 
 class MonsterSpecialAbilities(models.Model):
-  monster = models.ForeignKey(Monster, related_name='special_abilities', on_delete=models.CASCADE)
+  owner = models.ForeignKey(Monster, related_name='special_abilities', on_delete=models.CASCADE)
   desc = models.TextField(max_length=4000, null=True, blank=True)
   name = models.CharField(max_length=256, null=True, blank=True)
   attack_bonus = models.SmallIntegerField(default=0)
@@ -449,7 +449,7 @@ class MonsterSpecialAbilities(models.Model):
   ]
 
   fields = [
-    'monster',
+    'owner',
     'desc',
     'name',
     'attack_bonus',

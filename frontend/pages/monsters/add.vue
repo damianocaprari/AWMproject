@@ -9,24 +9,24 @@
             <v-container>
                 <v-form @submit.prevent="submit">
                     <!--<v-alert v-if="alert" :type="alert.type">{{ alert.message }}</v-alert>-->
-                    <v-text-field v-model="name" label="Name"/>
-                    <v-select v-model="size" :items="sizeList" label="Size"></v-select>
-                    <v-select v-model="alignment" :items="alignmentList" label="Alignment"></v-select>
-                    <v-text-field v-model="armor_class" type="number" label="Armor Class"></v-text-field>
-                    <v-select v-model="challenge_rating" :items="CRList" label="Challenge rating - CR"></v-select>
-                    <v-text-field v-model="hit_point" type="number" label="Hit points"></v-text-field>
-                    <v-select v-model="hit_dice" :items="hitDiceList" label="Hit Dice"></v-select>
+                    <v-text-field v-model="monster.name" label="Name"/>
+                    <v-select v-model="monster.size" :items="sizeList" label="Size"></v-select>
+                    <v-select v-model="monster.alignment" :items="alignmentList" label="Alignment"></v-select>
+                    <v-text-field v-model="monster.armor_class" type="number" label="Armor Class"></v-text-field>
+                    <v-select v-model="monster.challenge_rating" :items="CRList" label="Challenge rating - CR"></v-select>
+                    <v-text-field v-model="monster.hit_point" type="number" label="Hit points"></v-text-field>
+                    <v-select v-model="monster.hit_dice" :items="hitDiceList" label="Hit Dice"></v-select>
 
                     <v-row>
                         <v-col>
-                            <v-text-field v-model="ability_str" type="number" label="STRENGTH"></v-text-field>
-                            <v-text-field v-model="ability_dex" type="number" label="DEXTERITY"></v-text-field>
-                            <v-text-field v-model="ability_con" type="number" label="CONSTITUTION"></v-text-field>
+                            <v-text-field v-model="monster.ability_str" type="number" label="STRENGTH"></v-text-field>
+                            <v-text-field v-model="monster.ability_dex" type="number" label="DEXTERITY"></v-text-field>
+                            <v-text-field v-model="monster.ability_con" type="number" label="CONSTITUTION"></v-text-field>
                         </v-col>
                         <v-col>
-                            <v-text-field v-model="ability_int" type="number" label="INTELLIGENCE"></v-text-field>
-                            <v-text-field v-model="ability_wis" type="number" label="WISDOM"></v-text-field>
-                            <v-text-field v-model="ability_cha" type="number" label="CHARISMA"></v-text-field>
+                            <v-text-field v-model="monster.ability_int" type="number" label="INTELLIGENCE"></v-text-field>
+                            <v-text-field v-model="monster.ability_wis" type="number" label="WISDOM"></v-text-field>
+                            <v-text-field v-model="monster.ability_cha" type="number" label="CHARISMA"></v-text-field>
                         </v-col>
                     </v-row>
 
@@ -40,7 +40,7 @@
                     <v-row justify="center">
                         <v-col class="text-center">
                             <v-btn type="submit" outlined color="accent">Save</v-btn>
-                            <v-btn text color="accent" @click="resetFormData">Cancel</v-btn>
+                            <!--<v-btn text color="accent" @click="resetFormData">Cancel</v-btn>-->
                         </v-col>
                     </v-row>
                 </v-form>
@@ -64,7 +64,7 @@
             return {
                 monster: {
                     name: "",
-                    image: "",
+                    image: null,
                     version: "",
                     size: "",
                     type: "",
@@ -83,6 +83,7 @@
                     challenge_rating: "",
                     creation_time: "",
                     last_modified: "",
+                    actions: [],
                     speeds: [],
                     saves: [],
                     skills: [],
@@ -164,13 +165,20 @@
             submit() {
                 this.alert = null
                 this.loading = true
-                console.log("AAAAAAAAAAAAA")
-                console.log("AAAAAAAAAAAAA")
-                console.log("AAAAAAAAAAAAA")
                 console.log(this.monster)
-                console.log("AAAAAAAAAAAAA")
-                console.log("AAAAAAAAAAAAA")
-                console.log("AAAAAAAAAAAAA")
+
+                this.monster.armor_class = Number(this.monster.armor_class)
+                console.log(this.monster.armor_class)
+
+                this.monster.hit_point = Number(this.monster.hit_point)
+                this.monster.ability_str = Number(this.monster.ability_str)
+                this.monster.ability_dex = Number(this.monster.ability_dex)
+                this.monster.ability_con = Number(this.monster.ability_con)
+                this.monster.ability_int = Number(this.monster.ability_int)
+                this.monster.ability_wis = Number(this.monster.ability_wis)
+                this.monster.ability_cha = Number(this.monster.ability_cha)
+
+                console.log(JSON.stringify(this.monster))
 
                 api.createMonster(this.$axios, this.monster)
                     .then(result => {

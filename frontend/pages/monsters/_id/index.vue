@@ -29,7 +29,7 @@
                     <v-row v-if="monster.speeds.length > 0">
                         <span class="boldedname">Speed:</span>
                         <span v-for="(item, index) in monster.speeds" :key="item.id">
-                            {{item.speed}}
+                            {{item.value}}
                             <span v-if="index+1 < monster.speeds.length">,</span>
                          </span>
                     </v-row>

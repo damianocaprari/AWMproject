@@ -57,7 +57,8 @@
                 items: [
                     {title: 'Conditions', to: '/conditions'},
                     {title: 'Spells', to: '/spells'},
-                    {title: 'Monsters', to: '/monsters'}
+                    {title: 'Monsters', to: '/monsters'},
+                    {title: 'Musics', to: '/musics'}
                 ],
                 rightDrawer: false,
                 title: 'AWM project'
