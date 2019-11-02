@@ -8,6 +8,8 @@
                 <h1>Spells</h1>
             </v-container>
 
+            <v-btn right color="primary" to="/spells/add">Add spell</v-btn>
+
             <spells-table :spells="spells" :spelltags="spelltags" :characterclasses="characterclasses"></spells-table>
 
             <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">

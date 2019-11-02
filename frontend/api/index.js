@@ -23,6 +23,12 @@ export default {
     headers: {
       Accept: "text/html"
     }
+  }),
+
+  createSpell: ($axios, data) => $axios.$post( `spells/`, data, {
+    headers: {
+      Accept: "text/html"
+    }
   })
     // o gli passi data così come' se tutti i nomi sono uguali, oppure mappi come sopra con le graffe intorno perche oggetto
 
