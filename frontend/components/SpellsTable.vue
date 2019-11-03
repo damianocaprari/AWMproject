@@ -127,7 +127,9 @@
           {{ item.description }}
         </v-container>
         <v-container>
-          Classes: {{ item.class_list }}
+          <v-row>Classes: {{ item.class_list }} </v-row>
+          <v-row>Tags: {{ item.tag_list }} </v-row>
+
         </v-container>
       </td>
     </template>
@@ -148,8 +150,9 @@
         headers: [
           {text: 'LEVEL', value: 'level', align: 'left', filter: this.levelsFilter},
           {text: 'NAME', value: 'name', align: 'center', filter: this.nameFilter,},
+          {text: 'SCHOOL', value: 'school', align: 'center', filter: this.schoolFilter,},
           {text: 'CASTING TIME', value: 'casting_time', align: 'center', sortable: false},
-          {text: 'TAGS', value: 'tag_list', align: 'center', filter: this.spelltagsFilter},
+          {text: 'TAGS', value: 'tag_list', align: ' d-none', filter: this.spelltagsFilter},
           {text: 'CLASSES', value: 'class_list', align: ' d-none', filter: this.characterclassesFilter},
           {text: ' ', value: 'data-table-expand', align: 'left'}
         ],

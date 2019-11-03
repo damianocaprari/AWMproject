@@ -32,7 +32,8 @@ class SpellAdditionalInfoSerializer(serializers.ModelSerializer):
 
 class SpellSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='api:spell-detail')
-    author = serializers.HyperlinkedRelatedField(view_name='api:user-detail', read_only=True)
+    author = serializers.HyperlinkedRelatedField(view_name='api:user-detail', read_only=True, default=serializers.CurrentUserDefault())
+
     classes = serializers.PrimaryKeyRelatedField(many=True, queryset=CharacterClass.objects.all())
     spell_additional_info = SpellAdditionalInfoSerializer( allow_null=True, required=False)
     custom_attributes = SpellCASerializer(many=True, allow_null=True, required=False)
@@ -54,11 +55,10 @@ class SpellSerializer(serializers.HyperlinkedModelSerializer):
         print("\n\n\n", user, "\n\n\n\n")
 
         spell  = Spell.objects.create(**validated_data)
-        spell.author = user
+
         #spell.save()
 
         print("POST SAVE")
-        print("")
         print("class valid data", classes_validated_data)
         for id in classes_validated_data:
             print("id", id)
@@ -80,6 +80,10 @@ class SpellSerializer(serializers.HyperlinkedModelSerializer):
             spell_additional_info_validated_data['owner'] = spell
             spell_additional_info = spell_additional_info_set_serializer.create(spell_additional_info_validated_data)
 
+        print("AAAAAAAAAAAAAAAAAAAAA\nAuthor: ", spell.author)
+        spell.author = user
+        print("AAAAAAAAAAAAAAAAAAAAA\nuser: ", user)
+        print("AAAAAAAAAAAAAAAAAAAAA\nAuthor after add: ", spell.author)
         return spell
 
         '''

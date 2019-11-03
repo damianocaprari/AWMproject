@@ -5,7 +5,6 @@
     <v-container class="action-buttons">
         <nuxt-link :to="`/conditions/${condition.id}/`" class="btn btn-sm btn-success"> View </nuxt-link>
         <nuxt-link :to="`/conditions/${condition.id}/edit/`" class="btn btn-sm btn-primary"> Edit </nuxt-link>
-        <button @click="onDelete(condition.id)"  class="btn btn-sm btn-danger">Delete</button>
     </v-container>
   </v-card>
 </template>

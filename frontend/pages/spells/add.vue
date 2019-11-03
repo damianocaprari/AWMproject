@@ -57,7 +57,7 @@
                             <v-select v-model="spell.range_type" :items="rangeList" label="Range type"></v-select>
                         </v-col>
                         <v-col cols="12" md="6">
-                            <v-text-field v-model="spell.range_distance"
+                            <v-text-field v-model="spell.range_distance" type="number"
                                           label="Range distance (opt)"/>
                         </v-col>
                     </v-row>
@@ -88,6 +88,17 @@
                         <v-col>
                             <v-select v-model="spell.higher_level" :items="booleanList"
                                       label="Higher level"></v-select>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <v-select v-model="spell.classes"
+                                      :items="characterClassesList"
+                                      label="Character classes"
+                                      multiple
+                                      ></v-select>
+
                         </v-col>
                     </v-row>
 
@@ -199,6 +210,20 @@
                     {text: 'Minute', value: 'MINUTE'},
                     {text: 'Hour', value: 'HOUR'},
                     {text: 'Day', value: 'DAY'},
+                ],
+                characterClassesList: [
+                    {text: "Barbarian", value: 1},
+                    {text: "Bard", value: 2},
+                    {text: "Cleric", value: 3},
+                    {text: "Druid", value: 4},
+                    {text: "Fighter", value: 5},
+                    {text: "Monk", value: 6},
+                    {text: "Paladin", value: 7},
+                    {text: "Ranger", value: 8},
+                    {text: "Rogue", value: 9},
+                    {text: "Sorcerer", value: 10},
+                    {text: "Warlock", value: 11},
+                    {text: "Wizard", value: 12}
                 ],
 
             };
