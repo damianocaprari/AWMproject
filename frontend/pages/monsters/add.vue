@@ -32,10 +32,11 @@
 
                     <!--
                     <v-container class="form-group">
-                        <label for>Monster image</label>
+                        <v-row>Monster image</v-row>
                         <input type="file" name="file" @change="onFileChange">
                     </v-container>
                     -->
+
 
                     <v-row justify="center">
                         <v-col class="text-center">
@@ -68,7 +69,7 @@
                     version: "",
                     size: "",
                     type: "",
-                    subtype: null,
+                    subtype: "",
                     alignment: "",
                     armor_class: null,
                     armor_class_notes: "",
@@ -182,7 +183,7 @@
 
                 api.createMonster(this.$axios, this.monster)
                     .then(result => {
-                        //console.log('/account/index.vue .then() result', result)
+                        //console.log('/account/index.vue.OLD .then() result', result)
                         this.alert = {type: 'success', message: result.message || 'Success'}
                         this.loading = false
                     })

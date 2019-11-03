@@ -11,9 +11,9 @@ export default ({ app, $axios }, inject) => {
     }
     app.getResourceId = getResourceId
 
-    /* used in /account/index.vue */
+    /* used in /account/index.vue.OLD */
     async function getMySpells (myId) {
-        //console.log("getMySpells")
+        console.log("getMySpells")
         let retval = {my_spells: [], characterclasses: [], spelltags: []}
         try {
             let query_spell = await $axios.$get(`/spells/`);

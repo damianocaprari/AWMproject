@@ -228,6 +228,7 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
       each['owner'] = monster
     custom_attributes = custom_attributes_set_serializer.create(custom_attributes_validated_data)
 
+    monster.save()
     return monster
 
 

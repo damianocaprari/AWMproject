@@ -1,83 +1,83 @@
 <template>
-    <v-container>
-        <v-container class="col-15">
-            <v-container class="justify-content-between">
-                <h1>Monsters</h1>
-            </v-container>
+  <v-container>
+    <v-container class="col-15">
+      <v-container class="justify-content-between">
+        <h1>Monsters</h1>
+      </v-container>
+
+      <v-data-table
+          :headers="headers"
+          :items="monsters"
+          :items-per-page="5"
+
+          item-key="name"
+          class="elevation-1"
+          @click:row="goToSinglePage">
+
+        <template v-slot:top>
+          <v-container fluid>
+            <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
+            <v-row>
+              <!-- filter for name -->
+              <v-col cols="12" md="3">
+                <v-row class="pa-3">
+                  <v-text-field
+                      v-model="monsterFilterValue"
+                      type="text"
+                      label="Name"
+                  ></v-text-field>
+                </v-row>
+              </v-col>
+
+              <!-- Filter for challenge rating -->
+              <v-col cols="12" md="3">
+                <v-row class="pa-3">
+                  <v-select
+                      :items="CRList"
+                      v-model="CRFilterValue"
+                      label="Challenge rating (CR)"
+                  ></v-select>
+                </v-row>
+              </v-col>
+
+              <!-- Filter for ALIGNMENT -->
+              <v-col cols="12" md="3">
+                <v-row class="pa-3">
+                  <v-select
+                      :items="AlignmentList"
+                      v-model="AlignmentFilterValue"
+                      label="Alignment"
+                  ></v-select>
+                </v-row>
+              </v-col>
+
+              <!-- Filter for SIZE -->
+              <v-col cols="12" md="3">
+                <v-row class="pa-3">
+                  <v-select
+                      :items="SizeList"
+                      v-model="SizeFilterValue"
+                      label="Size"
+                  ></v-select>
+                </v-row>
+              </v-col>
+
+            </v-row>
+          </v-container>
+        </template>
 
 
-            <v-data-table
-                    :headers="headers"
-                    :items="monsters"
-                    :items-per-page="5"
-
-                    item-key="name"
-                    class="elevation-1"
-                    @click:row="goToSinglePage"
-            >
-
-                <template v-slot:top>
-                    <v-container fluid>
-                        <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
-                        <v-row>
-                            <!-- filter for name -->
-                            <v-col cols="12" md="3">
-                                <v-row class="pa-3">
-                                    <v-text-field
-                                            v-model="monsterFilterValue"
-                                            type="text"
-                                            label="Name"
-                                    ></v-text-field>
-                                </v-row>
-                            </v-col>
-
-                            <!-- Filter for challenge rating -->
-                            <v-col cols="12" md="3">
-                                <v-row class="pa-3">
-                                    <v-select
-                                            :items="CRList"
-                                            v-model="CRFilterValue"
-                                            label="Challenge rating (CR)"
-                                    ></v-select>
-                                </v-row>
-                            </v-col>
-
-                            <!-- Filter for ALIGNMENT -->
-                            <v-col cols="12" md="3">
-                                <v-row class="pa-3">
-                                    <v-select
-                                            :items="AlignmentList"
-                                            v-model="AlignmentFilterValue"
-                                            label="Alignment"
-                                    ></v-select>
-                                </v-row>
-                            </v-col>
-
-                            <!-- Filter for SIZE -->
-                            <v-col cols="12" md="3">
-                                <v-row class="pa-3">
-                                    <v-select
-                                            :items="SizeList"
-                                            v-model="SizeFilterValue"
-                                            label="Size"
-                                    ></v-select>
-                                </v-row>
-                            </v-col>
-
-                        </v-row>
-                    </v-container>
-                </template>
-
-            </v-data-table>
+      </v-data-table>
 
 
-        </v-container>
     </v-container>
+  </v-container>
 
 </template>
 
 
 <script>
+
     export default {
         head() {
             return {
@@ -96,7 +96,7 @@
 
                     retval.monsters.forEach(monster => {
                         let armor_class_total = "" + monster.armor_class
-                        if (monster.armor_class_notes != null) {
+                        if (monster.armor_class_notes) {
                             armor_class_total = armor_class_total + " (" + monster.armor_class_notes + ")"
                         }
                         monster['armor_class_total'] = armor_class_total
@@ -176,7 +176,6 @@
                     {text: 'CHALLENG RATING', value: 'challenge_rating', align: 'center', filter: this.crFilter},
                     {text: 'ALIGNMENT', value: 'alignment', align: 'center', filter: this.alignmentFilter},
                     {text: 'SIZE', value: 'size', align: ' d-none', filter: this.sizeFilter},
-
                 ],
             };
         },
@@ -188,7 +187,8 @@
                     return true;
                 }
                 return value.toLowerCase().includes(this.monsterFilterValue.toLowerCase());
-            },
+            }
+            ,
 
             // -- Filter for challenge rating
             crFilter(value) {
@@ -196,7 +196,8 @@
                     return true;
                 }
                 return value == this.CRFilterValue;
-            },
+            }
+            ,
 
             // -- Filter for ALIGNMENT
             alignmentFilter(value) {
@@ -204,7 +205,8 @@
                     return true;
                 }
                 return value.toLowerCase().includes(this.AlignmentFilterValue.toLowerCase())
-            },
+            }
+            ,
 
             // -- Filter for SIZE
             sizeFilter(value) {
@@ -212,7 +214,8 @@
                     return true;
                 }
                 return value.toLowerCase().includes(this.SizeFilterValue.toLowerCase())
-            },
+            }
+            ,
 
 
             // go to single page
@@ -223,10 +226,16 @@
                 let link = "/monsters/" + item.id
                 console.log(link)
                 window.location.replace(link)
-            }
+            },
+
+            deleteItem(item) {
+                const index = this.monsters.indexOf(item)
+                confirm('Delete this monster?') && this.monsters.splice(index, 1)
+            },
 
 
-        },
+        }
+        ,
 
 
     };
