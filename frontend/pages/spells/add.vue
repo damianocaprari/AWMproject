@@ -1,5 +1,5 @@
 <template>
-    <v-container class="my-5">
+    <v-container fluid class="my-5">
         <v-container class="row">
             <v-container class="col-md-12 my-3">
                 <h2 class="mb-3 text-uppercase">new Spell</h2>

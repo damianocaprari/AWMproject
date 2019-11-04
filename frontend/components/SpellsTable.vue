@@ -57,12 +57,15 @@
                 :items="characterclasses"
                 v-model="characterclassesFilterValue"
                 label="Character classes"
-
               ></v-select>
             </v-row>
           </v-col>
         </v-row>
       </v-container>
+    </template>
+
+    <template v-slot:item.name="{ item }">
+      <n-link :to="`/spells/${item.id}`">{{ item.name }}</n-link>&nbsp;<span class="mdi mdi-open-in-new"></span>
     </template>
 
     <!-- expand item -->

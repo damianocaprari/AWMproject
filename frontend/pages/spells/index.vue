@@ -61,7 +61,7 @@
                                     tag_list = tag_list.concat(spell.spell_additional_info.tags[cnt].tag)
                                     tag_list = tag_list.concat(" ")
                                 }
-                                spell['tag_list'] = tag_list
+                                spell['tag_list'] = tag_list.trim()
                             } else
                                 spell['tag_list'] = '-'
                         } else {

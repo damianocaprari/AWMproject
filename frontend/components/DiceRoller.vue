@@ -6,10 +6,16 @@
           Dice Roller&nbsp;<span class="mdi mdi-dice-d20"></span>
         </v-col>
 
-        <v-spacer></v-spacer>
-        <v-col>
-          <v-btn outlined color="accent" @click="rollDice">Roll</v-btn>
-          <v-btn text color="accent" @click="clearHistory">Clear</v-btn>
+        <!-- for screen < 600 px -->
+        <v-col class="d-sm-none" align="right">
+          <v-btn text color="onsecondary" @click="clearHistory" x-small>Clear</v-btn>
+          <v-btn outlined color="onsecondary" @click="rollDice" small>Roll</v-btn>
+        </v-col>
+
+        <!-- for screen >= 600 px -->
+        <v-col class="d-none d-sm-block" align="right">
+          <v-btn text color="onsecondary" @click="clearHistory">Clear</v-btn>
+          <v-btn outlined color="onsecondary" @click="rollDice">Roll</v-btn>
         </v-col>
       </v-row>
     </v-card-title>
@@ -17,12 +23,14 @@
       <v-form @submit.prevent="rollDice" class="mt-5">
         <v-text-field label="Dice to roll" v-model="diceExpr" :rules="diceRules" placeholder="2d6 +5"/>
       </v-form>
+      <!--
       <v-row justify="center" no-gutters>
         <v-col class="text-center">
           <v-btn outlined color="accent" @click="rollDice">Roll</v-btn>
           <v-btn text color="accent" @click="clearHistory">Clear</v-btn>
         </v-col>
       </v-row>
+      -->
 
       <v-divider class="mt-5"
         v-if="history.length > 0"
@@ -110,7 +118,7 @@
                     //this.diceExpr = ''
                     if (this.history.length > 10)
                         this.history.pop()
-                    console.log(this.history)
+                    //console.log(this.history)
                 }
             },
             clearHistory() {

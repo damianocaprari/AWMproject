@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
 
     <v-card-text v-if="isEditing">
       <v-form @submit.prevent="submit">
@@ -55,7 +55,7 @@
 
           <p></p>
 
-          <v-row v-for="(speed, index) in form_data.speeds">
+          <v-row v-for="(speed, index) in form_data.speeds" :key="index">
                       <v-text-field v-model="speed.value" label="Speeds" :readonly="!isEditing"/>
           </v-row>
 
@@ -140,7 +140,7 @@
 
           <p></p>
 
-          <v-row v-for="(speed, index) in form_data.speeds">
+          <v-row v-for="(speed, index) in form_data.speeds" :key="index">
                       <v-text-field v-model="speed.value" label="Speeds" :readonly="!isEditing"/>
           </v-row>
 

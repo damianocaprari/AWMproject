@@ -22,7 +22,7 @@ class SpellTagSerializer(serializers.HyperlinkedModelSerializer):
 class SpellAdditionalInfoSerializer(serializers.ModelSerializer):
     #url = serializers.HyperlinkedIdentityField(view_name='api:spelladditionalinfo-detail')
     #spell = serializers.PrimaryKeyRelatedField(queryset=Spell.objects.all())
-    tags = SpellTagSerializer(many=True)
+    tags = SpellTagSerializer(many=True, allow_null=True, required=False)
 
     class Meta:
         model = SpellAdditionalInfo
