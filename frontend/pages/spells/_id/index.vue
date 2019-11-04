@@ -7,64 +7,70 @@
         <v-card>
           <v-card-title class="secondary onsecondary--text"><h3>{{ spell.name }}</h3></v-card-title>
           <v-card-text>
-            <v-row justify="center">
-              <v-col align="center">
-                <v-avatar color="grey" tile size="160" class="mx-auto">
-                  <v-img :src="spell.spell_additional_info.avatar" v-if="(spell.spell_additional_info && spell.spell_additional_info.avatar)"></v-img>
-                </v-avatar>
-              </v-col>
-            </v-row>
             <v-row>
-              <v-col cols="6" sm="4" lg="3">
-                <v-row no-gutters><v-col>LEVEL</v-col></v-row>
-                <v-row no-gutters><v-col>{{ spell.level }}</v-col></v-row>
-              </v-col>
-              <v-col cols="6" sm="4" lg="3">
-                <v-row no-gutters><v-col>CASTING TIME</v-col></v-row>
-                <v-row no-gutters><v-col>{{ spell.casting_time_amount }} {{ spell.casting_time_unit.toLowerCase() }}</v-col></v-row>
-              </v-col>
-              <v-col cols="6" sm="4" lg="3">
-                <v-row no-gutters><v-col>RANGE/AREA</v-col></v-row>
-                <v-row no-gutters>
-                  <v-col v-if="'RANGED'.match(spell.range_type)">{{ spell.range_type.toLowerCase() }} ({{ spell.range_distance }} ft)</v-col>
-                  <v-col v-else>{{ spell.range_type.toLowerCase() }}</v-col>
-                </v-row>
-              </v-col>
-              <v-col cols="6" sm="4" lg="3">
-                <v-row no-gutters><v-col>COMPONENTS</v-col></v-row>
-                <v-row no-gutters><v-col>
-                   <template v-if="spell.component_verbal">V</template>
-                   <template v-if="spell.component_somatic">S</template>
-                   <template v-if="spell.component_material">M ({{ spell.component_material_description }}</template>
-                </v-col></v-row>
-              </v-col>
-              <v-col cols="6" sm="4" lg="3">
-                <v-row no-gutters><v-col>DURATION</v-col></v-row>
-                <v-row no-gutters>
-                  <v-col v-if="'TIME'.match(spell.duration_type) || 'CONCENTRATION'.match(spell.duration_type) || 'SPECIAL'.match(spell.duration_type)">
-                    {{ spell.duration_amount }} {{ spell.duration_unit.toLowerCase() }} <span v-if="'CONCENTRATION'.match(spell.duration_type)" class="mdi mdi-alpha-c-circle"></span>
+              <v-col cols="12" lg="3">
+                <v-row justify="center">
+                  <v-col align="center">
+                    <v-avatar color="grey" tile size="160" class="mx-auto">
+                      <v-img :src="spell.spell_additional_info.avatar" v-if="(spell.spell_additional_info && spell.spell_additional_info.avatar)"></v-img>
+                    </v-avatar>
                   </v-col>
-                  <v-col v-else>{{ spell.duration_type.toLowerCase() }}</v-col>
                 </v-row>
               </v-col>
-              <v-col cols="6" sm="4" lg="3">
-                <v-row no-gutters><v-col>SCHOOL</v-col></v-row>
-                <v-row no-gutters><v-col>{{ spell.school }}</v-col></v-row>
-              </v-col>
-              <v-col cols="6" sm="4" lg="3">
-                <v-row no-gutters><v-col>ATTACK/SAVE</v-col></v-row>
-                <v-row no-gutters>
-                  <v-col v-if="spell.spell_additional_info && spell.spell_additional_info.save_type">{{ item.spell_additional_info.save_type }}</v-col>
-                  <v-col v-else>-</v-col>
-                </v-row>
-              </v-col>
-              <v-col cols="6" sm="4" lg="3">
-                <v-row no-gutters><v-col>DAMAGE/EFFECT</v-col></v-row>
-                <v-row no-gutters>
-                  <v-col v-if="spell.spell_additional_info && spell.spell_additional_info.tags && spell.spell_additional_info.tags.length > 0">
-                    {{ spell.spell_additional_info.tags[0].tag }}
+              <v-col cols="12" lg="9">
+                <v-row>
+                  <v-col cols="6" sm="4" lg="3">
+                    <v-row no-gutters><v-col>LEVEL</v-col></v-row>
+                    <v-row no-gutters><v-col>{{ spell.level }}</v-col></v-row>
                   </v-col>
-                  <v-col v-else>-</v-col>
+                  <v-col cols="6" sm="4" lg="3">
+                    <v-row no-gutters><v-col>CASTING TIME</v-col></v-row>
+                    <v-row no-gutters><v-col>{{ spell.casting_time_amount }} {{ spell.casting_time_unit.toLowerCase() }}</v-col></v-row>
+                  </v-col>
+                  <v-col cols="6" sm="4" lg="3">
+                    <v-row no-gutters><v-col>RANGE/AREA</v-col></v-row>
+                    <v-row no-gutters>
+                      <v-col v-if="'RANGED'.match(spell.range_type)">{{ spell.range_type.toLowerCase() }} ({{ spell.range_distance }} ft)</v-col>
+                      <v-col v-else>{{ spell.range_type.toLowerCase() }}</v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="6" sm="4" lg="3">
+                    <v-row no-gutters><v-col>COMPONENTS</v-col></v-row>
+                    <v-row no-gutters><v-col>
+                       <template v-if="spell.component_verbal">V</template>
+                       <template v-if="spell.component_somatic">S</template>
+                       <template v-if="spell.component_material">M ({{ spell.component_material_description }}</template>
+                    </v-col></v-row>
+                  </v-col>
+                  <v-col cols="6" sm="4" lg="3">
+                    <v-row no-gutters><v-col>DURATION</v-col></v-row>
+                    <v-row no-gutters>
+                      <v-col v-if="'TIME'.match(spell.duration_type) || 'CONCENTRATION'.match(spell.duration_type) || 'SPECIAL'.match(spell.duration_type)">
+                        {{ spell.duration_amount }} {{ spell.duration_unit.toLowerCase() }} <span v-if="'CONCENTRATION'.match(spell.duration_type)" class="mdi mdi-alpha-c-circle"></span>
+                      </v-col>
+                      <v-col v-else>{{ spell.duration_type.toLowerCase() }}</v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="6" sm="4" lg="3">
+                    <v-row no-gutters><v-col>SCHOOL</v-col></v-row>
+                    <v-row no-gutters><v-col>{{ spell.school }}</v-col></v-row>
+                  </v-col>
+                  <v-col cols="6" sm="4" lg="3">
+                    <v-row no-gutters><v-col>ATTACK/SAVE</v-col></v-row>
+                    <v-row no-gutters>
+                      <v-col v-if="spell.spell_additional_info && spell.spell_additional_info.save_type">{{ item.spell_additional_info.save_type }}</v-col>
+                      <v-col v-else>-</v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="6" sm="4" lg="3">
+                    <v-row no-gutters><v-col>DAMAGE/EFFECT</v-col></v-row>
+                    <v-row no-gutters>
+                      <v-col v-if="spell.spell_additional_info && spell.spell_additional_info.tags && spell.spell_additional_info.tags.length > 0">
+                        {{ spell.spell_additional_info.tags[0].tag }}
+                      </v-col>
+                      <v-col v-else>-</v-col>
+                    </v-row>
+                  </v-col>
                 </v-row>
               </v-col>
             </v-row>
