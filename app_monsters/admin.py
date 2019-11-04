@@ -1,13 +1,14 @@
 from django.contrib import admin
 #from .models import Monster
-from app_monsters.models import Monster, MonsterCA, MonsterSpeed, MonsterSave, MonsterSkill, MonsterDamageVulnerability, MonsterDamageResistance, MonsterLegendaryAction,MonsterTrait,MonsterSpecialAbilities,MonsterSense,MonsterReaction,MonsterLanguage,MonsterDamageImmunity,MonsterConditionImmunity,MonsterAction
+from app_monsters.models import Monster, MonsterCA
+# OLD IMPORT MonsterSpeed, MonsterSave, MonsterSkill, MonsterDamageVulnerability, MonsterDamageResistance, MonsterLegendaryAction,MonsterTrait,MonsterSpecialAbilities,MonsterSense,MonsterReaction,MonsterLanguage,MonsterDamageImmunity,MonsterConditionImmunity,MonsterAction
 
 
 class MonsterCAInline(admin.TabularInline):
     extra = 0
     model = MonsterCA
 
-
+"""
 class MonsterSpeedInline(admin.StackedInline):
     extra = 0
     model = MonsterSpeed
@@ -76,7 +77,7 @@ class MonsterTraitInLine(admin.StackedInline):
 class MonsterReactionInLine(admin.StackedInline):
     extra = 0
     model = MonsterReaction
-
+"""
 
 class MonsterAdmin(admin.ModelAdmin):
     list_display = ('name', 'challenge_rating', 'author', 'creation_time', 'last_modified')
@@ -86,31 +87,38 @@ class MonsterAdmin(admin.ModelAdmin):
         ('name', 'version','image'),
         ('size', 'type', 'subtype', 'alignment'),
         ('armor_class', 'armor_class_notes'),
-        ('hit_point', 'hit_dice'),
+        ('hit_point', 'hit_dice', 'speeds'),
         ('ability_str', 'ability_dex', 'ability_con'),
         ('ability_int','ability_wis','ability_cha'),
-        ('challenge_rating')
-
+        ('challenge_rating', 'saves'),
+        ('traits'),
+        ('skills', 'languages'),
+        ('damage_vulnerabilities','damage_resistances'),
+        ('condition_immunities','damage_immunities'),
+        ('actions'),
+        ('senses'),
+        ('special_abilities'),
+        ('legendary_actions'),
     )
 
     readonly_fields = Monster.readonly_fields
     date_hierarchy = 'creation_time'
 
     inlines = [
-        MonsterSpeedInline,
-        MonsterSaveInline,
-        MonsterSkillInLine,
-        MonsterDamageVulnerabilityInLine,
-        MonsterDamageResistanceInLine,
-        MonsterConditionImmunityInLine,
-        MonsterDamageImmunityInLine,
-        MonsterSenseInLine,
-        MonsterLanguageInLine,
-        MonsterSpecialAbilitiesInLine,
-        MonsterActionInLine,
-        MonsterTraitInLine,
-        MonsterReactionInLine,
-        MonsterLegendaryActionInLine,
+        #MonsterSpeedInline,
+        #MonsterSaveInline,
+        ##MonsterSkillInLine,
+        #MonsterDamageVulnerabilityInLine,
+        #MonsterDamageResistanceInLine,
+        #MonsterConditionImmunityInLine,
+        #MonsterDamageImmunityInLine,
+        #MonsterSenseInLine,
+        #MonsterLanguageInLine,
+        #MonsterSpecialAbilitiesInLine,
+        #MonsterActionInLine,
+        #MonsterTraitInLine,
+        #MonsterReactionInLine,
+        #MonsterLegendaryActionInLine,
         MonsterCAInline,
     ]
 

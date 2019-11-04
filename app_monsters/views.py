@@ -9,7 +9,8 @@ from rest_framework import viewsets, permissions
 class MonsterViewSet(viewsets.ModelViewSet):
     serializer_class = MonsterSerializer
     queryset = Monster.objects.all()
-    permission_classes = (permissions.AllowAny,)  # todo da cambiare con il livello appropriato
+    permission_classes = (permissions.AllowAny,)
+    # todo da cambiare con il livello appropriato
     # TODO le permissions possono essere combinate usando & (and), | (or), ~ (not)
     # ad esempio: permission_classes = (permissions.IsAuthenticated & IsOwnUser | permissions.IsAdminUser,)
     def update(self, request, *args, **kwargs):

@@ -21,11 +21,15 @@ export default {
 
     updateMonster: ($axios, monsterId, data) => $axios.$put(`monsters/${monsterId}/`, {
         name: data.name,
+        //image: data.image,
         size: data.size,
+
         type: data.type,
         subtype: data.subtype,
         alignment: data.alignment,
         armor_class: data.armor_class,
+        armor_class_notes: data.armor_class_notes,
+
         hit_point: data.hit_point,
         hit_dice: data.hit_dice,
         ability_str: data.ability_str,
@@ -36,7 +40,19 @@ export default {
         ability_cha: data.ability_cha,
         challenge_rating: data.challenge_rating,
 
+        traits: data.traits,
         speeds: data.speeds,
+        saves: data.saves,
+        skills: data.skills,
+        damage_vulnerabilities: data.damage_vulnerabilities,
+        damage_resistances: data.damage_resistances,
+        condition_immunities: data.condition_immunities,
+        damage_immunities: data.damage_immunities,
+        senses: data.senses,
+        languages: data.languages,
+        special_abilities: data.special_abilities,
+        actions: data.actions,
+        legendary_actions: data.legendary_actions,
 
         //first_name: data.first_name,
         //last_name: data.last_name

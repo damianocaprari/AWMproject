@@ -241,7 +241,7 @@
 
                 api.createSpell(this.$axios, this.spell)
                     .then(result => {
-                        //console.log('/account/index.vue.OLD .then() result', result)
+                        //console.log('/account/edit.vue.OLD .then() result', result)
                         this.alert = {type: 'success', message: result.message || 'Success'}
                         this.loading = false
                     })

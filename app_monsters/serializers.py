@@ -1,10 +1,13 @@
-from app_monsters.models import Monster, MonsterAction, MonsterCA, MonsterConditionImmunity, MonsterDamageImmunity, \
+from app_monsters.models import Monster, MonsterCA
+"""
+MonsterAction, MonsterCA, MonsterConditionImmunity, MonsterDamageImmunity, \
   MonsterDamageResistance, MonsterDamageVulnerability, MonsterLanguage, MonsterLegendaryAction, MonsterReaction, \
   MonsterSave, MonsterSense, MonsterSkill, MonsterSpecialAbilities, MonsterSpeed, MonsterTrait
+"""
 # from app_characterclasses.models import CharacterClass
 from rest_framework import serializers
 
-
+"""
 class MonsterActionSerializer(serializers.ModelSerializer):
   class Meta:
     model = MonsterAction
@@ -86,6 +89,8 @@ class MonsterLegendaryActionSerializer(serializers.ModelSerializer):
   class Meta:
     model = MonsterLegendaryAction
     fields = ['id', ] + MonsterLegendaryAction.fields + MonsterLegendaryAction.readonly_fields
+"""
+
 
 
 class MonsterCASerializer(serializers.ModelSerializer):
@@ -100,8 +105,8 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
   author = serializers.HyperlinkedRelatedField(view_name='api:user-detail', read_only=True, default=serializers.CurrentUserDefault())
   # classes = serializers.HyperlinkedRelatedField(view_name='api:characterclass-detail', many=True, queryset=CharacterClass.objects.all())
 
-  # spell_additional_info = SpellAdditionalInfoSerializer()
   # custom_attributes = SpellCASerializer(many=True, allow_null=True, required=False)
+  """
   speeds = MonsterSpeedSerializer(many=True, allow_null=True, required=False)
   saves = MonsterSaveSerializer(many=True, allow_null=True, required=False)
   skills = MonsterSkillSerializer(many=True, allow_null=True, required=False)
@@ -116,20 +121,23 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
   traits = MonsterTraitSerializer(many=True, allow_null=True, required=False)
   actions = MonsterActionSerializer(many=True, allow_null=True, required=False)
   legendary_actions = MonsterLegendaryActionSerializer(many=True, allow_null=True, required=False)
+  """
 
   custom_attributes = MonsterCASerializer(many=True, allow_null=True, required=False)
 
   class Meta:
     model = Monster
-    fields = ['id', 'url'] + Monster.fields + Monster.readonly_fields + ['speeds', 'saves', 'skills',
-                                                                         'damage_vulnerabilities', 'damage_resistances',
-                                                                         'condition_immunities', 'damage_immunities',
-                                                                         'languages', 'reactions', 'senses',
-                                                                         'special_abilities',
-                                                                         'traits', 'actions', 'legendary_actions',
-                                                                         'custom_attributes']
+    fields = ['id', 'url'] + Monster.fields + Monster.readonly_fields + ['custom_attributes']
+    """'speeds', 'saves', 'skills',
+    'damage_vulnerabilities', 'damage_resistances',
+     'condition_immunities', 'damage_immunities',
+     'languages', 'reactions', 'senses',
+     'special_abilities',
+     'traits', 'actions', 'legendary_actions',
+     """
 
   def create(self, validated_data):
+    """
     actions_validated_data = validated_data.pop('actions')
     saves_validated_data = validated_data.pop('saves')
     skills_validated_data = validated_data.pop('skills')
@@ -144,6 +152,7 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
     special_abilities_validated_data = validated_data.pop('special_abilities')
     traits_validated_data = validated_data.pop('traits')
     legendary_actions_validated_data = validated_data.pop('legendary_actions')
+    """
     custom_attributes_validated_data = validated_data.pop('custom_attributes')
 
     user = self.context['request'].user
@@ -152,6 +161,7 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
     monster = Monster.objects.create(**validated_data)
     monster.author = user
 
+    """
     actions_set_serializer = self.fields['actions']
     for each in actions_validated_data:
       each['owner'] = monster
@@ -222,6 +232,7 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
     for each in legendary_actions_validated_data:
       each['owner'] = monster
     legendary_actions = legendary_actions_set_serializer.create(legendary_actions_validated_data)
+    """
 
     custom_attributes_set_serializer = self.fields['custom_attributes']
     for each in custom_attributes_validated_data:

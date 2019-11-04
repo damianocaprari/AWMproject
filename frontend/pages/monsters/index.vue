@@ -9,7 +9,7 @@
           :headers="headers"
           :items="monsters"
           :items-per-page="5"
-
+          sort-by="name"
           item-key="name"
           class="elevation-1"
           @click:row="goToSinglePage">
@@ -171,11 +171,12 @@
                 // v-data-table
                 headers: [
                     {text: 'NAME', value: 'name', align: 'left', filter: this.nameFilter},
-                    {text: 'HIT POINTS', value: 'hit_point', align: 'center'},
-                    {text: 'ARMOR CLASS', value: 'armor_class_total', align: 'center'},
+                    {text: 'SIZE', value: 'size', align: 'center', filter: this.sizeFilter},
                     {text: 'CHALLENG RATING', value: 'challenge_rating', align: 'center', filter: this.crFilter},
+                    {text: 'TYPE', value: 'type', align: 'center'},
+                    {text: 'HIT POINTS', value: 'hit_point', align: 'center'},
+                    //{text: 'ARMOR CLASS', value: 'armor_class_total', align: 'center'},
                     {text: 'ALIGNMENT', value: 'alignment', align: 'center', filter: this.alignmentFilter},
-                    {text: 'SIZE', value: 'size', align: ' d-none', filter: this.sizeFilter},
                 ],
             };
         },

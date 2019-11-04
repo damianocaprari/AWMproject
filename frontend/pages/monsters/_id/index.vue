@@ -1,183 +1,354 @@
 <template>
   <v-container fluid>
-
-    <v-card-text v-if="isEditing">
-      <v-form @submit.prevent="submit">
-
-        <v-row>
-        <v-text-field class="title" label="Name" v-model="form_data.name" :readonly="!isEditing"/>
-      </v-row>
-      <v-row>
-
-        <v-col>
-          <v-row>
-              <v-select outlined label="Size" :items="sizeList" v-model="form_data.size" :readonly="!isEditing"/>
-              <v-text-field outlined label="Type" v-model="form_data.type" :readonly="!isEditing"/>
-              <v-text-field outlined label="Subtype" v-model="form_data.subtype" :readonly="!isEditing"/>
-          </v-row>
-          <v-row>
-            <v-select v-model="form_data.alignment" :items="alignmentList" label="Alignment" :readonly="!isEditing"></v-select>
-          </v-row>
-
-          <p></p>
-
-          <v-row>
-            <v-col cols="12" md="4">
-              <v-text-field type="number" label="Armor class" v-model="form_data.armor_class" :readonly="!isEditing"/>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-text-field v-model="form_data.hit_point" type="number" label="Hit points" :readonly="!isEditing"></v-text-field>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-select v-model="form_data.hit_dice" :items="hitDiceList" label="Hit Dice" :readonly="!isEditing"></v-select>
-            </v-col>
-          </v-row>
-
-          <p></p>
-
-          <v-row>
-              <v-col cols="6" md="2">
-                  <v-text-field v-model="monster.ability_str" type="number" label="STR"></v-text-field>
-                  <v-text-field v-model="monster.ability_dex" type="number" label="DEX"></v-text-field>
-                  <v-text-field v-model="monster.ability_con" type="number" label="CON"></v-text-field>
+    <v-row wrap>
+      <v-alert v-if="!!alert" :type="alert.type">{{ alert.message }}</v-alert>
+      <v-col>
+        <v-card>
+          <v-card-title class="secondary onsecondary--text">
+            <v-row>
+              <v-col><h3>{{ monster.name }}</h3></v-col>
+              <v-col  align="right">
+                <v-btn outlined color="onsecondary" @click="goToEditPage" small>Edit</v-btn>
+                <v-btn outlined color="error" small>Delete</v-btn> <!-- TODO: delete e edit solo su PERMISSION -->
               </v-col>
-              <v-col cols="6" md="2">
-                  <v-text-field v-model="monster.ability_int" type="number" label="INT"></v-text-field>
-                  <v-text-field v-model="monster.ability_wis" type="number" label="WIS"></v-text-field>
-                  <v-text-field v-model="monster.ability_cha" type="number" label="CHA"></v-text-field>
+            </v-row>
+          </v-card-title>
+
+          <v-card-text>
+            <v-row>
+              <v-col cols="12" lg="3">
+                <v-row justify="center">
+                  <v-col align="center">
+                    <v-avatar color="grey" tile size="160" class="mx-auto">
+                      <v-img :src="monster.image"
+                             v-if="(monster.image)"></v-img>
+                    </v-avatar>
+                  </v-col>
+                </v-row>
               </v-col>
-          </v-row>
 
-
-          <p></p>
-          <v-select v-model="form_data.challenge_rating" :items="CRList" label="Challenge rating - CR" :readonly="!isEditing"></v-select>
-
-
-          <p></p>
-
-          <v-row v-for="(speed, index) in form_data.speeds" :key="index">
-                      <v-text-field v-model="speed.value" label="Speeds" :readonly="!isEditing"/>
-          </v-row>
-
-
-        </v-col>
-        <v-col v-if="monster.image != null">
-          <v-img
-              :src="monster.image"
-              max-width="250">
-          </v-img>
-        </v-col>
-
-
-
-
-
-      </v-row>
-
-
-
-
-
-        <v-row justify="center">
-          <v-col class="text-center">
-            <v-btn type="submit" :loading="loading" :disabled="loading" outlined color="accent">Save</v-btn>
-            <v-btn text color="accent" @click="resetFormData">Cancel</v-btn>
-          </v-col>
-        </v-row>
-      </v-form>
-    </v-card-text>
-    <!-- ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd -->
-    <v-card-text v-else>
-
-      <v-row>
-        <v-text-field class="title" label="Name" v-model="form_data.name" :readonly="!isEditing"/>
-      </v-row>
-      <v-row>
-
-        <v-col>
-          <v-row>
-              <v-select outlined label="Size" :items="sizeList" v-model="form_data.size" :readonly="!isEditing"/>
-              <v-text-field outlined label="Type" v-model="form_data.type" :readonly="!isEditing"/>
-              <v-text-field outlined label="Subtype" v-model="form_data.subtype" :readonly="!isEditing"/>
-          </v-row>
-          <v-row>
-            <v-select v-model="form_data.alignment" :items="alignmentList" label="Alignment" :readonly="!isEditing"></v-select>
-          </v-row>
-
-          <p></p>
-
-          <v-row>
-            <v-col cols="12" md="4">
-              <v-text-field type="number" label="Armor class" v-model="form_data.armor_class" :readonly="!isEditing"/>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-text-field v-model="form_data.hit_point" type="number" label="Hit points" :readonly="!isEditing"></v-text-field>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-select v-model="form_data.hit_dice" :items="hitDiceList" label="Hit Dice" :readonly="!isEditing"></v-select>
-            </v-col>
-          </v-row>
-
-          <p></p>
-
-          <v-row>
-              <v-col cols="6" md="2">
-                  <v-text-field v-model="monster.ability_str" type="number" label="STR"></v-text-field>
-                  <v-text-field v-model="monster.ability_dex" type="number" label="DEX"></v-text-field>
-                  <v-text-field v-model="monster.ability_con" type="number" label="CON"></v-text-field>
+              <v-col cols="12" lg="9">
+                <v-row>
+                  {{monster.size}} {{monster.type}}
+                  <template v-if="monster.subtype"> ({{monster.subtype}})</template>
+                  , {{monster.alignment}}
+                </v-row>
+                <v-row>
+                  <br>
+                  <v-divider></v-divider>
+                  <br>
+                </v-row>
+                <v-row>
+                  <span class="boldedname">Armor Class:</span> {{monster.armor_class}}
+                  <template v-if="monster"> ({{monster.armor_class_notes}})</template>
+                </v-row>
+                <v-row>
+                  <span class="boldedname">Hit points:</span> {{monster.hit_point }} ({{monster.hit_dice}})
+                </v-row>
+                <v-row v-if="monster.speeds"><span class="boldedname">Speed:</span> {{monster.speeds}}</v-row>
+                <v-row>
+                  <v-divider></v-divider>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-row>STR</v-row>
+                    <v-row>{{monster.ability_str}}</v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row>DEX</v-row>
+                    <v-row>{{monster.ability_dex}}</v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row>CON</v-row>
+                    <v-row>{{monster.ability_con}}</v-row>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-row>INT</v-row>
+                    <v-row>{{monster.ability_int}}</v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row>WIS</v-row>
+                    <v-row>{{monster.ability_wis}}</v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row>CHA</v-row>
+                    <v-row>{{monster.ability_cha}}</v-row>
+                  </v-col>
+                </v-row>
               </v-col>
-              <v-col cols="6" md="2">
-                  <v-text-field v-model="monster.ability_int" type="number" label="INT"></v-text-field>
-                  <v-text-field v-model="monster.ability_wis" type="number" label="WIS"></v-text-field>
-                  <v-text-field v-model="monster.ability_cha" type="number" label="CHA"></v-text-field>
+            </v-row>
+
+            <v-row>
+              <v-divider></v-divider>
+            </v-row>
+
+            <v-row v-if="monster.skills"><span class="boldedname">Skills:</span> {{monster.skills}}</v-row>
+            <v-row v-if="monster.senses"><span class="boldedname">Senses:</span> {{monster.senses}}</v-row>
+            <v-row v-if="monster.languages"><span class="boldedname">Languages:</span> {{monster.languages}}</v-row>
+            <v-row><span class="boldedname">Challenge rating:</span> {{monster.challenge_rating}}</v-row>
+
+            <v-row v-if="monster.damage_vulnerabilities"><span class="boldedname">Damage Vulnerabilities:</span>
+              {{monster.damage_vulnerabilities}}
+            </v-row>
+            <v-row v-if="monster.damage_resistances"><span class="boldedname">Damage Resistances:</span>
+              {{monster.damage_resistances}}
+            </v-row>
+            <v-row v-if="monster.condition_immunities"><span class="boldedname">Condition Immunities:</span>
+              {{monster.condition_immunities}}
+            </v-row>
+            <v-row v-if="monster.damage_immunities"><span class="boldedname">Damage Immunities:</span>
+              {{monster.damage_immunities}}
+            </v-row>
+
+
+            <template v-if="monster.traits">
+              <v-row>
+                <v-divider></v-divider>
+              </v-row>
+              <v-row class="text-justify" v-html="monster.traits"/>
+            </template>
+
+
+            <template v-if="monster.actions">
+              <v-row>
+                <v-divider></v-divider>
+              </v-row>
+              <v-row><h3>Actions</h3></v-row>
+              <v-row class="text-justify" v-html="monster.actions"/>
+            </template>
+
+
+            <template v-if="monster.special_abilities">
+              <v-row>
+                <v-divider></v-divider>
+              </v-row>
+              <v-row><h3>Special abilities</h3></v-row>
+              <v-row class="text-justify" v-html="monster.special_abilities"/>
+            </template>
+
+            <template v-if="monster.legendary_actions">
+              <v-row>
+                <v-divider></v-divider>
+              </v-row>
+              <v-row><h3>Legendary Actions</h3></v-row>
+              <v-row class="text-justify" v-html="monster.legendary_actions"/>
+            </template>
+
+          </v-card-text>
+          <!--
+          <v-divider></v-divider>
+
+          <v-container>
+            <v-row>
+
+              <v-col>
+                <v-row>
+                  <span>{{monster.size}} </span>
+                  <span v-if="monster.type != null">, {{monster.type}}</span>
+                  <span v-if="monster.subtype != null">, {{monster.subtype}}</span>
+                </v-row>
+
+
+                <v-row>
+                  <span class="boldedname">Armor Class:</span>
+                  <span>{{monster.armor_class}}</span>
+                  <span v-if="monster.armor_class_notes != null"> ({{monster.armor_class_notes}})</span>
+                </v-row>
+
+                <v-row>
+                  <span class="boldedname">Hit Points:</span>
+                  <span>{{monster.hit_point}} ({{monster.hit_dice}})</span>
+                </v-row>
+
+
+                <v-row v-if="monster.speeds.length > 0">
+                  <span class="boldedname">Speed:</span>
+                  <span v-for="(item, index) in monster.speeds" :key="item.id">
+                            {{item.value}}
+                            <span v-if="index+1 < monster.speeds.length">,</span>
+                         </span>
+                </v-row>
+
+                <v-row>
+                  <v-col>
+                    <v-row>STR</v-row>
+                    <v-row>{{monster.ability_str}}</v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row>DEX</v-row>
+                    <v-row>{{monster.ability_dex}}</v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row>CON</v-row>
+                    <v-row>{{monster.ability_con}}</v-row>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-row>INT</v-row>
+                    <v-row>{{monster.ability_int}}</v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row>WIS</v-row>
+                    <v-row>{{monster.ability_wis}}</v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row>CHA</v-row>
+                    <v-row>{{monster.ability_cha}}</v-row>
+                  </v-col>
+                </v-row>
               </v-col>
-          </v-row>
+
+              <v-col v-if="monster.image != null">
+                <v-img
+                    :src="monster.image"
+                    max-width="250">
+                </v-img>
+              </v-col>
+            </v-row>
+
+            <v-divider></v-divider>
+
+            <v-row v-if="monster.saves.length > 0">
+              <span class="boldedname">Saving throws: </span>
+              <span v-for="(item, index) in monster.saves" :key="item.id">
+                    {{item.name}} +{{item.modifier}}
+                    <span v-if="index+1 < monster.saves.length">,</span>
+                </span>
+            </v-row>
+
+            <v-row v-if="monster.skills.length > 0">
+              <span class="boldedname">Skills: </span>
+              <span v-for="(item, index) in monster.skills" :key="item.id">
+                    {{item.name}} +{{item.modifier}}
+                    <span v-if="index+1 < monster.skills.length">,</span>
+                </span>
+            </v-row>
+
+            <v-row v-if="monster.senses.length > 0">
+              <span class="boldedname">Senses: </span>
+              <span v-for="(item, index) in monster.senses" :key="item.id">
+                    {{item.sense}}
+                    <span v-if="index+1 < monster.senses.length">,</span>
+                    </span>
+            </v-row>
+
+            <v-row v-if="monster.languages.length > 0">
+              <span class="boldedname">Languages: </span>
+              <span v-for="(item, index) in monster.languages" :key="item.id">
+                    {{item.language}}
+                    <span v-if="index+1 < monster.languages.length">,</span>
+                </span>
+            </v-row>
+
+            <v-row>
+              <span class="boldedname">Challenge Rating: </span>
+              <span>{{monster.challenge_rating}}</span>
+            </v-row>
 
 
-          <p></p>
-          <v-select v-model="form_data.challenge_rating" :items="CRList" label="Challenge rating - CR" :readonly="!isEditing"></v-select>
+            <v-row v-if="monster.damage_vulnerabilities.length > 0">
+              <span class="boldedname">Damage Vulnerabilities: </span>
+              <span v-for="(item, index) in monster.damage_vulnerabilities" :key="item.id">
+                    {{item.damage_vulnerability}}
+                    <span v-if="index+1 < monster.damage_vulnerabilities.length">,</span>
+                </span>
+            </v-row>
+            <v-row v-if="monster.damage_resistances.length > 0">
+              <span class="boldedname">Damage Resistances: </span>
+              <span v-for="(item, index) in monster.damage_resistances" :key="item.id">
+                    {{item.damage_resistance}}
+                    <span v-if="index+1 < monster.damage_resistances.length">,</span>
+                </span>
+            </v-row>
+            <v-row v-if="monster.condition_immunities.length > 0">
+              <span class="boldedname">Condition Immunities: </span>
+              <span v-for="(item, index) in monster.condition_immunities" :key="item.id">
+                    {{item.condition_immunity}}
+                    <span v-if="index+1 < monster.condition_immunities.length">,</span>
+                </span>
+            </v-row>
+            <v-row v-if="monster.damage_immunities.length > 0">
+              <span class="boldedname">Damage Immunities: </span>
+              <span v-for="(item, index) in monster.damage_immunities" :key="item.id">
+                    {{item.damage_immunity}}
+                    <span v-if="index+1 < monster.damage_immunities.length">,</span>
+                </span>
+            </v-row>
+            <v-divider></v-divider>
+          </v-container>
 
+          <v-container v-if="monster.traits.length > 0">
+            <v-row class="subtitle">Traits</v-row>
+            <v-row v-for="item in monster.traits" :key="item.id">
+              <v-col>
+                <v-row class="boldedname inline">{{item.name}}</v-row>
+                <v-row class="text-justify">{{item.content}}</v-row>
+              </v-col>
+            </v-row>
+          </v-container>
 
-          <p></p>
+          <v-container v-if="monster.actions.length > 0">
+            <v-row class="subtitle">Actions</v-row>
+            <v-row class="mb-3" v-for="item in monster.actions" :key="item.id">
+              <v-col>
+                <v-row class="boldedname">{{item.name}}</v-row>
+                <v-row class="text-justify">{{item.desc}}</v-row>
+              </v-col>
+            </v-row>
+          </v-container>
 
-          <v-row v-for="(speed, index) in form_data.speeds" :key="index">
-                      <v-text-field v-model="speed.value" label="Speeds" :readonly="!isEditing"/>
-          </v-row>
+          <v-container v-if="monster.reactions.length > 0">
+            <v-row class="subtitle">Reactions</v-row>
+            <v-row class="mb-3" v-for="item in monster.reactions" :key="item.id">
+              <v-col>
+                <v-row class="boldedname">{{item.name}}</v-row>
+                <v-row class="text-justify">{{item.content}}</v-row>
+              </v-col>
+            </v-row>
+          </v-container>
 
+          <v-container v-if="monster.special_abilities.length > 0">
+            <v-row class="subtitle">Special Abilities</v-row>
+            <v-row class="mb-3" v-for="item in monster.special_abilities" :key="item.id">
+              <v-col>
+                <v-row class="boldedname">{{item.name}}</v-row>
+                <v-row class="text-justify">{{item.desc}}</v-row>
+              </v-col>
+            </v-row>
+          </v-container>
 
-        </v-col>
-        <v-col v-if="monster.image != null">
-          <v-img
-              :src="monster.image"
-              max-width="250">
-          </v-img>
-        </v-col>
+          <v-container v-if="monster.legendary_actions.length > 0">
+            <v-row class="subtitle">Legendary Actions</v-row>
+            <v-row class="mb-3" v-for="item in monster.legendary_actions" :key="item.id">
+              <v-col>
+                <v-row class="boldedname">{{item.name}}</v-row>
+                <v-row class="text-justify">{{item.content}}</v-row>
+              </v-col>
+            </v-row>
+          </v-container>
 
+          <v-container v-if="monster.custom_attributes.length > 0">
+            <v-row class="subtitle">Custom Attributes</v-row>
+            <v-row class="mb-3" v-for="item in monster.custom_attributes" :key="item.id">
+              <v-col>
+                <v-row class="boldedname">{{item.name}}</v-row>
+                <v-row class="text-justify">{{item.value}}</v-row>
+              </v-col>
+            </v-row>
+          </v-container>
+      -->
 
-
-
-
-      </v-row>
-
-
-
-      <v-row justify="center">
-        <v-col class="text-center">
-          <v-btn type="" outlined color="accent" @click="isEditing = true">Edit</v-btn>
-        </v-col>
-      </v-row>
-
-
-    </v-card-text>
-
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
+
 <script>
-    import api from '~/api'
-
-    import FormData from 'form-data'
-
     export default {
         head() {
             return {
@@ -187,199 +358,38 @@
         async asyncData({$axios, params}) {
             try {
                 let monster = await $axios.$get(`/monsters/${params.id}`);
-                let form_data = {
-                    name: monster.name,
-                    image: monster.image,
-                    size: monster.size,
-                    type: monster.type,
-                    subtype: monster.subtype,
-                    alignment: monster.alignment,
-                    armor_class: monster.armor_class,
-                    hit_point: monster.hit_point,
-                    hit_dice: monster.hit_dice,
-                    ability_str: monster.ability_str,
-                    ability_dex: monster.ability_dex,
-                    ability_con: monster.ability_con,
-                    ability_int: monster.ability_int,
-                    ability_wis: monster.ability_wis,
-                    ability_cha: monster.ability_cha,
-                    challenge_rating: monster.challenge_rating,
-
-                    speeds: monster.speeds,
-
-                };
-                console.log("AAAAAAAAAA", typeof(form_data.speeds))
-
-                return {monster, form_data};
+                console.log(monster.author)
+                if (!monster) {
+                    return {
+                        alert: {
+                            type: 'error',
+                            message: 'Selected monster does not exist'
+                        }
+                    }
+                }
+                return {monster};
             } catch (e) {
-                return {monster: []};
+                return {
+                    alert: {
+                        type: 'error',
+                        message: 'An error occurred while retrieving information'
+                    }
+                }
             }
         },
         data() {
             return {
                 monster: {},
-                loading: false,
-
-                form_data: {
-                    name: '',
-                    size: '',
-                    type: '',
-                    subtype: '',
-                    alignment: '',
-                    armor_class: '',
-                    hit_point: '',
-                    hit_dice: '',
-                    ability_str: '',
-                    ability_dex: '',
-                    ability_con: '',
-                    ability_int: '',
-                    ability_wis: '',
-                    ability_cha: '',
-                    challeng_rating: '',
-
-                    speeds:[]
-
-                },
-
                 alert: null,
-                isEditing: false,
-
-                CRList: [
-                    {text: "All", value: null},
-                    {text: "1/8", value: "1/8"},
-                    {text: "1/4", value: "1/4"},
-                    {text: "1/2", value: "1/2"},
-                    {text: "1", value: "1"},
-                    {text: "2", value: "2"},
-                    {text: "3", value: "3"},
-                    {text: "4", value: "4"},
-                    {text: "5", value: "5"},
-                    {text: "6", value: "6"},
-                    {text: "7", value: "7"},
-                    {text: "8", value: "8"},
-                    {text: "9", value: "9"},
-                    {text: "10", value: "10"},
-                    {text: "11", value: "11"},
-                    {text: "12", value: "12"},
-                    {text: "13", value: "13"},
-                    {text: "14", value: "14"},
-                    {text: "15", value: "15"},
-                    {text: "16", value: "16"},
-                    {text: "17", value: "17"},
-                    {text: "18", value: "18"},
-                    {text: "19", value: "19"},
-                    {text: "20", value: "20"},
-                ],
-                sizeList: [
-                    {text: "Fine", value: "Fine"},
-                    {text: "Diminutive", value: "Diminutive"},
-                    {text: "Tiny", value: "Tiny"},
-                    {text: "Small", value: "Small"},
-                    {text: "Medium", value: "Medium"},
-                    {text: "Large", value: "Large"},
-                    {text: "Huge", value: "Huge"},
-                    {text: "Gargantuan", value: "Gargantuan"},
-                    {text: "Colossal", value: "Colossal"},
-                ],
-                alignmentList: [
-                    {text: 'Lawful Good', value: 'Lawful Good'},
-                    {text: 'Neutral Good', value: 'Neutral Good'},
-                    {text: 'Chaotic Good', value: 'Chaotic Good'},
-                    {text: 'Lawful Neutral', value: 'Lawful Neutral'},
-                    {text: 'True Neutral', value: 'True Neutral'},
-                    {text: 'Chaotic Neutral', value: 'Chaotic Neutral'},
-                    {text: 'Lawful Evil', value: 'Lawful Evil'},
-                    {text: 'Neutral Evil', value: 'Neutral Evil'},
-                    {text: 'Chaotic Evil', value: 'Chaotic Evil'},
-                ],
-                hitDiceList: [
-                    {text: '1d3', value: '1d3'},
-                    {text: '1d4', value: '1d4'},
-                    {text: '1d6', value: '1d6'},
-                    {text: '1d8', value: '1d8'},
-                    {text: '1d10', value: '1d10'},
-                    {text: '1d12', value: '1d12'},
-                ]
             };
         },
         methods: {
-            resetFormData() {
-                this.form_data = {
-                    name: this.monster.name,
-                    size: this.monster.size,
-                    type: this.monster.type,
-                    subtype: this.form_data.subtype,
-                    alignment: this.form_data.alignment,
-                    armor_class: this.form_data.armor_class,
-                    hit_point: this.form_data.hit_point,
-                    hit_dice: this.form_data.hit_dice,
-                    ability_str: this.form_data.ability_str,
-                    ability_dex: this.form_data.ability_dex,
-                    ability_con: this.form_data.ability_con,
-                    ability_int: this.form_data.ability_int,
-                    ability_wis: this.form_data.ability_wis,
-                    ability_cha: this.form_data.ability_cha,
-                    challenge_rating: this.form_data.challenge_rating,
-
-                    speeds: this.form_data.speeds
-
-
-                    //first_name: this.user.first_name,
-                    //last_name: this.user.last_name,
-                }
-                this.isEditing = false
+            goToEditPage() {
+                this.$router.push(`/monsters/${this.$route.params.id}/edit`)
             },
-            submit() {
-                if (this.isEditing == false) return
-                this.alert = null
-                this.loading = true
-                api.updateMonster(this.$axios, this.monster.id, this.form_data)
-                    .then(result => {
-                        //console.log('/account/index.vue .then() result', result)
-                        this.alert = {type: 'success', message: result.message || 'Success'}
-                        this.loading = false
-                        this.isEditing = false
-                        this.monster.name = this.form_data.name
-                        this.monster.size = this.form_data.size
-                        this.monster.type = this.form_data.type
-                        this.monster.subtype = this.form_data.subtype
-                        this.monster.alignment = this.form_data.alignment
-                        this.monster.this.monster.armor_class= this.form_data.armor_class
-                        this.monster.hit_point= this.form_data.hit_point
-                        this.monster.hit_dice= this.form_data.hit_dice
-                        this.monster.ability_str = this.form_data.ability_str
-                        this.monster.ability_dex= this.form_data.ability_dex
-                        this.monster.ability_con= this.form_data.ability_con
-                        this.monster.ability_int= this.form_data.ability_int
-                        this.monster.ability_wis= this.form_data.ability_wis
-                        this.monster.ability_cha= this.form_data.ability_cha
-                        this.monster.challenge_rating= this.form_data.challenge_rating
-
-                        this.monster.speeds = this.form_data.speeds
-
-
-
-
-                        //this.user.last_name = this.form_data.last_name
-                        //this.user.email = this.form_data.email
-                    })
-                    .catch(error => {
-                        console.log('/account/index.vue .catch() error', error)
-                        console.log('/account/index.vue .catch() error.response', error.response)
-                        this.loading = false
-                        if (error.response && error.response.data) {
-                            this.alert = {
-                                type: 'error',
-                                message: error.response.data || 'Error'
-                            }
-                        }
-                    })
-            },
-            onDelete(id) {
-                console.log(id)
-            }
         }
-    };
+    }
+    ;
 
 </script>
 
