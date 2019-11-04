@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row wrap>
       <v-alert v-if="!!alert" :type="alert.type">{{ alert.message }}</v-alert>
-      <!-- qua i pulsanti -->
+      <!-- TODO qua i pulsanti -->
       <v-col>
         <v-card>
           <v-card-title class="secondary onsecondary--text"><h3>{{ spell.name }}</h3></v-card-title>
@@ -227,9 +227,9 @@
         async asyncData ( {$axios, params }) {
             try {
                 let retval = {spell: {}, characterclasses: [], spelltags: []}
-                let query_spell = await $axios.$get(`/spells/${params.id}`);
-                let query_characterclasses = await $axios.$get(`/characterclasses/`);
-                let query_spelltags = await $axios.$get(`/spelltags/`);
+                let query_spell = await $axios.$get(`/spells/${params.id}`)
+                let query_characterclasses = await $axios.$get(`/characterclasses/`)
+                let query_spelltags = await $axios.$get(`/spelltags/`)
 
                 if (!query_spell) {
                     return {
