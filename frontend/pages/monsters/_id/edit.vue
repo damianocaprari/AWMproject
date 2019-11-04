@@ -6,23 +6,25 @@
           <v-form @submit.prevent="submit">
 
             <v-row>
-              <v-text-field class="title" label="Name" v-model="form_data.name"/>
+              <v-col>
+                <v-text-field class="title" label="Name" v-model="form_data.name"/>
+              </v-col>
             </v-row>
 
             <v-row>
-              <v-col cols="12" lg="9">
+              <v-col cols="12" sm="8">
                 <v-row>
-                  <v-col cols="12" lg="3">
+                  <v-col cols="12" md="3">
                     <v-select outlined v-model="form_data.alignment" :items="alignmentList"
                               label="Alignment"></v-select>
                   </v-col>
-                  <v-col cols="12" lg="3">
+                  <v-col cols="12" md="3">
                     <v-select outlined label="Size" :items="sizeList" v-model="form_data.size"/>
                   </v-col>
-                  <v-col cols="12" lg="3">
+                  <v-col cols="12" md="3">
                     <v-text-field label="Type" v-model="form_data.type"/>
                   </v-col>
-                  <v-col cols="12" lg="3">
+                  <v-col cols="12" md="3">
                     <v-text-field v-if="form_data.type" label="Subtype" v-model="form_data.subtype"/>
                   </v-col>
                 </v-row>
@@ -72,7 +74,7 @@
              </v-avatar>
            </v-col>
              -->
-              <v-col cols="12" lg="3">
+              <v-col cols="12" sm="4">
                 <v-row justify="center">
                   <v-col align="center">
                     <v-avatar color="grey" tile size="160" class="mx-auto">
@@ -86,32 +88,134 @@
 
 
             <v-row>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="1">
                 <v-text-field v-model="monster.ability_str" type="number" label="STR"></v-text-field>
                 <v-text-field v-model="monster.ability_dex" type="number" label="DEX"></v-text-field>
                 <v-text-field v-model="monster.ability_con" type="number" label="CON"></v-text-field>
               </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="1">
                 <v-text-field v-model="monster.ability_int" type="number" label="INT"></v-text-field>
                 <v-text-field v-model="monster.ability_wis" type="number" label="WIS"></v-text-field>
                 <v-text-field v-model="monster.ability_cha" type="number" label="CHA"></v-text-field>
               </v-col>
+              <v-col cols="12" md="4">
+                <v-row>
+                  <v-text-field v-model="form_data.speeds" label="Speeds"/>
+                </v-row>
+                <v-row>
+                  <v-text-field v-model="form_data.senses" label="Senses"/>
+                </v-row>
+                <v-row>
+                  <v-text-field v-model="form_data.languages" label="Languages"/>
+                </v-row>
+              </v-col>
             </v-row>
 
             <v-row>
-              <v-select v-model="form_data.challenge_rating" :items="CRList" label="Challenge rating - CR"/>
+              <v-col cols="12" md="1">
+                <v-select v-model="form_data.challenge_rating" :items="CRList" label="Challenge rating - CR"/>
+              </v-col>
+            </v-row>
+
+
+            <v-row>
+              <v-col>
+                <v-text-field v-model="form_data.skills" label="Skills"/>
+              </v-col>
+              <v-col>
+                <v-text-field v-model="form_data.saves" label="Saves"/>
+              </v-col>
             </v-row>
 
             <v-row>
-              <v-textarea
-                  style="white-space: pre"
-                  v-model="form_data.traits"
-                  auto-grow
-                  outlined
-                  name="input-7-4"
-                  label="Traits"
-                  value=""
-              ></v-textarea>
+              <v-col cols="12" md="6">
+                <v-text-field v-model="form_data.damage_vulnerabilities" label="Damage Vulnerabilities"/>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field v-model="form_data.damage_resistances" label="Damage Resistances"/>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field v-model="form_data.condition_immunities" label="Condition Immunities"/>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field v-model="form_data.damage_immunities" label="Damage Immunities"/>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-row class="body-1">Traits</v-row>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-row>
+                      <v-textarea
+                          outlined
+                          auto-grow
+                          v-on="on"
+                          v-model="form_data.traits"
+                      />
+                    </v-row>
+                  </template>
+                  <span>Put < br > to make a new line.</span>
+                </v-tooltip>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-row class="body-1">Actions</v-row>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-row>
+                      <v-textarea
+                          outlined
+                          auto-grow
+                          v-on="on"
+                          v-model="form_data.actions"
+                      />
+                    </v-row>
+                  </template>
+                  <span>Put < br > to make a new line.</span>
+                </v-tooltip>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-row class="body-1">Special Abilities</v-row>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-row>
+                      <v-textarea
+                          outlined
+                          auto-grow
+                          v-on="on"
+                          v-model="form_data.special_abilities"
+                      />
+                    </v-row>
+                  </template>
+                  <span>Put < br > to make a new line.</span>
+                </v-tooltip>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-row class="body-1">Legendary Actions</v-row>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-row>
+                      <v-textarea
+                          outlined
+                          auto-grow
+                          v-on="on"
+                          v-model="form_data.legendary_actions"
+                      />
+                    </v-row>
+                  </template>
+                  <span>Put < br > to make a new line.</span>
+                </v-tooltip>
+              </v-col>
             </v-row>
 
 
@@ -423,21 +527,24 @@
                     legendary_actions: this.form_data.legendary_actions,
 
                 }
-                this.isEditing = false
+                this.$router.push(`/monsters/${this.$route.params.id}`)
+
             },
             submit() {
-                if (this.isEditing == false) return
+                console.log("AAAAAAAAAAAAAAAA")
+                console.log(this.form_data)
+                //if (this.isEditing == false) return
                 this.alert = null
                 this.loading = true
                 api.updateMonster(this.$axios, this.monster.id, this.form_data)
                     .then(result => {
-                        //console.log('/account/edit.vue .then() result', result)
+                        console.log('/account/edit.vue .then() result', result)
                         this.alert = {type: 'success', message: result.message || 'Success'}
                         this.loading = false
                         this.isEditing = false
 
                         this.monster.name = this.form_data.name
-                        this.monster.image = this.form_data.image
+                        //this.monster.image = this.form_data.image
                         this.monster.size = this.form_data.size
 
                         this.monster.type = this.form_data.type
@@ -489,35 +596,6 @@
                 console.log(id)
             },
 
-            pickImage() {
-                this.$refs.image.click()
-            },
-            onImagePicked(e) {
-                const files = e.target.files
-                if (files[0] !== undefined) {
-                    if (files[0].name.lastIndexOf('.') <= 0) {
-                        console.log("ERROR")
-                        //console.log('/components/SpellForm.vue onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
-                        return
-                    }
-                    const fr = new FileReader()
-                    fr.readAsDataURL(files[0])
-                    fr.addEventListener('load', () => {
-
-
-                        let form_dataaa = new FormData()
-                        form_dataaa.append('avatar', files[0], files[0].name)
-                        this.form_data.image = form_dataaa
-
-                        console.log("Preparato spell_avatar_form_data da inviare con la form al submit")
-                        //console.log(this.spell_avatar_form_data)
-
-                        this.monster.image = fr.result
-                    })
-                } else {
-                    this.spell_additional_info.avatar = '/images/image-placeholder.png'
-                }
-            }
         }
     };
 

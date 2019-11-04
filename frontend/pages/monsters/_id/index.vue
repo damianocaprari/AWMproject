@@ -7,7 +7,7 @@
           <v-card-title class="secondary onsecondary--text">
             <v-row>
               <v-col><h3>{{ monster.name }}</h3></v-col>
-              <v-col  align="right">
+              <v-col align="right">
                 <v-btn outlined color="onsecondary" @click="goToEditPage" small>Edit</v-btn>
                 <v-btn outlined color="error" small>Delete</v-btn> <!-- TODO: delete e edit solo su PERMISSION -->
               </v-col>
@@ -16,7 +16,7 @@
 
           <v-card-text>
             <v-row>
-              <v-col cols="12" lg="3">
+              <v-col cols="12" sm="4">
                 <v-row justify="center">
                   <v-col align="center">
                     <v-avatar color="grey" tile size="160" class="mx-auto">
@@ -27,7 +27,7 @@
                 </v-row>
               </v-col>
 
-              <v-col cols="12" lg="9">
+              <v-col cols="12" sm="8">
                 <v-row>
                   {{monster.size}} {{monster.type}}
                   <template v-if="monster.subtype"> ({{monster.subtype}})</template>
@@ -50,29 +50,29 @@
                   <v-divider></v-divider>
                 </v-row>
                 <v-row>
-                  <v-col>
+                  <v-col cols="12" md="2">
                     <v-row>STR</v-row>
                     <v-row>{{monster.ability_str}}</v-row>
                   </v-col>
-                  <v-col>
+                  <v-col cols="12" md="2">
                     <v-row>DEX</v-row>
                     <v-row>{{monster.ability_dex}}</v-row>
                   </v-col>
-                  <v-col>
+                  <v-col cols="12" md="2">
                     <v-row>CON</v-row>
                     <v-row>{{monster.ability_con}}</v-row>
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col>
+                  <v-col cols="12" md="2">
                     <v-row>INT</v-row>
                     <v-row>{{monster.ability_int}}</v-row>
                   </v-col>
-                  <v-col>
+                  <v-col cols="12" md="2">
                     <v-row>WIS</v-row>
                     <v-row>{{monster.ability_wis}}</v-row>
                   </v-col>
-                  <v-col>
+                  <v-col cols="12" md="2">
                     <v-row>CHA</v-row>
                     <v-row>{{monster.ability_cha}}</v-row>
                   </v-col>

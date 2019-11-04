@@ -53,7 +53,6 @@ export default {
         special_abilities: data.special_abilities,
         actions: data.actions,
         legendary_actions: data.legendary_actions,
-
         //first_name: data.first_name,
         //last_name: data.last_name
     }),
