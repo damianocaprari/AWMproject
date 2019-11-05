@@ -57,17 +57,9 @@ export default {
         //last_name: data.last_name
     }),
 
-    createMonster: ($axios, data) => $axios.$post(`monsters/`, data, {
-        headers: {
-            Accept: "text/html"
-        }
-    }),
+    createMonster: ($axios, data) => $axios.$post(`monsters/`, data),
 
-    createSpell: ($axios, data) => $axios.$post(`spells/`, data, {
-        headers: {
-            Accept: "text/html"
-        }
-    })
+    createSpell: ($axios, data) => $axios.$post(`spells/`, data)
     // o gli passi data così come' se tutti i nomi sono uguali, oppure mappi come sopra con le graffe intorno perche oggetto
 
 }

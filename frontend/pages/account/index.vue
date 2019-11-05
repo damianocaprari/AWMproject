@@ -152,6 +152,7 @@
             try {
                 my_spells = await context.app.getMySpells(userId)
             } catch (e2) {
+                console.log("AAAAAAAAAAAAAAAAAAAAAA")
                 console.log('/account/index.vue asyncData() catch(e2)', e2)
                 my_spells = {}
             }

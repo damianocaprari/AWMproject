@@ -9,13 +9,35 @@
       <v-container>
         <v-form @submit.prevent="submit">
           <!--<v-alert v-if="alert" :type="alert.type">{{ alert.message }}</v-alert>-->
-          <v-text-field v-model="monster.name" label="Name"/>
-          <v-select v-model="monster.alignment" :items="alignmentList" label="Alignment"></v-select>
-          <v-select v-model="monster.challenge_rating" :items="CRList" label="Challenge rating - CR"></v-select>
-          <v-text-field v-model="monster.hit_point" type="number" label="Hit points"></v-text-field>
-          <v-select v-model="monster.hit_dice" :items="hitDiceList" label="Hit Dice"></v-select>
-          <v-text-field v-model="monster.armor_class" type="number" label="Armor Class"></v-text-field>
-          <v-text-field v-model="monster.armor_class_notes" label="Armor Class Notes (opt)"></v-text-field>
+          <v-row>
+            <v-col>
+              <v-text-field v-model="monster.name" label="Name"/>
+              <v-select v-model="monster.alignment" :items="alignmentList" label="Alignment"></v-select>
+              <v-select v-model="monster.challenge_rating" :items="CRList" label="Challenge rating - CR"></v-select>
+              <v-text-field v-model="monster.hit_point" type="number" label="Hit points"></v-text-field>
+              <v-select v-model="monster.hit_dice" :items="hitDiceList" label="Hit Dice"></v-select>
+              <v-text-field v-model="monster.armor_class" type="number" label="Armor Class"></v-text-field>
+              <v-text-field v-model="monster.armor_class_notes" label="Armor Class Notes (opt)"></v-text-field>
+            </v-col>
+
+            <v-col>
+              <v-avatar tile size="160" class="mx-auto" color="grey">
+                <v-hover v-slot:default="{ hover }">
+                  <v-img :src="monster.image || '/images/image-placeholder.png'">
+                    <v-expand-transition>
+                      <div v-if="hover"
+                           class="d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal white--text"
+                           style="height: 100%;" @click="pickImage">
+                        Change
+                        <input type="file" style="display: none" ref="image" accept="image/*" @change="onImagePicked">
+                      </div>
+                    </v-expand-transition>
+                  </v-img>
+                </v-hover>
+              </v-avatar>
+            </v-col>
+          </v-row>
+
 
           <v-row>
             <v-col>
@@ -146,6 +168,7 @@
         },
         data() {
             return {
+                form_data_avatar_file: null,
                 monster: {
                     name: "",
                     image: null,
@@ -266,6 +289,18 @@
                     .then(result => {
                         this.alert = {type: 'success', message: result.message || 'Success'}
                         this.loading = false
+                        let form_data = new FormData()
+                        if(!!this.form_data_avatar_file){
+                            form_data.append('image', this.form_data_avatar_file, this.form_data_avatar_file.name)
+                            this.$axios.put(`/monsters/${result.id}/`, form_data, {headers:{"Content-type":"multipart/form-data"}})
+                                .then(data => {
+                                    console-log("Add image")
+                                    }
+                                ).catch(e => {
+                                    console.log(e.response)
+                            })
+                        }
+
                     })
                     .catch(error => {
                         console.log('/monster/add.vue .catch() error', error)
@@ -281,6 +316,32 @@
 
                 this.$router.push(`/monsters`)
             },
+
+            pickImage() {
+                this.$refs.image.click()
+            },
+            onImagePicked(e) {
+                const files = e.target.files
+                if (files[0] !== undefined) {
+                    if (files[0].name.lastIndexOf('.') <= 0) {
+                        //console.log('/components/SpellForm.vue onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
+                        console.log('/monsters/add.vue  onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
+                        return
+                    }
+                    const fr = new FileReader()
+                    fr.readAsDataURL(files[0])
+                    fr.addEventListener('load', () => {
+                        //let form_data = new FormData()
+                        //form_data.append('avatar', files[0], files[0].name)
+                        this.form_data_avatar_file = files[0]
+                        //alert("Preparato spell_avatar_form_data da inviare con la form al submit, vedi console.log()")
+                        //console.log(this.spell_avatar_form_data)
+
+                        //this.spell_additional_info.avatar = fr.result
+                        this.monster.image = fr.result
+                    })
+                }
+            }
         }
     };
 
@@ -288,4 +349,12 @@
 
 
 <style scoped>
+  .v-card--reveal {
+    align-items: center;
+    bottom: 0;
+    justify-content: center;
+    opacity: .75;
+    position: absolute;
+    width: 100%;
+  }
 </style>
