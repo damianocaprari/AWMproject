@@ -4,10 +4,17 @@
     <data-source name="db" uuid="8a26a7c0-3f53-4ec9-816d-cfb1bc8b379f">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0" />
       <auth-required>false</auth-required>
+      <schema-mapping />
     </data-source>
     <data-source name="db [2]" uuid="ac572168-0553-4815-892f-6bc73e62e62d">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0" />
       <auth-required>false</auth-required>
+      <schema-mapping />
+    </data-source>
+    <data-source name="Django default" uuid="7e7241d3-4143-438b-97af-1e779f5ede46">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0" />
+      <auth-required>false</auth-required>
+      <schema-mapping />
     </data-source>
   </component>
 </project>

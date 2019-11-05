@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAdminUser, IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from app_monsters.models import Monster
 
@@ -9,19 +9,22 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
   print("Sono dentro che provo")
 
   def has_permission(self, request, view):
-      user = Monster.objects.get(pk=view.kwargs['id'])
-      print(user)
-      try:
-          if request.user == user:
-              print("USER", user)
-              return True
-      except:
-          return request.method in SAFE_METHODS
-      return False
+    if request.method in SAFE_METHODS:
+      return True
+    try:
+      monster = Monster.objects.get(pk=view.kwargs['pk'])
+      print(monster)
+      if monster.author == request.user:
+            return True
+    except:
+        return False
+    return False
 
-
-
-
+class IsPost(permissions.BasePermission):
+  def has_permission(self, request, view):
+    if request.method == 'POST':
+      return True
+    return False
 
 
 # -------------------------
@@ -33,7 +36,6 @@ class ReadOnly(BasePermission):
 
 class IsOwnUser(permissions.BasePermission):
   """permette l'accesso alla risorsa solo se l'utente della richiesta è l'owner della risorsa"""
-
   def has_permission(self, request, view):
     try:
       user = User.objects.get(pk=view.kwargs['pk'])

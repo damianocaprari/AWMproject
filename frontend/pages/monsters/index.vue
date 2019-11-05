@@ -19,83 +19,15 @@
           <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
         </v-col>
       </template>
-
-
     </v-row>
 
     <monsters-table :monsters="monsters"></monsters-table>
 
-
-    <v-data-table
-        :headers="headers"
-        :items="monsters"
-        :items-per-page="5"
-        sort-by="name"
-        item-key="name"
-        class="elevation-1"
-        @click:row="goToSinglePage">
-
-      <template v-slot:top>
-        <v-container fluid>
-          <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
-          <v-row>
-            <!-- filter for name -->
-            <v-col cols="12" md="3">
-              <v-row class="pa-3">
-                <v-text-field
-                    v-model="monsterFilterValue"
-                    type="text"
-                    label="Name"
-                ></v-text-field>
-              </v-row>
-            </v-col>
-
-            <!-- Filter for challenge rating -->
-            <v-col cols="12" md="3">
-              <v-row class="pa-3">
-                <v-select
-                    :items="CRList"
-                    v-model="CRFilterValue"
-                    label="Challenge rating (CR)"
-                ></v-select>
-              </v-row>
-            </v-col>
-
-            <!-- Filter for ALIGNMENT -->
-            <v-col cols="12" md="3">
-              <v-row class="pa-3">
-                <v-select
-                    :items="AlignmentList"
-                    v-model="AlignmentFilterValue"
-                    label="Alignment"
-                ></v-select>
-              </v-row>
-            </v-col>
-
-            <!-- Filter for SIZE -->
-            <v-col cols="12" md="3">
-              <v-row class="pa-3">
-                <v-select
-                    :items="SizeList"
-                    v-model="SizeFilterValue"
-                    label="Size"
-                ></v-select>
-              </v-row>
-            </v-col>
-
-          </v-row>
-        </v-container>
-      </template>
-    </v-data-table>
-
-
   </v-container>
-
 </template>
 
 
 <script>
-
     import MonstersTable from "../../components/MonstersTable";
 
     export default {
@@ -241,12 +173,9 @@
 
             // go to single page
             goToSinglePage(item) {
-                console.log("ASDASDD")
-                console.log(item.id)
                 let number = item.id
                 let link = "/monsters/" + item.id
-                console.log(link)
-                window.location.replace(link)
+                this.$router.push((`/monsters/${item.id}/edit`))
             },
 
             deleteItem(item) {

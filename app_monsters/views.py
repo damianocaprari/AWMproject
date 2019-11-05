@@ -13,13 +13,12 @@ class MonsterViewSet(viewsets.ModelViewSet):
     serializer_class = MonsterSerializer
     queryset = Monster.objects.all()
 
-    def get_object(self):
-        obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
-        self.check_object_permissions(self.request, obj)
-        return obj
-
-    # permission_classes = (permissions.AllowAny,)
-    permission_classes = (permissions.IsOwnerOrReadOnly,) # | permissions.IsAdminUser,)
+    #def get_object(self):
+    #    obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+    #    self.check_object_permissions(self.request, obj)
+    #    return obj
+    #permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated & permissions.IsPost | permissions.IsOwnerOrReadOnly | permissions.IsAdminUser,)
     # TODO le permissions possono essere combinate usando & (and), | (or), ~ (not)
     # ad esempio: permission_classes = (permissions.IsAuthenticated & IsOwnUser | permissions.IsAdminUser,)
 

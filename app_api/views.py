@@ -80,11 +80,11 @@ class CharacterClassView(viewsets.ModelViewSet):
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
+"""
 class ConditionsView(viewsets.ModelViewSet):
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer
-
+"""
 """
 class MonstersView(viewsets.ModelViewSet):
     queryset = Monster.objects.all()

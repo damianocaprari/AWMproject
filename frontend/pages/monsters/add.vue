@@ -122,19 +122,9 @@
             ></v-textarea>
           </v-row>
 
-
-          <!--
-          <v-container class="form-group">
-              <v-row>Monster image</v-row>
-              <input type="file" name="file" @change="onFileChange">
-          </v-container>
-          -->
-
-
           <v-row justify="center">
             <v-col class="text-center">
               <v-btn type="submit" outlined color="accent">Save</v-btn>
-              <!--<v-btn text color="accent" @click="resetFormData">Cancel</v-btn>-->
             </v-col>
           </v-row>
         </v-form>
@@ -261,10 +251,8 @@
             submit() {
                 this.alert = null
                 this.loading = true
-                console.log(this.monster)
 
                 this.monster.armor_class = Number(this.monster.armor_class)
-                console.log(this.monster.armor_class)
 
                 this.monster.hit_point = Number(this.monster.hit_point)
                 this.monster.ability_str = Number(this.monster.ability_str)
@@ -274,11 +262,8 @@
                 this.monster.ability_wis = Number(this.monster.ability_wis)
                 this.monster.ability_cha = Number(this.monster.ability_cha)
 
-                console.log(JSON.stringify(this.monster))
-
                 api.createMonster(this.$axios, this.monster)
                     .then(result => {
-                        //console.log('/account/edit.vue.OLD .then() result', result)
                         this.alert = {type: 'success', message: result.message || 'Success'}
                         this.loading = false
                     })
@@ -296,42 +281,6 @@
 
                 this.$router.push(`/monsters`)
             },
-
-            /*
-            onFileChange(e) {
-                let files = e.target.files || e.dataTransfer.files;
-                if (!files.length) {
-                    return;
-                }
-                this.recipe.image = files[0];
-                this.createImage(files[0]);
-            },
-            createImage(file) {
-                // let image = new Image();
-                let reader = new FileReader();
-                let vm = this;
-                reader.onload = e => {
-                    vm.preview = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            },
-            async submitRecipe() {
-                const config = {
-                    headers: {"content-type": "multipart/form-data"}
-                };
-                let formData = new FormData();
-                for (let data in this.recipe) {
-                    formData.append(data, this.recipe[data]);
-                }
-                try {
-                    let response = await this.$axios.$post("/recipes/", formData, config);
-                    this.$router.push("/recipes/");
-                } catch (e) {
-                    console.log(e);
-                }
-
-            }
-            */
         }
     };
 
