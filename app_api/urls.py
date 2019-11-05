@@ -1,4 +1,4 @@
-from app_api import views  # TODO le view vanno importate dalle varie app
+#from app_api import views  # TODO le view vanno importate dalle varie app
 from app_characterclasses.views import CharacterClassViewSet
 from app_conditions.views import ConditionViewSet
 from app_profiles.views import ProfileViewSet, UserViewSet

@@ -1,3 +1,4 @@
+'''
 from app_api.serializers import CharacterClassSerializer
 from app_api.serializers import UserSerializer
 from app_api.serializers import ConditionSerializer
@@ -90,3 +91,4 @@ class MonstersView(viewsets.ModelViewSet):
     queryset = Monster.objects.all()
     serializer_class = MonstersSerializer
 """
+'''

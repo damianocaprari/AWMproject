@@ -7,6 +7,7 @@ class ReadOnly(BasePermission):
         return request.method in SAFE_METHODS
 
 
+'''
 class IsOwnerOrReadOnlyMonster(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.
@@ -24,7 +25,7 @@ class IsOwnerOrReadOnlyMonster(permissions.BasePermission):
 
         # Write permissions are only allowed to the owner of the snippet.
         return obj.author == request.user
-
+'''
 
 
 

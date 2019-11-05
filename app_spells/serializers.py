@@ -27,7 +27,7 @@ class SpellAdditionalInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpellAdditionalInfo
         fields = ['id', ] + SpellAdditionalInfo.fields + SpellAdditionalInfo.readonly_fields + ['tags',]
-        read_only_fields = ['id', 'spell', ]
+        read_only_fields = ['id', 'spell', 'tags',]
 
 
 
@@ -43,84 +43,35 @@ class SpellSerializer(serializers.HyperlinkedModelSerializer):
         model = Spell
         fields = ['id', 'url'] + Spell.fields + Spell.readonly_fields + ['custom_attributes', 'spell_additional_info',]
 
+    def update(self, instance, validated_data):
+        spell_additional_info_validated_data = validated_data.pop('spell_additional_info', None)
+        classes_validated_data = validated_data.pop('classes', None)
+        instance.classes.add(*classes_validated_data)
+
+        if spell_additional_info_validated_data is not None:
+            spell_additional_info = SpellAdditionalInfo.objects.get(spell=instance)
+            spell_additional_info.avatar = spell_additional_info_validated_data['avatar']
+            spell_additional_info.aoe_type = spell_additional_info_validated_data['aoe_type']
+            spell_additional_info.aoe_size = spell_additional_info_validated_data['aoe_size']
+            #spell_additional_info.part_of_weapon_attack = spell_additional_info_validated_data['part_of_weapon_attack']
+            spell_additional_info.save_type = spell_additional_info_validated_data['save_type']
+            spell_additional_info.save()
+
+        return instance
+
     def create(self, validated_data):
-
-        print("\n\n\",\n", validated_data)
-
         spell_additional_info_validated_data = validated_data.pop('spell_additional_info')
-
         classes_validated_data = validated_data.pop('classes')
 
-
         user = self.context['request'].user
-        print("\n\n\n", user, "\n\n\n\n")
-
-        spell  = Spell.objects.create(**validated_data)
-
-        #spell.save()
-
-        print("POST SAVE")
-        print("class valid data", classes_validated_data)
-        for id in classes_validated_data:
-            print("id", id)
-            #clazz = CharacterClass.objects.get(pk=id)
-            #print("clazz", clazz)
-            #spell.classes.add(clazz)
-
+        spell = Spell.objects.create(**validated_data)
         spell.classes.add(*classes_validated_data)
-
-        #clazzes = CharacterClass.objects.filter(pk__in=classes_validated_data)
-        #print("POST CLAZZES")
-        #print(clazzes)
-        #spell.classes.add(*clazzes)
-        print("POST ADD")
-        #print("ciao")
 
         spell_additional_info_set_serializer = self.fields['spell_additional_info']
         if spell_additional_info_validated_data is not None:
-            spell_additional_info_validated_data['owner'] = spell
+            spell_additional_info_validated_data['spell'] = spell
             spell_additional_info = spell_additional_info_set_serializer.create(spell_additional_info_validated_data)
 
         spell.author = user
         spell.save()
         return spell
-
-        '''
-        actions_validated_data = validated_data.pop('actions')
-        saves_validated_data = validated_data.pop('saves')
-        skills_validated_data = validated_data.pop('skills')
-        speeds_validated_data = validated_data.pop('speeds')
-        damage_resistances_validated_data = validated_data.pop('damage_resistances')
-        damage_vulnerabilities_validated_data = validated_data.pop('damage_vulnerabilities')
-        damage_immunities_validated_data = validated_data.pop('damage_immunities')
-        condition_immunities_validated_data = validated_data.pop('condition_immunities')
-        languages_validated_data = validated_data.pop('languages')
-        reactions_validated_data = validated_data.pop('reactions')
-        senses_validated_data = validated_data.pop('senses')
-        special_abilities_validated_data = validated_data.pop('special_abilities')
-        traits_validated_data = validated_data.pop('traits')
-        legendary_actions_validated_data = validated_data.pop('legendary_actions')
-        custom_attributes_validated_data = validated_data.pop('custom_attributes')
-        
-        user = self.context['request'].user
-        print("\n\n\n", user, "\n\n\n\n")
-
-        monster = Monster.objects.create(**validated_data)
-        monster.author = user
-
-        actions_set_serializer = self.fields['actions']
-        for each in actions_validated_data:
-            each['owner'] = monster
-        actions = actions_set_serializer.create(actions_validated_data)
-
-        speeds_set_serializer = self.fields['speeds']
-        for each in speeds_validated_data:
-            each['owner'] = monster
-        speeds = speeds_set_serializer.create(speeds_validated_data)
-        '''
-
-
-
-
-
-"""{"name":"asdasdefeesv","version":null,"level":1,"school":"Divination","casting_time_amount":2,"casting_time_unit":"ACTION","casting_time_description":null,"component_verbal":"false","component_somatic":"false","component_material":"true","component_material_description":null,"range_type":"TOUCH","range_distance":null,"duration_type":"INSTANTANEOUS","duration_amount":0,"duration_unit":null,"description":"dcwefwegregregrwe","ritual":"true","higher_level":"true","classes":["http://127.0.0.1:8000/api/characterclasses/3/","http://127.0.0.1:8000/api/characterclasses/4/"],"spell_additional_info":null}"""

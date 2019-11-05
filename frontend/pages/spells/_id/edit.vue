@@ -5,7 +5,7 @@
       :spelltags="spelltags"
       :characterclasses="characterclasses"
       :alert="alert"
-      :submit="submit"
+      :edit="true"
     ></spell-form>
 
     <v-row justify="center" v-else>
@@ -127,7 +127,7 @@
             },
 
             submit() {
-                console.log('spell', this.spell)
+                //console.log('spell', this.spell)
 
                 // copia i valori, non il puntatore all'oggetto
                 let form = JSON.parse(JSON.stringify(this.spell))
@@ -141,27 +141,26 @@
 
                 this.$axios.$put(`/spells/${this.$route.params.id}/`, form)
                 .then(data => {
-                    console.log("tutto ok")
+                    console.log('/spells/_id/edit.vue $axios->spell OK', data)
+                    console.log(this.form_data_avatar_file)
+                    console.log(data.spell_additional_info)
+                    if(!!this.form_data_avatar_file && !!data.spell_additional_info && !!data.spell_additional_info.id) {
+                        console.log('dentro l"if')
+                        let form_data = new FormData();
+                        form_data.append('avatar', this.form_data_avatar_file, this.form_data_avatar_file.name)
+                        this.$axios.$put(`/spell_additional_info/${data.spell_additional_info.id}/`,
+                            form_data, {headers: {'Content-Type': 'multipart/form-data'}})
+                            .then(data => {
+                                console.log('/spells/_id/edit.vue $axios->spell_additional_info OK')
+                            })
+                            .catch(e => {
+                                console.log('/spells/_id/edit.vue $axios->spell_additional_info ERROR:', e.response || e)
+                            })
+                    }
                 })
                 .catch(e => {
-                    if (e.response)
-                        console.log(e.response)
-                    else
-                        console.log(e)
+                    console.log('/spells/_id/edit.vue $axios->spell ERROR:', e.response || e)
                 })
-
-                if(!!this.form_data_avatar_file && !!this.spell.spell_additional_info && !!this.spell.spell_additional_info.id) {
-                    let form_data = new FormData();
-                    form_data.append('avatar', this.form_data_avatar_file, this.form_data_avatar_file.name)
-                    this.$axios.$put(`/spell_additional_info/${this.spell.spell_additional_info.id}/`,
-                        form_data, {headers: {'Content-Type': 'multipart/form-data'}})
-                        .then(data => {
-                            console.log(data)
-                        })
-                        .catch(e => {
-                            console.log(e.response)
-                        })
-                }
             },
         }
 

@@ -5,7 +5,6 @@
       :spelltags="spelltags"
       :characterclasses="characterclasses"
       :alert="alert"
-      :submit="submit"
     ></spell-form>
 
     <v-row justify="center" v-else>
@@ -174,6 +173,7 @@
                     description: "",
                     ritual: false,
                     higher_level: false,
+                    version: "",
 
                     classes: [],
                     spell_additional_info: {},
@@ -210,12 +210,7 @@
                 }
             }
             catch (e) {
-                if (e.response) {
-                    console.log('spells/_id/edit.vue asyncData() .catch e.response:', e.response)
-                }
-                else {
-                    console.log('spells/_id/edit.vue asyncData() .catch e:', e)
-                }
+                console.log('spells/_id/edit.vue asyncData() .catch e.response:', e.response || e)
                 return {
                     alert: {
                         type: 'error',
@@ -226,6 +221,7 @@
         },
 
         methods: {
+            /*
             submit() {
                 console.log('spell', this.spell)
 
@@ -267,6 +263,7 @@
                         })
                 }
             },
+             */
 
             /*
             submit() {

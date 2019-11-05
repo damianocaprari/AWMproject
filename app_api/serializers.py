@@ -1,3 +1,4 @@
+'''
 from app_spells.models import Spell
 from app_characterclasses.models import CharacterClass
 from app_conditions.models import Condition
@@ -30,3 +31,4 @@ class ConditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Condition
         fields = ("id", "name", "description", "source_page_number")
+'''

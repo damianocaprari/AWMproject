@@ -11,6 +11,10 @@ class SpellViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated & permissions.IsPost | permissions.IsOwnerOrReadOnly | permissions.IsAdminUser,)
     # permission_classes = (permissions.AllowAny,)
 
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
 
 class SpellTagViewSet(viewsets.ModelViewSet):
     queryset = SpellTag.objects.all()
