@@ -5,8 +5,8 @@
     <v-row wrap>
       <v-col>
         <v-card
-          max-width="768"
-          class="mx-auto"
+            max-width="768"
+            class="mx-auto"
         >
           <v-card-title class="secondary onsecondary--text"><h3>My Profile</h3></v-card-title>
           <v-list-item>
@@ -16,28 +16,28 @@
             </v-list-item-content>
 
             <v-list-item-avatar
-              size="120"
-              color="grey"
+                size="120"
+                color="grey"
             >
               <v-hover v-slot:default="{ hover }">
                 <v-img
-                  sizes="100"
-                  :src="avatar || '/images/image-placeholder.png'"
+                    sizes="100"
+                    :src="avatar || '/images/image-placeholder.png'"
                 >
                   <v-expand-transition>
                     <div
-                      v-if="hover"
-                      class="d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal white--text"
-                      style="height: 100%;"
-                      @click="pickImage"
+                        v-if="hover"
+                        class="d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal white--text"
+                        style="height: 100%;"
+                        @click="pickImage"
                     >
                       Change
                       <input
-                        type="file"
-                        style="display: none"
-                        ref="image"
-                        accept="image/*"
-                        @change="onImagePicked"
+                          type="file"
+                          style="display: none"
+                          ref="image"
+                          accept="image/*"
+                          @change="onImagePicked"
                       >
                     </div>
                   </v-expand-transition>
@@ -79,12 +79,13 @@
     <v-row wrap>
       <v-col>
         <v-card
-          max-width="768"
-          class="mx-auto"
+            max-width="768"
+            class="mx-auto"
         >
           <v-card-title class="secondary onsecondary--text"><h3>My Spells</h3></v-card-title>
           <v-card-text>
-            <spells-table :spells="my_spells" :spelltags="spelltags" :characterclasses="characterclasses"></spells-table>
+            <spells-table :spells="my_spells" :spelltags="spelltags"
+                          :characterclasses="characterclasses"></spells-table>
           </v-card-text>
         </v-card>
       </v-col>
@@ -95,18 +96,18 @@
     <v-row wrap>
       <v-col>
         <v-card
-          max-width="768"
-          class="mx-auto"
+            max-width="768"
+            class="mx-auto"
         >
           <v-card-title class="secondary onsecondary--text"><h3>My Monsters</h3></v-card-title>
           <v-card-text>
-            Qui ci vuole il component della tabella dei mostri
+            <!--Qui ci vuole il component della tabella dei mostri-->
+            <monsters-table :monsters="my_monsters"></monsters-table>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
     <!-- EO CREATED MONSTERS -->
-
 
   </v-container>
 </template>
@@ -115,17 +116,22 @@
     import api from '~/api'
     import FormData from 'form-data'
     import SpellsTable from '~/components/SpellsTable'
+    import MonstersTable from '~/components/MonstersTable'
 
     export default {
         components: {
             SpellsTable,
+            MonstersTable
         },
         async asyncData(context) {
             let retval = {}
+            let my_spells = {}
+            let my_monsters = {}
+
             let userId = context.store.state.auth.user.id
             try {
                 let user = await context.$axios.$get(`/users/${userId}`);
-                if (user != undefined && user.id == userId){
+                if (user != undefined && user.id == userId) {
                     //console.log("/account/index asyncData() user", user)
                     retval['user'] = user
                     retval['avatar'] = user.profile.avatar
@@ -141,23 +147,42 @@
                 console.log('/account/index.vue asyncData() catch(e)', e)
                 context.redirect('/account/login')
             }
+
             // for SpellTable component
             try {
+                my_spells = await context.app.getMySpells(userId)
+            } catch (e2) {
+                console.log('/account/index.vue asyncData() catch(e2)', e2)
+                my_spells = {}
+            }
+
+            // for MonsterTable component
+            try {
+                my_monsters = await context.app.getMyMonsters(userId)
+            } catch (e3) {
+                console.log('/account/index.vue asyncData() catch(e3)', e3)
+                my_monsters = {}
+            }
+            return Object.assign(retval, my_spells, my_monsters)
+
+            /*
+            FUNZIONE MA E' TUTTO UNITO
+            try {
                 let my_spells = await context.app.getMySpells(userId)
-                return Object.assign(retval, my_spells)
+                let my_monsters = await context.app.getMyMonsters(userId)
+                return Object.assign(retval, my_spells, my_monsters)
             } catch (e2) {
                 console.log('/account/index.vue asyncData() catch(e2)', e2)
                 return retval
             }
-            // for MonsterTable component TODO
-            // ...
-            // ...
+            */
         },
 
         data: () => ({
             isEditing: false,
             user: {},
             my_spells: [],
+            my_monsters: [],
             characterclasses: [],
             spelltags: [],
             avatar: '/images/image-placeholder.png',
@@ -167,7 +192,7 @@
                 last_name: ''
             },
             emailRules: [
-                v => (!v || /.+@.+\..+/.test(v))  || 'Email must be valid',
+                v => (!v || /.+@.+\..+/.test(v)) || 'Email must be valid',
             ],
             alert: null,
             loading: false
@@ -185,19 +210,17 @@
                 try {
                     let date = new Date(dateTimeString)
                     return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-                }
-                catch (e1) {
+                } catch (e1) {
                     try {
                         let date = dateTimeString.split("T")[0]
                         let dateparams = date.split("-")
                         return `${dateparams[2]}-${dateparams[1]}-${dateparams[0]}`
-                    }
-                    catch (e2) {
+                    } catch (e2) {
                         return ""
                     }
                 }
             },
-            submit () {
+            submit() {
                 if (this.isEditing == false) return
                 this.alert = null
                 this.loading = true
@@ -226,21 +249,21 @@
             pickImage() {
                 this.$refs.image.click()
             },
-            onImagePicked (e) {
+            onImagePicked(e) {
                 const files = e.target.files
-                if(files[0] !== undefined) {
-                    if(files[0].name.lastIndexOf('.') <= 0) {
+                if (files[0] !== undefined) {
+                    if (files[0].name.lastIndexOf('.') <= 0) {
                         console.log('/account/index.vue onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
                         return
                     }
-                    const fr = new FileReader ()
+                    const fr = new FileReader()
                     fr.readAsDataURL(files[0])
                     fr.addEventListener('load', () => {
                         let form_data = new FormData()
                         form_data.append('avatar', files[0], files[0].name)
                         this.$axios.$put(`profiles/${this.user.profile.id}/`,
                             form_data,
-                            { headers: {'Content-Type': 'multipart/form-data'}})
+                            {headers: {'Content-Type': 'multipart/form-data'}})
                             .then(data => {
                                 //console.log('then data', data)
                             })

@@ -1,30 +1,43 @@
-<!--
-  TODO: Creare pagina singola per la spell (recipes) o che si apra una tendina
--->
 <template>
-    <v-container>
-        <v-container class="col-12">
-            <v-container class="justify-content-between">
-                <h1>Spells</h1>
-            </v-container>
+  <v-container>
+    <v-container class="col-12">
 
-            <v-btn right color="primary" to="/spells/add">Add spell</v-btn>
+      <v-row>
+        <v-col class="d-sm-none">
+            <h2>Spells</h2>
+        </v-col>
+        <!-- for screen >= 600 px -->
+        <v-col class="d-none d-sm-block">
+            <h1>Spells</h1>
+        </v-col>
 
-            <spells-table :spells="spells" :spelltags="spelltags" :characterclasses="characterclasses"></spells-table>
+        <!-- for screen < 600 px -->
+        <v-col class="d-sm-none" align="right">
+          <v-btn right color="primary" to="/spells/add" small>Add spell</v-btn>
+        </v-col>
+        <!-- for screen >= 600 px -->
+        <v-col class="d-none d-sm-block" align="right">
+          <v-btn right color="primary" to="/spells/add">Add spell</v-btn>
+        </v-col>
 
-            <!--
-            <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">
-                <v-icon>mdi-arrow-up</v-icon>
-            </v-btn>
-            -->
-        </v-container>
+      </v-row>
 
+      <spells-table :spells="spells" :spelltags="spelltags" :characterclasses="characterclasses"></spells-table>
+
+      <!--
+      <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">
+          <v-icon>mdi-arrow-up</v-icon>
+      </v-btn>
+      -->
     </v-container>
+
+  </v-container>
 </template>
 
 
 <script>
     import SpellsTable from "~/components/SpellsTable";
+
     export default {
 
 

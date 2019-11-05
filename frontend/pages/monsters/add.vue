@@ -15,16 +15,18 @@
           <v-text-field v-model="monster.hit_point" type="number" label="Hit points"></v-text-field>
           <v-select v-model="monster.hit_dice" :items="hitDiceList" label="Hit Dice"></v-select>
           <v-text-field v-model="monster.armor_class" type="number" label="Armor Class"></v-text-field>
-            <v-text-field v-model="monster.armor_class_notes" label="Armor Class Notes (opt)"></v-text-field>
+          <v-text-field v-model="monster.armor_class_notes" label="Armor Class Notes (opt)"></v-text-field>
 
-            <v-row>
-                <v-col>
-                    <v-select v-model="monster.size" :items="sizeList" label="Size"></v-select>
-                </v-col>
+          <v-row>
+            <v-col>
+              <v-select v-model="monster.size" :items="sizeList" label="Size"></v-select>
+            </v-col>
             <v-col>
               <v-text-field v-model="monster.type" label="Type"></v-text-field>
             </v-col>
-                <v-col><v-text-field v-model="monster.subtype" label="Subtype"></v-text-field></v-col>
+            <v-col>
+              <v-text-field v-model="monster.subtype" label="Subtype"></v-text-field>
+            </v-col>
           </v-row>
 
           <v-row>
@@ -198,7 +200,6 @@
                 preview: "",
 
                 CRList: [
-                    {text: "All", value: null},
                     {text: "1/8", value: "1/8"},
                     {text: "1/4", value: "1/4"},
                     {text: "1/2", value: "1/2"},
@@ -292,6 +293,8 @@
                             }
                         }
                     })
+
+                this.$router.push(`/monsters`)
             },
 
             /*

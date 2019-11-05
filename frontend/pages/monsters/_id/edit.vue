@@ -1,5 +1,6 @@
 <template>
-  <v-container fluid>
+  <!--<v-container fluid>-->
+  <v-container v-if="canEdit()">
     <v-row>
       <v-col>
         <v-card-text>
@@ -345,6 +346,16 @@
         async asyncData({$axios, params}) {
             try {
                 let monster = await $axios.$get(`/monsters/${params.id}`);
+
+                if (!monster || monster.id != params.id) {
+                    return {
+                        alert: {
+                            type: 'error',
+                            message: 'Selected monster does not exist'
+                        }
+                    }
+                }
+
                 let form_data = {
                     name: monster.name,
                     image: monster.image,
@@ -591,10 +602,27 @@
                             }
                         }
                     })
+                this.$router.push('/monsters')
+
             },
             onDelete(id) {
                 console.log(id)
             },
+
+            canEdit() {
+                try {
+                    let userId = this.$store.state.auth.user.id
+                    if (this.monster && this.monster.author) {
+                        let monsterAuthorId = this.$store.app.getResourceId(this.monster.author)
+                        if(userId == monsterAuthorId)
+                            return true
+                    }
+                }
+                catch(e) {
+                    console.log('monsters/_id/edit.vue canEdit() .catch e:', e)
+                }
+                this.$router.push('/')
+            }
 
         }
     };

@@ -6,11 +6,18 @@
         <v-card>
           <v-card-title class="secondary onsecondary--text">
             <v-row>
-              <v-col><h3>{{ monster.name }}</h3></v-col>
-              <v-col align="right">
-                <v-btn outlined color="onsecondary" @click="goToEditPage" small>Edit</v-btn>
-                <v-btn outlined color="error" small>Delete</v-btn> <!-- TODO: delete e edit solo su PERMISSION -->
-              </v-col>
+              <v-col><h3>
+                {{ monster.name }}
+              </h3></v-col>
+
+              <template v-if="canEdit()">
+                <v-col align="right">
+                  <v-btn text color="onsecondary" @click="deleteMonster()" x-small>Delete</v-btn> <!-- TODO: delete e edit solo su PERMISSION -->
+                  <v-btn outlined color="onsecondary" @click="goToEditPage" small>Edit</v-btn>
+                </v-col>
+              </template>
+              <v-btn outlined color="onsecondary" @click="returnToMonsters" small>Back</v-btn>
+
             </v-row>
           </v-card-title>
 
@@ -384,10 +391,37 @@
             };
         },
         methods: {
+            deleteMonster() {
+                if (this.canEdit()) {
+                    this.$axios.$delete(`/monsters/${this.$route.params.id}`)
+                }
+                this.returnToMonsters()
+            },
+
             goToEditPage() {
                 this.$router.push(`/monsters/${this.$route.params.id}/edit`)
             },
-        }
+
+            canEdit() {
+                try {
+                    let userId = this.$store.state.auth.user.id
+                    if (this.monster && this.monster.author) {
+                        let monsterAuthorId = this.$store.app.getResourceId(this.monster.author)
+                        if (userId == monsterAuthorId)
+                            return true
+                    }
+                } catch (e) {
+                    console.log('monsters/_id/edit.vue canEdit() .catch e:', e)
+                    return false
+                }
+                return false
+            },
+
+            returnToMonsters() {
+                this.$router.push(`/monsters`)
+                // TODO: FAI IN MODO CHE REFRESHI LA PAGINA QUANDO TORNA INDIETRO
+            }
+        },
     }
     ;
 

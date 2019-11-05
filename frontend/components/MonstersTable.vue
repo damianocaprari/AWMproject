@@ -1,139 +1,75 @@
 <template>
-  <v-container>
-    <v-container class="col-15">
+  <v-data-table
+      :headers="headers"
+      :items="monsters"
+      :items-per-page="5"
+      sort-by="name"
+      item-key="name"
+      class="elevation-1"
+      @click:row="goToSinglePage">
 
-      <v-row>
-        <v-col class="d-sm-none">
-            <h2>Monsters</h2>
-        </v-col>
-        <!-- for screen >= 600 px -->
-        <v-col class="d-none d-sm-block">
-            <h1>Monsters</h1>
-        </v-col>
-
-        <!-- for screen < 600 px -->
-        <v-col class="d-sm-none" align="right">
-          <v-btn right color="primary" to="/monsters/add" x-small>Add monster</v-btn>
-        </v-col>
-        <!-- for screen >= 600 px -->
-        <v-col class="d-none d-sm-block" align="right">
-          <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
-        </v-col>
-
-
-      </v-row>
-
-      <monsters-table :monsters="monsters"></monsters-table>
-
-
-      <v-data-table
-          :headers="headers"
-          :items="monsters"
-          :items-per-page="5"
-          sort-by="name"
-          item-key="name"
-          class="elevation-1"
-          @click:row="goToSinglePage">
-
-        <template v-slot:top>
-          <v-container fluid>
-            <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
-            <v-row>
-              <!-- filter for name -->
-              <v-col cols="12" md="3">
-                <v-row class="pa-3">
-                  <v-text-field
-                      v-model="monsterFilterValue"
-                      type="text"
-                      label="Name"
-                  ></v-text-field>
-                </v-row>
-              </v-col>
-
-              <!-- Filter for challenge rating -->
-              <v-col cols="12" md="3">
-                <v-row class="pa-3">
-                  <v-select
-                      :items="CRList"
-                      v-model="CRFilterValue"
-                      label="Challenge rating (CR)"
-                  ></v-select>
-                </v-row>
-              </v-col>
-
-              <!-- Filter for ALIGNMENT -->
-              <v-col cols="12" md="3">
-                <v-row class="pa-3">
-                  <v-select
-                      :items="AlignmentList"
-                      v-model="AlignmentFilterValue"
-                      label="Alignment"
-                  ></v-select>
-                </v-row>
-              </v-col>
-
-              <!-- Filter for SIZE -->
-              <v-col cols="12" md="3">
-                <v-row class="pa-3">
-                  <v-select
-                      :items="SizeList"
-                      v-model="SizeFilterValue"
-                      label="Size"
-                  ></v-select>
-                </v-row>
-              </v-col>
-
+    <template v-slot:top>
+      <v-container fluid>
+        <v-row>
+          <!-- filter for name -->
+          <v-col cols="12" md="3">
+            <v-row class="pa-3">
+              <v-text-field
+                  v-model="monsterFilterValue"
+                  type="text"
+                  label="Name"
+              ></v-text-field>
             </v-row>
-          </v-container>
-        </template>
-      </v-data-table>
+          </v-col>
+
+          <!-- Filter for challenge rating -->
+          <v-col cols="12" md="3">
+            <v-row class="pa-3">
+              <v-select
+                  :items="CRList"
+                  v-model="CRFilterValue"
+                  label="Challenge rating"
+              ></v-select>
+            </v-row>
+          </v-col>
+
+          <!-- Filter for ALIGNMENT -->
+          <v-col cols="12" md="3">
+            <v-row class="pa-3">
+              <v-select
+                  :items="AlignmentList"
+                  v-model="AlignmentFilterValue"
+                  label="Alignment"
+              ></v-select>
+            </v-row>
+          </v-col>
+
+          <!-- Filter for SIZE -->
+          <v-col cols="12" md="3">
+            <v-row class="pa-3">
+              <v-select
+                  :items="SizeList"
+                  v-model="SizeFilterValue"
+                  label="Size"
+              ></v-select>
+            </v-row>
+          </v-col>
+
+        </v-row>
+      </v-container>
+    </template>
 
 
-    </v-container>
-  </v-container>
-
+  </v-data-table>
 </template>
 
-
 <script>
-
-    import MonstersTable from "../../components/MonstersTable";
-
     export default {
-        head() {
-            return {
-                title: "Monsters list",
-            };
-        },
-
-        components: {MonstersTable},
-
-        async asyncData({$axios, params}) {
-            let retval = {monsters: []}
-            try {
-                let query_monster = await $axios.$get(`/monsters/`);
-                if (query_monster.count > 0) {
-                    retval.monsters = query_monster.results
-
-                    retval.monsters.forEach(monster => {
-                        let armor_class_total = "" + monster.armor_class
-                        if (monster.armor_class_notes) {
-                            armor_class_total = armor_class_total + " (" + monster.armor_class_notes + ")"
-                        }
-                        monster['armor_class_total'] = armor_class_total
-                    })
-                }
-
-
-            } catch (e) {
-                console.log(e);
-            }
-            return retval
-        },
+        props: ['monsters',],
 
         data() {
             return {
-                monsters: [],
+                // monsters: [],
 
                 CRList: [
                     {text: "All", value: null},
@@ -199,7 +135,7 @@
                     //{text: 'ARMOR CLASS', value: 'armor_class_total', align: 'center'},
                     {text: 'ALIGNMENT', value: 'alignment', align: 'center', filter: this.alignmentFilter},
                 ],
-            };
+            }
         },
 
         methods: {
@@ -227,8 +163,7 @@
                     return true;
                 }
                 return value.toLowerCase().includes(this.AlignmentFilterValue.toLowerCase())
-            }
-            ,
+            },
 
             // -- Filter for SIZE
             sizeFilter(value) {
@@ -236,9 +171,7 @@
                     return true;
                 }
                 return value.toLowerCase().includes(this.SizeFilterValue.toLowerCase())
-            }
-            ,
-
+            },
 
             // go to single page
             goToSinglePage(item) {
@@ -250,17 +183,8 @@
                 window.location.replace(link)
             },
 
-            deleteItem(item) {
-                const index = this.monsters.indexOf(item)
-                confirm('Delete this monster?') && this.monsters.splice(index, 1)
-            },
-
-
-        }
-        ,
-
-
-    };
+        },
+    }
 </script>
 
 <style scoped>

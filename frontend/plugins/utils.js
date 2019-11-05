@@ -90,4 +90,27 @@ export default ({ app, $axios }, inject) => {
     }
     app.getMySpells = getMySpells
 
+
+    // -----------------------
+    // ----- per MONSTERS -----
+    async function getMyMonsters (myId) {
+        console.log("getMyMonsters")
+        let retval = {my_monsters: []}
+        try {
+            let query_monster = await $axios.$get(`/monsters/`);
+
+            if (query_monster.count > 0) {
+                retval.my_monsters = query_monster.results.filter(monster => {
+                    return myId == getResourceId(monster.author)
+                })
+
+                if (retval.my_monsters.length <= 0) return retval
+            }
+        } catch (e) {
+            console.log('plugins/utils.js getMyMonsters() catch(e)', e);
+        }
+        return retval
+    }
+    app.getMyMonsters = getMyMonsters
+
 }
