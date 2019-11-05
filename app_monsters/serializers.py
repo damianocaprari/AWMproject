@@ -105,7 +105,8 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
   author = serializers.HyperlinkedRelatedField(view_name='api:user-detail', read_only=True, default=serializers.CurrentUserDefault())
   # classes = serializers.HyperlinkedRelatedField(view_name='api:characterclass-detail', many=True, queryset=CharacterClass.objects.all())
 
-  # custom_attributes = SpellCASerializer(many=True, allow_null=True, required=False)
+  custom_attributes = MonsterCASerializer(many=True, allow_null=True, required=False)
+
   """
   speeds = MonsterSpeedSerializer(many=True, allow_null=True, required=False)
   saves = MonsterSaveSerializer(many=True, allow_null=True, required=False)
@@ -123,7 +124,6 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
   legendary_actions = MonsterLegendaryActionSerializer(many=True, allow_null=True, required=False)
   """
 
-  custom_attributes = MonsterCASerializer(many=True, allow_null=True, required=False)
 
   class Meta:
     model = Monster

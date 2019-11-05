@@ -5,7 +5,6 @@ from app_monsters.models import Monster, MonsterCA
 
 
 class MonsterCAInline(admin.TabularInline):
-    extra = 0
     model = MonsterCA
 
 """

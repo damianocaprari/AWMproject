@@ -451,12 +451,15 @@ class MonsterSpecialAbilities(models.Model):
   ]
 """
 
+
 class MonsterCA(models.Model):
   owner = models.ForeignKey(Monster, related_name='custom_attributes', on_delete=models.CASCADE)
-  name = models.CharField(max_length=256)
-  value = models.CharField(max_length=1000)
   creation_time = models.DateTimeField(auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True)
+
+  name = models.CharField(max_length=2048)
+  value = models.CharField(max_length=8192)
+
   readonly_fields = [
     'creation_time',
     'last_modified',
@@ -465,7 +468,7 @@ class MonsterCA(models.Model):
   fields = [
     'owner',
     'name',
-    'vaule'
+    'value',
   ]
 
 ##### -- FAI N_CLEAN CON MESSAGGI DI ERRORE
