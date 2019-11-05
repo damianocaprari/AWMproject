@@ -153,7 +153,7 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
     traits_validated_data = validated_data.pop('traits')
     legendary_actions_validated_data = validated_data.pop('legendary_actions')
     """
-    custom_attributes_validated_data = validated_data.pop('custom_attributes')
+    # custom_attributes_validated_data = validated_data.pop('custom_attributes')
 
     user = self.context['request'].user
     print("\n\n\n", user,"\n\n\n\n")
@@ -235,9 +235,9 @@ class MonsterSerializer(serializers.HyperlinkedModelSerializer):
     """
 
     custom_attributes_set_serializer = self.fields['custom_attributes']
-    for each in custom_attributes_validated_data:
-      each['owner'] = monster
-    custom_attributes = custom_attributes_set_serializer.create(custom_attributes_validated_data)
+    #for each in custom_attributes_validated_data:
+    #  each['owner'] = monster
+    #custom_attributes = custom_attributes_set_serializer.create(custom_attributes_validated_data)
 
     monster.save()
     return monster

@@ -80,11 +80,19 @@
                   <v-col align="center">
 
 
-                    <v-avatar color="grey" tile size="160" class="mx-auto" >
+                    <!--
+                    <v-avatar color="grey" tile size="160" class="mx-auto">
                       <v-img :src="monster.image"
                              v-if="(monster.image)"
-                             ></v-img>
+                      ></v-img>
                     </v-avatar>
+                    -->
+                    <!--
+                    <div class="form-group">
+                      <label for>Edit picture</label>
+                      <input type="file" name="file" @change="onFileChange">
+                    </div>
+                    -->
 
 
                   </v-col>
@@ -118,7 +126,7 @@
             </v-row>
 
             <v-row>
-              <v-col cols="12" md="1">
+              <v-col cols="12" sm="3">
                 <v-select v-model="form_data.challenge_rating" :items="CRList" label="Challenge rating - CR"/>
               </v-col>
             </v-row>
@@ -363,7 +371,7 @@
 
                 let form_data = {
                     name: monster.name,
-                    image: monster.image,
+                    //image: monster.image,
                     size: monster.size,
 
                     type: monster.type,
@@ -410,7 +418,7 @@
 
                 form_data: {
                     name: '',
-                    image: '',
+                    //image: '',
                     size: '',
 
                     type: '',
@@ -509,7 +517,7 @@
             resetFormData() {
                 this.form_data = {
                     name: this.monster.name,
-                    image: this.monster.image,
+                    //image: this.monster.image,
                     size: this.monster.size,
 
                     type: this.monster.type,
@@ -546,6 +554,31 @@
                 this.$router.push(`/monsters/${this.$route.params.id}`)
 
             },
+
+            submitSBAGLIATA() {
+                let editedMonster = this.monster
+                //console.log(editedMonster.image)
+                //if (editedMonster.image.indexOf("http://") != -1) {
+                //    delete editedMonster["image"]
+                //}
+                const config = {
+                    headers: {"content-type": "multipart/form-data"}
+                };
+                let formData = new FormData();
+                for (let data in editedMonster) {
+                    formData.append(data, editedMonster[data]);
+                }
+                try {
+                    let response = this.$axios.$put(`/monsters/${editedMonster.id}/`, formData, config);
+                    //this.$router.push("/monsters/");
+                    this.$router.push(`/monsters/${this.$route.params.id}`)
+                } catch (e) {
+                    console.log(e);
+                }
+
+            },
+
+
             submit() {
                 console.log("AAAAAAAAAAAAAAAA")
                 console.log(this.form_data)
@@ -657,7 +690,28 @@
                 } else {
                     this.spell_additional_info.avatar = '/images/image-placeholder.png'
                 }
-            }
+            },
+
+
+            //------------------
+            //------------------
+            onFileChange(e) {
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length) {
+                    return;
+                }
+                this.monster.image = files[0];
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                // let image = new Image();
+                let reader = new FileReader();
+                let vm = this;
+                reader.onload = e => {
+                    vm.preview = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
 
         }
     };

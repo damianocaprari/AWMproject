@@ -33,6 +33,16 @@
                       <v-img :src="monster.image"
                              v-if="(monster.image)"></v-img>
                     </v-avatar>
+
+
+                    <v-form @submit.prevent="submit">
+                      <div class="form-group">
+                        <input type="file" name="file" @change="onFileChange">
+                        <v-btn type="submit" outlined color="accent">Modify</v-btn>
+                      </div>
+                    </v-form>
+
+
                   </v-col>
                 </v-row>
               </v-col>
@@ -215,7 +225,106 @@
 
             returnToMonsters() {
                 this.$router.push(`/monsters`)
-            }
+            },
+
+            //------------------
+            //------------------
+            onFileChange(e) {
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length) {
+                    return;
+                }
+                this.monster.image = files[0];
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                // let image = new Image();
+                let reader = new FileReader();
+                let vm = this;
+                reader.onload = e => {
+                    vm.preview = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
+
+            submit() {
+                console.log("AAAAAAAAAAAAAAAA", this.monster.image)
+
+                if (!!this.monster.image) {
+                    let form_data = new FormData();
+                    form_data.append('image', this.monster.image)
+                    this.$axios.$put(`/monsters/${this.monster.id}/`,
+                        form_data, {headers: {'Content-Type': 'multipart/form-data'}})
+                        .then(data => {
+                            console.log(data)
+                        })
+                        .catch(e => {
+                            console.log(e.response)
+                        })
+                }
+
+                //this.$axios.$put(`monsters/${this.monster.id}/`, this.monster)
+                /*
+                api.updateMonster(this.$axios, this.monster.id, this.form_data)
+                    .then(result => {
+                        console.log('/account/edit.vue .then() result', result)
+                        this.alert = {type: 'success', message: result.message || 'Success'}
+                        this.loading = false
+                        this.isEditing = false
+
+                        this.monster.name = this.form_data.name
+                        //this.monster.image = this.form_data.image
+                        this.monster.size = this.form_data.size
+
+                        this.monster.type = this.form_data.type
+                        this.monster.subtype = this.form_data.subtype
+                        this.monster.alignment = this.form_data.alignment
+                        this.monster.armor_class = this.form_data.armor_class
+                        this.monster.armor_class_notes = this.form_data.armor_class_notes
+
+                        this.monster.hit_point = this.form_data.hit_point
+                        this.monster.hit_dice = this.form_data.hit_dice
+                        this.monster.ability_str = this.form_data.ability_str
+                        this.monster.ability_dex = this.form_data.ability_dex
+                        this.monster.ability_con = this.form_data.ability_con
+                        this.monster.ability_int = this.form_data.ability_int
+                        this.monster.ability_wis = this.form_data.ability_wis
+                        this.monster.ability_cha = this.form_data.ability_cha
+                        this.monster.challenge_rating = this.form_data.challenge_rating
+
+                        this.monster.traits = this.form_data.traits
+                        this.monster.speeds = this.form_data.speeds
+                        this.monster.saves = this.form_data.saves
+                        this.monster.skills = this.form_data.skills
+                        this.monster.damage_vulnerabilities = this.form_data.damage_vulnerabilities
+                        this.monster.damage_resistances = this.form_data.damage_resistances
+                        this.monster.condition_immunities = this.form_data.condition_immunities
+                        this.monster.damage_immunities = this.form_data.damage_immunities
+                        this.monster.senses = this.form_data.senses
+                        this.monster.languages = this.form_data.languages
+                        this.monster.special_abilities = this.form_data.special_abilities
+                        this.monster.actions = this.form_data.actions
+                        this.monster.legendary_actions = this.form_data.legendary_actions
+
+                        //this.user.last_name = this.form_data.last_name
+                        //this.user.email = this.form_data.email
+                    })
+                    .catch(error => {
+                        console.log('/account/edit.vue .catch() error', error)
+                        console.log('/account/edit.vue .catch() error.response', error.response)
+                        this.loading = false
+                        if (error.response && error.response.data) {
+                            this.alert = {
+                                type: 'error',
+                                message: error.response.data || 'Error'
+                            }
+                        }
+                    })
+
+                 */
+                this.$router.push('/monsters')
+
+            },
         },
     }
     ;

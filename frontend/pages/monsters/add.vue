@@ -21,6 +21,12 @@
             </v-col>
 
             <v-col>
+
+              <div class="form-group">
+                <label for>Monster picture</label>
+                <input type="file" name="file" @change="onFileChange">
+              </div>
+              <!--
               <v-avatar tile size="160" class="mx-auto" color="grey">
                 <v-hover v-slot:default="{ hover }">
                   <v-img :src="monster.image || '/images/image-placeholder.png'">
@@ -35,6 +41,7 @@
                   </v-img>
                 </v-hover>
               </v-avatar>
+              -->
             </v-col>
           </v-row>
 
@@ -274,6 +281,38 @@
             submit() {
                 this.alert = null
                 this.loading = true
+                console.log(this.monster)
+                if(this.monster.image == null)
+                    console.log("ADD BASIC IMAGE")
+                console.log(this.monster.image)
+                this.monster.armor_class = Number(this.monster.armor_class)
+                this.monster.hit_point = Number(this.monster.hit_point)
+                this.monster.ability_str = Number(this.monster.ability_str)
+                this.monster.ability_dex = Number(this.monster.ability_dex)
+                this.monster.ability_con = Number(this.monster.ability_con)
+                this.monster.ability_int = Number(this.monster.ability_int)
+                this.monster.ability_wis = Number(this.monster.ability_wis)
+                this.monster.ability_cha = Number(this.monster.ability_cha)
+
+                const config = {
+                    headers: {"content-type": "multipart/form-data"}
+                };
+                let formData = new FormData();
+                for (let data in this.monster) {
+                    formData.append(data, this.monster[data]);
+                }
+                console.log(formData)
+                try {
+                    let response = this.$axios.$post("/monsters/", formData, config);
+                    this.$router.push("/monsters/");
+                } catch (e) {
+                    console.log(e);
+                }
+
+            },
+            submitCORRECT() {
+                this.alert = null
+                this.loading = true
 
                 this.monster.armor_class = Number(this.monster.armor_class)
 
@@ -290,14 +329,14 @@
                         this.alert = {type: 'success', message: result.message || 'Success'}
                         this.loading = false
                         let form_data = new FormData()
-                        if(!!this.form_data_avatar_file){
+                        if (!!this.form_data_avatar_file) {
                             form_data.append('image', this.form_data_avatar_file, this.form_data_avatar_file.name)
-                            this.$axios.put(`/monsters/${result.id}/`, form_data, {headers:{"Content-type":"multipart/form-data"}})
+                            this.$axios.put(`/monsters/${result.id}/`, form_data, {headers: {"Content-type": "multipart/form-data"}})
                                 .then(data => {
-                                    console-log("Add image")
+                                        console.log("Add image")
                                     }
                                 ).catch(e => {
-                                    console.log(e.response)
+                                console.log(e.response)
                             })
                         }
 
@@ -341,7 +380,27 @@
                         this.monster.image = fr.result
                     })
                 }
-            }
+            },
+
+            //------------------
+            //------------------
+            onFileChange(e) {
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length) {
+                    return;
+                }
+                this.monster.image = files[0];
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                // let image = new Image();
+                let reader = new FileReader();
+                let vm = this;
+                reader.onload = e => {
+                    vm.preview = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
         }
     };
 
