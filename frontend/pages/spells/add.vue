@@ -1,4 +1,24 @@
 <template>
+  <v-container>
+    <spell-form v-if="canAdd()"
+      :spell="spell"
+      :spelltags="spelltags"
+      :characterclasses="characterclasses"
+      :alert="alert"
+      :submit="submit"
+    ></spell-form>
+
+    <v-row justify="center" v-else>
+      <v-col cols="12">
+        <v-alert :type="alert.type">{{ alert.message }}</v-alert>
+      </v-col>
+
+      <v-col class="text-center">
+        <v-btn class="accent onaccent--text" @click="returnToSpells">Back to spells</v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
+  <!--
     <v-container fluid class="my-5">
         <v-container class="row">
             <v-container class="col-md-12 my-3">
@@ -7,7 +27,6 @@
 
             <v-container>
                 <v-form @submit.prevent="submit">
-                    <!--<v-alert v-if="alert" :type="alert.type">{{ alert.message }}</v-alert>-->
                     <v-text-field v-model="spell.name" label="Name"/>
                     <v-row>
                         <v-col>
@@ -105,7 +124,6 @@
                     <v-row justify="center">
                         <v-col class="text-center">
                             <v-btn type="submit" outlined color="accent">Save</v-btn>
-                            <!--<v-btn text color="accent" @click="resetFormData">Cancel</v-btn>-->
                         </v-col>
                     </v-row>
                 </v-form>
@@ -113,10 +131,12 @@
             </v-container>
         </v-container>
     </v-container>
+  -->
 </template>
 
 <script>
     import api from '~/api'
+    import SpellForm from "~/components/SpellForm";
 
     export default {
 
@@ -125,11 +145,18 @@
                 title: "Add Spell"
             };
         },
+
+        components: {
+            SpellForm,
+        },
+
         data() {
             return {
+                alert: null,
+                spelltags: [],
+                characterclasses: [],
                 spell: {
                     name: "",
-                    version: null,
                     level: "",
                     school: "",
                     casting_time_amount: "",
@@ -149,86 +176,99 @@
                     higher_level: false,
 
                     classes: [],
-                    spell_additional_info: null,
-
+                    spell_additional_info: {},
                 },
-
-                preview: "",
-
-                levelList: [
-                    {text: "Cantrip", value: 0},
-                    {text: "1", value: 1},
-                    {text: "2", value: 2},
-                    {text: "3", value: 3},
-                    {text: "4", value: 4},
-                    {text: "5", value: 5},
-                    {text: "6", value: 6},
-                    {text: "7", value: 7},
-                    {text: "8", value: 8},
-                    {text: "9", value: 9}
-                ],
-                schoolList: [
-                    {text: 'Abjuration', value: 'Abjuration'},
-                    {text: 'Conjuration', value: 'Conjuration'},
-                    {text: 'Divination', value: 'Divination'},
-                    {text: 'Enchantment', value: 'Enchantment'},
-                    {text: 'Evocation', value: 'Evocation'},
-                    {text: 'Illusion', value: 'Illusion'},
-                    {text: 'Necromancy', value: 'Necromancy'},
-                    {text: 'Transmutation', value: 'Transmutation'},
-                ],
-                castingTimeList: [
-                    {text: 'Action', value: 'ACTION'},
-                    {text: 'Bonus Action', value: 'BONUS_ACTION'},
-                    {text: 'Hour', value: 'HOUR'},
-                    {text: 'Minute', value: 'MINUTE'},
-                    {text: 'No Action', value: 'NO_ACTION'},
-                    {text: 'Reaction', value: 'REACTION'},
-                    {text: 'Special', value: 'SPECIAL'},
-                ],
-                booleanList: [
-                    {text: 'True', value: 'true'},
-                    {text: 'False', value: 'false'}
-                ],
-                rangeList: [
-                    {text: 'Self', value: 'SELF'},
-                    {text: 'Touch', value: 'TOUCH'},
-                    {text: 'Ranged', value: 'RANGED'},
-                    {text: 'Sight', value: 'SIGHT'},
-                    {text: 'Unlimited', value: 'UNLIMITED'},
-                ],
-                durationList: [
-                    {text: 'Concentration', value: 'CONCENTRATION'},
-                    {text: 'Instantaneous', value: 'INSTANTANEOUS'},
-                    {text: 'Special', value: 'SPECIAL'},
-                    {text: 'Time', value: 'TIME'},
-                    {text: 'Until Dispelled', value: 'UNTIL_DISPELLED'},
-                    {text: 'Until Dispelled or Triggered', value: 'UNTIL_DISPELLED_OR_TRIGGERED'},
-                ],
-                durationUnitList: [
-                    {text: 'Round', value: 'ROUND'},
-                    {text: 'Minute', value: 'MINUTE'},
-                    {text: 'Hour', value: 'HOUR'},
-                    {text: 'Day', value: 'DAY'},
-                ],
-                characterClassesList: [
-                    {text: "Barbarian", value: 1},
-                    {text: "Bard", value: 2},
-                    {text: "Cleric", value: 3},
-                    {text: "Druid", value: 4},
-                    {text: "Fighter", value: 5},
-                    {text: "Monk", value: 6},
-                    {text: "Paladin", value: 7},
-                    {text: "Ranger", value: 8},
-                    {text: "Rogue", value: 9},
-                    {text: "Sorcerer", value: 10},
-                    {text: "Warlock", value: 11},
-                    {text: "Wizard", value: 12}
-                ],
-
-            };
+            }
         },
+
+        async asyncData({$axios, params}) {
+            try {
+                let query_characterclasses = await $axios.$get(`/characterclasses/`)
+                let query_spelltags = await $axios.$get(`/spelltags/`)
+
+                if (!query_characterclasses.count > 0) {
+                    return {
+                        alert: {
+                            type: 'error',
+                            message: 'An error occurred while retrieving information',
+                        }
+                    }
+                }
+
+                if (!query_spelltags.count > 0) {
+                    return {
+                        alert: {
+                            type: 'error',
+                            message: 'An error occurred while retrieving information',
+                        }
+                    }
+                }
+
+                return {
+                    characterclasses: query_characterclasses.results,
+                    spelltags: query_spelltags.results || {},
+                }
+            }
+            catch (e) {
+                if (e.response) {
+                    console.log('spells/_id/edit.vue asyncData() .catch e.response:', e.response)
+                }
+                else {
+                    console.log('spells/_id/edit.vue asyncData() .catch e:', e)
+                }
+                return {
+                    alert: {
+                        type: 'error',
+                        message: 'An error occurred while retrieving information'
+                    }
+                }
+            }
+        },
+
         methods: {
+            submit() {
+                console.log('spell', this.spell)
+
+                // copia i valori, non il puntatore all'oggetto
+                let form = JSON.parse(JSON.stringify(this.spell))
+                delete form['author']
+                delete form['creation_time']
+                delete form['custom_attributes']
+                delete form['id']
+                delete form['last_modified']
+                delete form['url']
+                delete form['spell_additional_info']
+
+                let spell_id = null
+
+                this.$axios.$post('/spells/', form)
+                .then(data => {
+                    console.log("tutto ok", data)
+                    spai_id = data.spell_additional_info.id
+                })
+                .catch(e => {
+                    if (e.response)
+                        console.log(e.response)
+                    else
+                        console.log(e)
+                })
+
+
+                if(!!spell_id && !!this.form_data_avatar_file && !!this.spell.spell_additional_info && !!this.spell.spell_additional_info.id) {
+                    let form_data = new FormData();
+                    form_data.append('avatar', this.form_data_avatar_file, this.form_data_avatar_file.name)
+                    this.$axios.$put(`/spell_additional_info/${this.spell.spell_additional_info.id}/`,
+                        form_data, {headers: {'Content-Type': 'multipart/form-data'}})
+                        .then(data => {
+                            console.log(data)
+                        })
+                        .catch(e => {
+                            console.log(e.response)
+                        })
+                }
+            },
+
+            /*
             submit() {
                 this.alert = null
                 this.loading = true
@@ -256,6 +296,35 @@
                             }
                         }
                     })
+            },
+             */
+
+            canAdd() {
+                try {
+                    let user = this.$store.state.auth.user
+                    if (!user) {
+                        this.alert = {
+                            type: 'error',
+                            message: 'Sign In to create a spell'
+                        }
+                        return false
+                    }
+                    else {
+                        return true
+                    }
+                }
+                catch (e) {
+                    console.log('spells/_id/edit.vue canEdit() .catch e:', e)
+                }
+                this.alert = {
+                    type: 'error',
+                    message: 'You do not have the permission create a spell'
+                }
+                return false
+            },
+
+            returnToSpells() {
+                this.$router.push(`/spells`)
             },
         }
     };

@@ -27,6 +27,7 @@ class SpellAdditionalInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpellAdditionalInfo
         fields = ['id', ] + SpellAdditionalInfo.fields + SpellAdditionalInfo.readonly_fields + ['tags',]
+        read_only_fields = ['id', 'spell', ]
 
 
 

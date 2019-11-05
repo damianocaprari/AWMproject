@@ -175,12 +175,7 @@
 
             // go to single page
             goToSinglePage(item) {
-                console.log("ASDASDD")
-                console.log(item.id)
-                let number = item.id
-                let link = "/monsters/" + item.id
-                console.log(link)
-                window.location.replace(link)
+                this.$router.push(`/monsters/${item.id}`)
             },
 
         },

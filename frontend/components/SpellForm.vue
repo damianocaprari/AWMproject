@@ -136,11 +136,11 @@
 
 <script>
     export default {
-        props: ['spell', 'spelltags', 'characterclasses', 'alert'],
+        props: ['spell', 'spelltags', 'characterclasses', 'alert', 'submit'],
         data () {
             return {
                 //alert: null,
-                spell_avatar_form_data : {},
+                form_data_avatar_file : null,
                 levelList: [
                     {text: "Cantrip", value: 0},
                     {text: "1st", value: 1},
@@ -223,6 +223,7 @@
 
         methods: {
             getCharacterclassesList() {
+                console.log(this.characterclasses)
                 let classes = []
                 if (!!this.characterclasses && typeof this.characterclasses === 'array') {
                     this.characterclasses.forEach(clazz => {
@@ -242,11 +243,45 @@
                 return tags
             },
 
+            /*
             submit() {
-                console.log(this.spell)
+                console.log('spell', this.spell)
 
-                // TODO ricorda this.spell_additional_info.avatar
+                // copia i valori, non il puntatore all'oggetto
+                let form = JSON.parse(JSON.stringify(this.spell))
+                delete form['author']
+                delete form['creation_time']
+                delete form['custom_attributes']
+                delete form['id']
+                delete form['last_modified']
+                delete form['url']
+                delete form['spell_additional_info']
+
+                this.$axios.$put(`/spells/${this.$route.params.id}/`, form)
+                .then(data => {
+                    console.log("tutto ok")
+                })
+                .catch(e => {
+                    if (e.response)
+                        console.log(e.response)
+                    else
+                        console.log(e)
+                })
+
+                if(!!this.form_data_avatar_file && !!this.spell.spell_additional_info && !!this.spell.spell_additional_info.id) {
+                    let form_data = new FormData();
+                    form_data.append('avatar', this.form_data_avatar_file, this.form_data_avatar_file.name)
+                    this.$axios.$put(`/spell_additional_info/${this.spell.spell_additional_info.id}/`,
+                        form_data, {headers: {'Content-Type': 'multipart/form-data'}})
+                        .then(data => {
+                            console.log(data)
+                        })
+                        .catch(e => {
+                            console.log(e.response)
+                        })
+                }
             },
+             */
 
             returnToSpell() {
                 this.$router.push(`/spells/${this.$route.params.id}`)
@@ -265,21 +300,13 @@
                     const fr = new FileReader ()
                     fr.readAsDataURL(files[0])
                     fr.addEventListener('load', () => {
-                        let form_data = new FormData()
-                        form_data.append('avatar', files[0], files[0].name)
-
-                        this.spell_avatar_form_data = {
-                            form_data: form_data,
-                            config: { headers: {'Content-Type': 'multipart/form-data'}}
-                        }
-
-                        alert("Preparato spell_avatar_form_data da inviare con la form al submit, vedi console.log()")
-                        console.log(this.spell_avatar_form_data)
-
+                        //let form_data = new FormData()
+                        //form_data.append('avatar', files[0], files[0].name)
+                        this.form_data_avatar_file = files[0]
+                        //alert("Preparato spell_avatar_form_data da inviare con la form al submit, vedi console.log()")
+                        //console.log(this.spell_avatar_form_data)
                         this.spell_additional_info.avatar = fr.result
                     })
-                } else {
-                    this.spell_additional_info.avatar = '/images/image-placeholder.png'
                 }
             }
         },
