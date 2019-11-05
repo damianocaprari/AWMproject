@@ -12,9 +12,11 @@
 
             <spells-table :spells="spells" :spelltags="spelltags" :characterclasses="characterclasses"></spells-table>
 
+            <!--
             <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">
                 <v-icon>mdi-arrow-up</v-icon>
             </v-btn>
+            -->
         </v-container>
 
     </v-container>
@@ -39,12 +41,14 @@
         async asyncData({$axios, params}) {
             let retval = {spells: [], characterclasses: [], spelltags: []}
             try {
-                let query_spell = await $axios.$get(`/spells/`);
+                let query_spells = await $axios.$get(`/spells/`);
                 let query_characterclasses = await $axios.$get(`/characterclasses/`);
                 let query_spelltags = await $axios.$get(`/spelltags/`);
 
-                if (query_spell.count > 0) {
-                    retval.spells = query_spell.results
+                console.log(query_spells)
+
+                if (query_spells.count > 0) {
+                    retval.spells = query_spells.results
                     // -- Add casting_time value
                     retval.spells.forEach(spell => {
                         let casting_time = "" + spell.casting_time_amount + " " + spell.casting_time_unit.toLowerCase()

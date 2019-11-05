@@ -1,11 +1,41 @@
 <template>
-  <v-container fluid>
-    <v-row wrap>
-      <v-alert v-if="!!alert" :type="alert.type">{{ alert.message }}</v-alert>
-      <!-- TODO qua i pulsanti -->
+  <v-container>
+
+    <v-row justify="center" v-if="alert">
+      <v-col cols="12">
+        <v-alert :type="alert.type">{{ alert.message }}</v-alert>
+      </v-col>
+
+      <v-col class="text-center">
+        <v-btn class="accent onaccent--text" @click="returnToSpells">Back</v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row v-else>
       <v-col>
         <v-card>
-          <v-card-title class="secondary onsecondary--text"><h3>{{ spell.name }}</h3></v-card-title>
+          <v-card-title class="secondary onsecondary--text">
+            <v-row no-gutters>
+              <v-col>
+                {{ spell.name }}
+              </v-col>
+
+              <template v-if="canEdit()">
+                <!-- for screen < 600 px -->
+                <v-col class="d-sm-none" align="right">
+                  <v-btn text color="onsecondary" @click="deleteSpell" x-small>Delete</v-btn>
+                  <v-btn outlined color="onsecondary" @click="editSpell" small>Edit</v-btn>
+                </v-col>
+
+                <!-- for screen >= 600 px -->
+                <v-col class="d-none d-sm-block" align="right">
+                  <v-btn text color="onsecondary" @click="deleteSpell">Delete</v-btn>
+                  <v-btn outlined color="onsecondary" @click="editSpell">Edit</v-btn>
+                </v-col>
+              </template>
+            </v-row>
+          </v-card-title>
+
           <v-card-text>
             <v-row>
               <v-col cols="12" lg="3">
@@ -25,13 +55,13 @@
                   </v-col>
                   <v-col cols="6" sm="4" lg="3">
                     <v-row no-gutters><v-col>CASTING TIME</v-col></v-row>
-                    <v-row no-gutters><v-col>{{ spell.casting_time_amount }} {{ spell.casting_time_unit.toLowerCase() }}</v-col></v-row>
+                    <v-row no-gutters><v-col>{{ spell.casting_time_amount }} <span class="text-capitalize">{{ spell.casting_time_unit }}</span></v-col></v-row>
                   </v-col>
                   <v-col cols="6" sm="4" lg="3">
                     <v-row no-gutters><v-col>RANGE/AREA</v-col></v-row>
                     <v-row no-gutters>
-                      <v-col v-if="'RANGED'.match(spell.range_type)">{{ spell.range_type.toLowerCase() }} ({{ spell.range_distance }} ft)</v-col>
-                      <v-col v-else>{{ spell.range_type.toLowerCase() }}</v-col>
+                      <v-col v-if="'RANGED'.match(spell.range_type)"><span class="text-capitalize">{{ spell.range_type }}</span> ({{ spell.range_distance }} ft)</v-col>
+                      <v-col v-else><span class="text-capitalize">{{ spell.range_type }}</span></v-col>
                     </v-row>
                   </v-col>
                   <v-col cols="6" sm="4" lg="3">
@@ -46,9 +76,9 @@
                     <v-row no-gutters><v-col>DURATION</v-col></v-row>
                     <v-row no-gutters>
                       <v-col v-if="'TIME'.match(spell.duration_type) || 'CONCENTRATION'.match(spell.duration_type) || 'SPECIAL'.match(spell.duration_type)">
-                        {{ spell.duration_amount }} {{ spell.duration_unit.toLowerCase() }} <span v-if="'CONCENTRATION'.match(spell.duration_type)" class="mdi mdi-alpha-c-circle"></span>
+                        {{ spell.duration_amount }} <span class="text-capitalize">{{ spell.duration_unit }}</span> <span v-if="'CONCENTRATION'.match(spell.duration_type)" class="mdi mdi-alpha-c-circle"></span>
                       </v-col>
-                      <v-col v-else>{{ spell.duration_type.toLowerCase() }}</v-col>
+                      <v-col v-else><span class="text-capitalize">{{ spell.duration_type }}</span></v-col>
                     </v-row>
                   </v-col>
                   <v-col cols="6" sm="4" lg="3">
@@ -99,116 +129,7 @@
             </v-row>
           </v-card-text>
         </v-card>
-        <h2></h2>
       </v-col>
-<!--
-      <v-col>
-        <v-form @submit.prevent="submit">
-          <v-alert v-if="alert" :type="alert.type">{{ alert.message }}</v-alert>
-          <v-text-field v-model="spell.name" label="Name"/>
-          <v-row>
-            <v-col>
-              <v-select v-model="spell.level" :items="levelList" label="Level"></v-select>
-            </v-col>
-            <v-col>
-              <v-select v-model="spell.school" :items="schoolList" label="School"></v-select>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12" md="4">
-              <v-text-field v-model="spell.casting_time_amount" type="number"
-                            label="Casting time amount"></v-text-field>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-select v-model="spell.casting_time_unit" :items="castingTimeList"
-                        label="Casting time unit"></v-select>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-text-field v-model="spell.casting_time_description"
-                            label="Casting time description (opt)"/>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12" md="3">
-              <v-select v-model="spell.component_verbal" :items="booleanList"
-                        label="Component verbal"></v-select>
-            </v-col>
-            <v-col cols="12" md="3">
-              <v-select v-model="spell.component_somatic" :items="booleanList"
-                        label="Component somatic"></v-select>
-            </v-col>
-            <v-col cols="12" md="3">
-              <v-select v-model="spell.component_material" :items="booleanList"
-                        label="Component material"></v-select>
-            </v-col>
-            <v-col cols="12" md="3">
-              <v-text-field v-model="spell.component_material_description"
-                            label="Component description (opt)"/>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-select v-model="spell.range_type" :items="rangeList" label="Range type"></v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field v-model="spell.range_distance" type="number"
-                            label="Range distance (opt)"/>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12" md="4">
-              <v-select v-model="spell.duration_type" :items="durationList"
-                        label="Duration type"></v-select>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-text-field v-model="spell.duration_amount"
-                            type="number"
-                            label="Duration amount (opt)"/>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-select v-model="spell.duration_unit" :items="durationUnitList"
-                        label="Duration unit (opt)"></v-select>
-            </v-col>
-          </v-row>
-
-          <v-text-field v-model="spell.description" label="Description"/>
-
-          <v-row>
-            <v-col>
-              <v-select v-model="spell.ritual" :items="booleanList"
-                        label="Ritual"></v-select>
-            </v-col>
-            <v-col>
-              <v-select v-model="spell.higher_level" :items="booleanList"
-                        label="Higher level"></v-select>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-select v-model="spell.classes"
-                        :items="characterClassesList"
-                        label="Character classes"
-                        multiple
-              ></v-select>
-
-            </v-col>
-          </v-row>
-
-          <v-row justify="center">
-            <v-col class="text-center">
-              <v-btn type="submit" outlined color="accent">Save</v-btn>
-              <v-btn text color="accent" @click="resetFormData">Cancel</v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-
-      </v-col>
-      -->
     </v-row>
   </v-container>
 </template>
@@ -231,11 +152,13 @@
                 let query_characterclasses = await $axios.$get(`/characterclasses/`)
                 let query_spelltags = await $axios.$get(`/spelltags/`)
 
-                if (!query_spell) {
+                console.log(query_spell)
+
+                if (!query_spell || query_spell.id != params.id) {
                     return {
                         alert: {
                             type: 'error',
-                            message: 'Selected spell does not exist'
+                            message: 'Requested spell not found'
                         }
                     }
                 }
@@ -245,6 +168,18 @@
                 retval.spelltags = query_spelltags.results
                 return retval
             } catch (e) {
+                if (e.response) {
+                    console.log('spells/_id/index.vue asyncData() .catch e.response:', e.response)
+                    if (e.response.status == 404)
+                        return {
+                            alert: {
+                                type: 'error',
+                                message: 'Requested spell not found'
+                            }
+                        }
+                }
+
+                console.log('spells/_id/index.vue asyncData() .catch e:', e)
                 return {
                     alert: {
                         type: 'error',
@@ -264,6 +199,37 @@
                 // ID not found
                 return null
             },
+
+            deleteSpell() {
+                if (this.canEdit()) {
+                    this.$axios.$delete(`/spells/${this.$route.params.id}`)
+                }
+                this.returnToSpells()
+            },
+
+            editSpell() {
+               this.$router.push(`/spells/${this.$route.params.id}/edit`)
+            },
+
+            canEdit() {
+                try {
+                    let userId = this.$store.state.auth.user.id
+                    if (this.spell && this.spell.author) {
+                        let spellAuthorId = this.$store.app.getResourceId(this.spell.author)
+                        return (userId == spellAuthorId)
+                    }
+                }
+                catch (e) {
+                    console.log('spells/_id/index.vue canEdit() .catch e:', e)
+                    return false
+                }
+                return false
+            },
+
+            returnToSpells () {
+                this.$router.push(`/spells`)
+            }
+
         }
     }
 </script>

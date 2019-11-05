@@ -18,7 +18,7 @@
                         :to="item.to"
                 >
                     <v-list-item-content class="primary onprimary--text">
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        <v-list-item-title class="mx-5" align="right">{{ item.title }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -61,9 +61,10 @@
                 clipped: false,
                 items: [
                     {title: 'Conditions', to: '/conditions'},
-                    {title: 'Spells', to: '/spells'},
                     {title: 'Monsters', to: '/monsters'},
-                    {title: 'Musics', to: '/musics'}
+                    {title: 'Musics', to: '/musics'},
+                    {title: 'Spells', to: '/spells'},
+                    {title: 'Tools', to: '/tools'},
                 ],
                 rightDrawer: false,
                 title: 'AWM project',

@@ -125,7 +125,7 @@
             let userId = context.store.state.auth.user.id
             try {
                 let user = await context.$axios.$get(`/users/${userId}`);
-                if (user != undefined){
+                if (user != undefined && user.id == userId){
                     //console.log("/account/index asyncData() user", user)
                     retval['user'] = user
                     retval['avatar'] = user.profile.avatar
@@ -134,18 +134,24 @@
                         first_name: user.first_name,
                         last_name: user.last_name,
                     }
+                } else {
+                    context.redirect('/account/login')
                 }
             } catch (e) {
-                console.log('/account/edit.vue.OLD asyncData() catch(e)', e)
+                console.log('/account/index.vue asyncData() catch(e)', e)
                 context.redirect('/account/login')
             }
+            // for SpellTable component
             try {
                 let my_spells = await context.app.getMySpells(userId)
                 return Object.assign(retval, my_spells)
             } catch (e2) {
-                console.log('/account/edit.vue.OLD asyncData() catch(e2)', e2)
+                console.log('/account/index.vue asyncData() catch(e2)', e2)
                 return retval
             }
+            // for MonsterTable component TODO
+            // ...
+            // ...
         },
 
         data: () => ({
@@ -197,7 +203,7 @@
                 this.loading = true
                 api.updateUserProfile(this.$axios, this.user.id, this.form_data)
                     .then(result => {
-                        //console.log('/account/edit.vue.OLD .then() result', result)
+                        //console.log('/account/index.vue .then() result', result)
                         this.alert = {type: 'success', message: result.message || 'Success'}
                         this.loading = false
                         this.isEditing = false
@@ -206,8 +212,8 @@
                         this.user.email = this.form_data.email
                     })
                     .catch(error => {
-                        console.log('/account/edit.vue.OLD .catch() error', error)
-                        console.log('/account/edit.vue.OLD .catch() error.response', error.response)
+                        console.log('/account/index.vue .catch() error', error)
+                        console.log('/account/index.vue .catch() error.response', error.response)
                         this.loading = false
                         if (error.response && error.response.data) {
                             this.alert = {
@@ -224,7 +230,7 @@
                 const files = e.target.files
                 if(files[0] !== undefined) {
                     if(files[0].name.lastIndexOf('.') <= 0) {
-                        console.log('/account/edit.vue.OLD onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
+                        console.log('/account/index.vue onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
                         return
                     }
                     const fr = new FileReader ()
@@ -239,8 +245,8 @@
                                 //console.log('then data', data)
                             })
                             .catch(error => {
-                                console.log('/account/edit.vue.OLD onImagePicked() .catch error', error)
-                                console.log('/account/edit.vue.OLD onImagePicked() .catch error.response', error.response)
+                                console.log('/account/index.vue onImagePicked() .catch error', error)
+                                console.log('/account/index.vue onImagePicked() .catch error.response', error.response)
                             })
                         this.avatar = fr.result
                     })
