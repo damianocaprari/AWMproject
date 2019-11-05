@@ -1,17 +1,16 @@
 <template>
   <v-container>
-    <v-container class="col-15">
+    <v-row>
+      <v-col class="d-sm-none">
+        <h2>Monsters</h2>
+      </v-col>
+      <!-- for screen >= 600 px -->
+      <v-col class="d-none d-sm-block">
+        <h1>Monsters</h1>
+      </v-col>
 
-      <v-row>
-        <v-col class="d-sm-none">
-            <h2>Monsters</h2>
-        </v-col>
-        <!-- for screen >= 600 px -->
-        <v-col class="d-none d-sm-block">
-            <h1>Monsters</h1>
-        </v-col>
-
-        <!-- for screen < 600 px -->
+      <!-- for screen < 600 px -->
+      <template v-if="isLogged()">
         <v-col class="d-sm-none" align="right">
           <v-btn right color="primary" to="/monsters/add" x-small>Add monster</v-btn>
         </v-col>
@@ -19,77 +18,77 @@
         <v-col class="d-none d-sm-block" align="right">
           <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
         </v-col>
+      </template>
 
 
-      </v-row>
+    </v-row>
 
-      <monsters-table :monsters="monsters"></monsters-table>
-
-
-      <v-data-table
-          :headers="headers"
-          :items="monsters"
-          :items-per-page="5"
-          sort-by="name"
-          item-key="name"
-          class="elevation-1"
-          @click:row="goToSinglePage">
-
-        <template v-slot:top>
-          <v-container fluid>
-            <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
-            <v-row>
-              <!-- filter for name -->
-              <v-col cols="12" md="3">
-                <v-row class="pa-3">
-                  <v-text-field
-                      v-model="monsterFilterValue"
-                      type="text"
-                      label="Name"
-                  ></v-text-field>
-                </v-row>
-              </v-col>
-
-              <!-- Filter for challenge rating -->
-              <v-col cols="12" md="3">
-                <v-row class="pa-3">
-                  <v-select
-                      :items="CRList"
-                      v-model="CRFilterValue"
-                      label="Challenge rating (CR)"
-                  ></v-select>
-                </v-row>
-              </v-col>
-
-              <!-- Filter for ALIGNMENT -->
-              <v-col cols="12" md="3">
-                <v-row class="pa-3">
-                  <v-select
-                      :items="AlignmentList"
-                      v-model="AlignmentFilterValue"
-                      label="Alignment"
-                  ></v-select>
-                </v-row>
-              </v-col>
-
-              <!-- Filter for SIZE -->
-              <v-col cols="12" md="3">
-                <v-row class="pa-3">
-                  <v-select
-                      :items="SizeList"
-                      v-model="SizeFilterValue"
-                      label="Size"
-                  ></v-select>
-                </v-row>
-              </v-col>
-
-            </v-row>
-          </v-container>
-        </template>
-      </v-data-table>
+    <monsters-table :monsters="monsters"></monsters-table>
 
 
-    </v-container>
+    <v-data-table
+        :headers="headers"
+        :items="monsters"
+        :items-per-page="5"
+        sort-by="name"
+        item-key="name"
+        class="elevation-1"
+        @click:row="goToSinglePage">
+
+      <template v-slot:top>
+        <v-container fluid>
+          <v-btn right color="primary" to="/monsters/add">Add monster</v-btn>
+          <v-row>
+            <!-- filter for name -->
+            <v-col cols="12" md="3">
+              <v-row class="pa-3">
+                <v-text-field
+                    v-model="monsterFilterValue"
+                    type="text"
+                    label="Name"
+                ></v-text-field>
+              </v-row>
+            </v-col>
+
+            <!-- Filter for challenge rating -->
+            <v-col cols="12" md="3">
+              <v-row class="pa-3">
+                <v-select
+                    :items="CRList"
+                    v-model="CRFilterValue"
+                    label="Challenge rating (CR)"
+                ></v-select>
+              </v-row>
+            </v-col>
+
+            <!-- Filter for ALIGNMENT -->
+            <v-col cols="12" md="3">
+              <v-row class="pa-3">
+                <v-select
+                    :items="AlignmentList"
+                    v-model="AlignmentFilterValue"
+                    label="Alignment"
+                ></v-select>
+              </v-row>
+            </v-col>
+
+            <!-- Filter for SIZE -->
+            <v-col cols="12" md="3">
+              <v-row class="pa-3">
+                <v-select
+                    :items="SizeList"
+                    v-model="SizeFilterValue"
+                    label="Size"
+                ></v-select>
+              </v-row>
+            </v-col>
+
+          </v-row>
+        </v-container>
+      </template>
+    </v-data-table>
+
+
   </v-container>
 
 </template>
@@ -253,6 +252,18 @@
             deleteItem(item) {
                 const index = this.monsters.indexOf(item)
                 confirm('Delete this monster?') && this.monsters.splice(index, 1)
+            },
+
+            isLogged() {
+                try {
+                    let user = this.$store.state.auth.user
+                    if (!!user) {
+                        return true
+                    }
+                } catch (e) {
+                    console.log('monsters/add isLogged() .catch e:', e)
+                }
+                return false
             },
 
 

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row wrap>
       <v-alert v-if="!!alert" :type="alert.type">{{ alert.message }}</v-alert>
       <v-col>
@@ -12,11 +12,11 @@
 
               <template v-if="canEdit()">
                 <v-col align="right">
-                  <v-btn text color="onsecondary" @click="deleteMonster()" x-small>Delete</v-btn> <!-- TODO: delete e edit solo su PERMISSION -->
+                  <v-btn text color="onsecondary" @click="deleteMonster()" x-small>Delete</v-btn>
                   <v-btn outlined color="onsecondary" @click="goToEditPage" small>Edit</v-btn>
+                  <v-btn class="ml-5 " text color="onsecondary" @click="returnToMonsters" small>Back</v-btn>
                 </v-col>
               </template>
-              <v-btn outlined color="onsecondary" @click="returnToMonsters" small>Back</v-btn>
 
             </v-row>
           </v-card-title>
@@ -57,29 +57,29 @@
                   <v-divider></v-divider>
                 </v-row>
                 <v-row>
-                  <v-col cols="12" md="2">
+                  <v-col cols="12" sm="2">
                     <v-row>STR</v-row>
                     <v-row>{{monster.ability_str}}</v-row>
                   </v-col>
-                  <v-col cols="12" md="2">
+                  <v-col cols="12" sm="2">
                     <v-row>DEX</v-row>
                     <v-row>{{monster.ability_dex}}</v-row>
                   </v-col>
-                  <v-col cols="12" md="2">
+                  <v-col cols="12" sm="2">
                     <v-row>CON</v-row>
                     <v-row>{{monster.ability_con}}</v-row>
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col cols="12" md="2">
+                  <v-col cols="12" sm="2">
                     <v-row>INT</v-row>
                     <v-row>{{monster.ability_int}}</v-row>
                   </v-col>
-                  <v-col cols="12" md="2">
+                  <v-col cols="12" sm="2">
                     <v-row>WIS</v-row>
                     <v-row>{{monster.ability_wis}}</v-row>
                   </v-col>
-                  <v-col cols="12" md="2">
+                  <v-col cols="12" sm="2">
                     <v-row>CHA</v-row>
                     <v-row>{{monster.ability_cha}}</v-row>
                   </v-col>
@@ -109,14 +109,12 @@
               {{monster.damage_immunities}}
             </v-row>
 
-
             <template v-if="monster.traits">
               <v-row>
                 <v-divider></v-divider>
               </v-row>
               <v-row class="text-justify" v-html="monster.traits"/>
             </template>
-
 
             <template v-if="monster.actions">
               <v-row>
@@ -125,7 +123,6 @@
               <v-row><h3>Actions</h3></v-row>
               <v-row class="text-justify" v-html="monster.actions"/>
             </template>
-
 
             <template v-if="monster.special_abilities">
               <v-row>

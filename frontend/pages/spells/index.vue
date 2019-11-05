@@ -1,16 +1,15 @@
 <template>
   <v-container>
-    <v-container class="col-12">
+    <v-row>
+      <v-col class="d-sm-none">
+        <h2>Spells</h2>
+      </v-col>
+      <!-- for screen >= 600 px -->
+      <v-col class="d-none d-sm-block">
+        <h1>Spells</h1>
+      </v-col>
 
-      <v-row>
-        <v-col class="d-sm-none">
-            <h2>Spells</h2>
-        </v-col>
-        <!-- for screen >= 600 px -->
-        <v-col class="d-none d-sm-block">
-            <h1>Spells</h1>
-        </v-col>
-
+      <template v-if="isLogged()">
         <!-- for screen < 600 px -->
         <v-col class="d-sm-none" align="right">
           <v-btn right color="primary" to="/spells/add" small>Add spell</v-btn>
@@ -19,19 +18,19 @@
         <v-col class="d-none d-sm-block" align="right">
           <v-btn right color="primary" to="/spells/add">Add spell</v-btn>
         </v-col>
+      </template>
 
-      </v-row>
+    </v-row>
 
-      <spells-table :spells="spells" :spelltags="spelltags" :characterclasses="characterclasses"></spells-table>
+    <spells-table :spells="spells" :spelltags="spelltags" :characterclasses="characterclasses"></spells-table>
 
-      <!--
-      <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">
-          <v-icon>mdi-arrow-up</v-icon>
-      </v-btn>
-      -->
-    </v-container>
-
+    <!--
+    <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">
+        <v-icon>mdi-arrow-up</v-icon>
+    </v-btn>
+    -->
   </v-container>
+
 </template>
 
 
@@ -39,8 +38,6 @@
     import SpellsTable from "~/components/SpellsTable";
 
     export default {
-
-
         head() {
             return {
                 title: "Spells list",
@@ -256,6 +253,18 @@
             // Expand row
             expandRow(item) {
                 this.expanded = item == this.expanded[0] ? [] : [item]
+            },
+
+            isLogged() {
+                try {
+                    let user = this.$store.state.auth.user
+                    if (!!user) {
+                        return true
+                    }
+                } catch (e) {
+                    console.log('spells/add isLogged() .catch e:', e)
+                }
+                return false
             },
         },
 

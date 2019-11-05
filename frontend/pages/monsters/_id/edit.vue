@@ -78,10 +78,15 @@
               <v-col cols="12" sm="4">
                 <v-row justify="center">
                   <v-col align="center">
-                    <v-avatar color="grey" tile size="160" class="mx-auto">
+
+
+                    <v-avatar color="grey" tile size="160" class="mx-auto" >
                       <v-img :src="monster.image"
-                             v-if="(monster.image)"></v-img>
+                             v-if="(monster.image)"
+                             ></v-img>
                     </v-avatar>
+
+
                   </v-col>
                 </v-row>
               </v-col>
@@ -614,14 +619,44 @@
                     let userId = this.$store.state.auth.user.id
                     if (this.monster && this.monster.author) {
                         let monsterAuthorId = this.$store.app.getResourceId(this.monster.author)
-                        if(userId == monsterAuthorId)
+                        if (userId == monsterAuthorId)
                             return true
                     }
-                }
-                catch(e) {
+                } catch (e) {
                     console.log('monsters/_id/edit.vue canEdit() .catch e:', e)
                 }
                 this.$router.push('/')
+            },
+
+            pickImage() {
+                this.$refs.image.click()
+            },
+            onImagePicked(e) {
+                const files = e.target.files
+                if (files[0] !== undefined) {
+                    if (files[0].name.lastIndexOf('.') <= 0) {
+                        console.log('/components/SpellForm.vue onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
+                        return
+                    }
+                    const fr = new FileReader()
+                    fr.readAsDataURL(files[0])
+                    fr.addEventListener('load', () => {
+                        let form_data = new FormData()
+                        form_data.append('avatar', files[0], files[0].name)
+
+                        this.spell_avatar_form_data = {
+                            form_data: form_data,
+                            config: {headers: {'Content-Type': 'multipart/form-data'}}
+                        }
+
+                        alert("Preparato spell_avatar_form_data da inviare con la form al submit, vedi console.log()")
+                        console.log(this.spell_avatar_form_data)
+
+                        this.spell_additional_info.avatar = fr.result
+                    })
+                } else {
+                    this.spell_additional_info.avatar = '/images/image-placeholder.png'
+                }
             }
 
         }

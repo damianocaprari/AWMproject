@@ -5,8 +5,9 @@
     </v-container>
 
     <v-container>
-      <!--  <input type="text" v-model="search" placeholder="search conditions"/>  -->
-      <v-text-field v-model="search" label="Search conditions" outlined dense></v-text-field>
+      <v-col>
+        <v-text-field v-model="search" label="Search conditions" outlined dense></v-text-field>
+      </v-col>
     </v-container>
 
     <v-container>
@@ -20,12 +21,6 @@
     <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">
       <v-icon>mdi-arrow-up</v-icon>
     </v-btn>
-    <!--
-    <v-btn v-scroll="onScroll" v-show="fab" fab dark fixed bottom right color="primary"
-            @click="toTop">
-          <v-icon>keyboard_arrow_up</v-icon>
-    </v-btn>
-    -->
   </v-container>
 </template>
 
