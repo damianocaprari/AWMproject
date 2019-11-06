@@ -1,121 +1,111 @@
 <template>
   <v-container class="my-5">
-    <v-container class="row">
-      <v-container class="col-md-12 my-3">
-        <h2 class="mb-3 text-uppercase">new Monster</h2>
-      </v-container>
+
+    <v-container class="col-md-12 my-3">
+      <h2 class="mb-3 text-uppercase">new Monster</h2>
+    </v-container>
 
 
-      <v-container>
-        <v-form @submit.prevent="submit">
-          <!--<v-alert v-if="alert" :type="alert.type">{{ alert.message }}</v-alert>-->
-          <v-row>
-            <v-col>
-              <v-text-field v-model="monster.name" label="Name"/>
-              <v-select v-model="monster.alignment" :items="alignmentList" label="Alignment"></v-select>
-              <v-select v-model="monster.challenge_rating" :items="CRList" label="Challenge rating - CR"></v-select>
-              <v-text-field v-model="monster.hit_point" type="number" label="Hit points"></v-text-field>
-              <v-select v-model="monster.hit_dice" :items="hitDiceList" label="Hit Dice"></v-select>
-              <v-text-field v-model="monster.armor_class" type="number" label="Armor Class"></v-text-field>
-              <v-text-field v-model="monster.armor_class_notes" label="Armor Class Notes (opt)"></v-text-field>
-            </v-col>
+    <v-container v-if="canAdd()">
+      <v-form @submit.prevent="submit">
+        <!--<v-alert v-if="alert" :type="alert.type">{{ alert.message }}</v-alert>-->
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-text-field v-model="monster.name" label="Name*"/>
+            <v-select v-model="monster.alignment" :items="alignmentList" label="Alignment*"></v-select>
+            <v-select v-model="monster.challenge_rating" :items="CRList" label="Challenge rating*"></v-select>
+            <v-text-field v-model="monster.hit_point" type="number" label="Hit points*"></v-text-field>
+            <v-select v-model="monster.hit_dice" :items="hitDiceList" label="Hit Dice*"></v-select>
+            <v-text-field v-model="monster.armor_class" type="number" label="Armor Class*"></v-text-field>
+            <v-text-field v-model="monster.armor_class_notes" label="Armor Class Notes"></v-text-field>
+          </v-col>
 
-            <v-col>
+          <v-col cols="12" sm="6">
+            <div class="form-group mt-6">
+              <label for>Monster picture</label>
+              <input type="file" name="file" @change="onFileChange">
+            </div>
 
-              <div class="form-group">
-                <label for>Monster picture</label>
-                <input type="file" name="file" @change="onFileChange">
-              </div>
-              <!--
-              <v-avatar tile size="160" class="mx-auto" color="grey">
-                <v-hover v-slot:default="{ hover }">
-                  <v-img :src="monster.image || '/images/image-placeholder.png'">
-                    <v-expand-transition>
-                      <div v-if="hover"
-                           class="d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal white--text"
-                           style="height: 100%;" @click="pickImage">
-                        Change
-                        <input type="file" style="display: none" ref="image" accept="image/*" @change="onImagePicked">
-                      </div>
-                    </v-expand-transition>
-                  </v-img>
-                </v-hover>
-              </v-avatar>
-              -->
-            </v-col>
-          </v-row>
+            <v-row class="mt-1">
+              <v-col>
+                <v-text-field v-model="monster.ability_str" type="number" label="STRENGTH*"></v-text-field>
+                <v-text-field v-model="monster.ability_dex" type="number" label="DEXTERITY*"></v-text-field>
+                <v-text-field v-model="monster.ability_con" type="number" label="CONSTITUTION*"></v-text-field>
+              </v-col>
+              <v-col>
+                <v-text-field v-model="monster.ability_int" type="number" label="INTELLIGENCE*"></v-text-field>
+                <v-text-field v-model="monster.ability_wis" type="number" label="WISDOM*"></v-text-field>
+                <v-text-field v-model="monster.ability_cha" type="number" label="CHARISMA*"></v-text-field>
+              </v-col>
+            </v-row>
+
+          </v-col>
+        </v-row>
 
 
-          <v-row>
-            <v-col>
-              <v-select v-model="monster.size" :items="sizeList" label="Size"></v-select>
-            </v-col>
-            <v-col>
-              <v-text-field v-model="monster.type" label="Type"></v-text-field>
-            </v-col>
-            <v-col>
-              <v-text-field v-model="monster.subtype" label="Subtype"></v-text-field>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-text-field v-model="monster.ability_str" type="number" label="STRENGTH"></v-text-field>
-              <v-text-field v-model="monster.ability_dex" type="number" label="DEXTERITY"></v-text-field>
-              <v-text-field v-model="monster.ability_con" type="number" label="CONSTITUTION"></v-text-field>
-            </v-col>
-            <v-col>
-              <v-text-field v-model="monster.ability_int" type="number" label="INTELLIGENCE"></v-text-field>
-              <v-text-field v-model="monster.ability_wis" type="number" label="WISDOM"></v-text-field>
-              <v-text-field v-model="monster.ability_cha" type="number" label="CHARISMA"></v-text-field>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-textarea
-                v-model="monster.traits"
-                auto-grow
-                outlined
-                clearable
-                name="input-7-4"
-                label="Traits"
-                value="No traits.."
-            ></v-textarea>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-text-field v-model="monster.skills" label="Skills"/>
-            </v-col>
-            <v-col>
-              <v-text-field v-model="monster.languages" label="Languages"/>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-text-field v-model="monster.damage_vulnerabilities" label="Damage Vulnerabilities"/>
-            </v-col>
-            <v-col>
-              <v-text-field v-model="monster.damage_resistances" label="Damage Resistances"/>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-text-field v-model="monster.condition_immunities" label="Condition Immunities"/>
-            </v-col>
-            <v-col>
-              <v-text-field v-model="monster.damage_immunities" label="Damage Immunities"/>
-            </v-col>
-          </v-row>
+        <v-row>
+          <v-col>
+            <v-select v-model="monster.size" :items="sizeList" label="Size*"></v-select>
+          </v-col>
+          <v-col>
+            <v-text-field v-model="monster.type" label="Type*"></v-text-field>
+          </v-col>
+          <v-col>
+            <v-text-field v-model="monster.subtype" label="Subtype"></v-text-field>
+          </v-col>
+        </v-row>
 
 
-          <v-row>
+        <v-row>
+          <v-col>
+          <v-textarea
+              v-model="monster.traits"
+              auto-grow
+              outlined
+              clearable
+              name="input-7-4"
+              label="Traits"
+              value="No traits.."
+          ></v-textarea>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <v-text-field v-model="monster.skills" label="Skills"/>
+          </v-col>
+          <v-col>
+            <v-text-field v-model="monster.languages" label="Languages"/>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <v-text-field v-model="monster.damage_vulnerabilities" label="Damage Vulnerabilities"/>
+          </v-col>
+          <v-col>
+            <v-text-field v-model="monster.damage_resistances" label="Damage Resistances"/>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <v-text-field v-model="monster.condition_immunities" label="Condition Immunities"/>
+          </v-col>
+          <v-col>
+            <v-text-field v-model="monster.damage_immunities" label="Damage Immunities"/>
+          </v-col>
+        </v-row>
+
+
+        <v-row>
+          <v-col>
             <v-text-field v-model="monster.senses" label="Senses"/>
-          </v-row>
+          </v-col>
+        </v-row>
 
-          <v-row>
+        <v-row>
+          <v-col>
             <v-textarea
                 v-model="monster.actions"
                 auto-grow
@@ -125,9 +115,12 @@
                 label="Actions"
                 value="No actions.."
             ></v-textarea>
-          </v-row>
+          </v-col>
+        </v-row>
 
-          <v-row>
+        <v-row>
+          <v-col>
+
             <v-textarea
                 v-model="monster.special_abilities"
                 auto-grow
@@ -137,9 +130,12 @@
                 label="Special abilities"
                 value="No special abilities.."
             ></v-textarea>
-          </v-row>
+          </v-col>
+        </v-row>
 
-          <v-row>
+        <v-row>
+          <v-col>
+
             <v-textarea
                 v-model="monster.legendary_actions"
                 auto-grow
@@ -149,17 +145,29 @@
                 label="Legendary Actions"
                 value="No legendary actions.."
             ></v-textarea>
-          </v-row>
+          </v-col>
+        </v-row>
 
-          <v-row justify="center">
-            <v-col class="text-center">
-              <v-btn type="submit" outlined color="accent">Save</v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
+        <v-row justify="center">
+          <v-col class="text-center">
+            <v-btn type="submit" outlined color="accent">Save</v-btn>
+          </v-col>
+        </v-row>
+      </v-form>
 
-      </v-container>
     </v-container>
+
+    <v-row justify="center" v-else>
+      <v-col cols="12">
+        <v-alert :type="alert.type">{{ alert.message }}</v-alert>
+      </v-col>
+
+      <v-col class="text-center">
+        <v-btn class="accent onaccent--text" @click="returnToMonsters">Back to monsters</v-btn>
+      </v-col>
+    </v-row>
+
+
   </v-container>
 </template>
 
@@ -168,7 +176,7 @@
 
     export default {
 
-        head(){
+        head() {
             return {
                 title: `AWM Project - Add Monster`
             };
@@ -282,7 +290,7 @@
                 this.alert = null
                 this.loading = true
                 console.log(this.monster)
-                if(this.monster.image == null)
+                if (this.monster.image == null)
                     console.log("ADD BASIC IMAGE")
                 console.log(this.monster.image)
                 this.monster.armor_class = Number(this.monster.armor_class)
@@ -400,6 +408,31 @@
                     vm.preview = e.target.result;
                 };
                 reader.readAsDataURL(file);
+            },
+
+            canAdd() {
+                try {
+                    let user = this.$store.state.auth.user
+                    if (!user) {
+                        this.alert = {
+                            type: 'error',
+                            message: 'Sign In to create a monster'
+                        }
+                        return false
+                    } else {
+                        return true
+                    }
+                } catch (e) {
+                    console.log('monsters/_id/edit.vue canEdit() .catch e:', e)
+                }
+                this.alert = {
+                    type: 'error',
+                    message: 'You do not have the permission create a monster'
+                }
+                return false
+            },
+            returnToMonsters() {
+                this.$router.push(`/monsters`)
             },
         }
     };

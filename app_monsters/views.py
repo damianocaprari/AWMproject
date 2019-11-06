@@ -7,6 +7,8 @@ from rest_framework import viewsets
 class MonsterViewSet(viewsets.ModelViewSet):
     serializer_class = MonsterSerializer
     queryset = Monster.objects.all()
+    permission_classes = (permissions.IsAuthenticated & permissions.IsPost | permissions.IsOwnerOrReadOnly | permissions.IsAdminUser,)
+
 
     def update(self, request, *args, **kwargs):
         kwargs['partial'] = True

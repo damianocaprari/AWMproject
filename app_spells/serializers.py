@@ -53,7 +53,9 @@ class SpellSerializer(serializers.HyperlinkedModelSerializer):
             spell_additional_info.save_type = spell_additional_info_validated_data['save_type']
             spell_additional_info.save()
 
-        return instance
+        return super().update(instance, validated_data)
+        # return instance
+
 
     def create(self, validated_data):
         spell_additional_info_validated_data = validated_data.pop('spell_additional_info')
@@ -63,11 +65,15 @@ class SpellSerializer(serializers.HyperlinkedModelSerializer):
         spell = Spell.objects.create(**validated_data)
         spell.classes.add(*classes_validated_data)
 
+        spell.author = user
+        spell.save()
+
         spell_additional_info_set_serializer = self.fields['spell_additional_info']
         if spell_additional_info_validated_data is not None:
             spell_additional_info_validated_data['spell'] = spell
             spell_additional_info = spell_additional_info_set_serializer.create(spell_additional_info_validated_data)
 
-        spell.author = user
-        spell.save()
+        spell_additional_info.save()  # qui non sono sicuro che funzioni senza problemi
+        # puoi provare a creare una spell direttamente dall'API, e controllare che 1) non crashi, 2) il campo spell_additional_info non sia "null"
+
         return spell

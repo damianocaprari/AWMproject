@@ -580,8 +580,7 @@
 
 
             submit() {
-                console.log("AAAAAAAAAAAAAAAA")
-                console.log(this.form_data)
+                //console.log(this.form_data)
                 //if (this.isEditing == false) return
                 this.alert = null
                 this.loading = true

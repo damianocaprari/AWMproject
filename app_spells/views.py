@@ -24,8 +24,11 @@ class SpellTagViewSet(viewsets.ModelViewSet):
 class SpellAdditionalInfoViewSet(viewsets.ModelViewSet):
     queryset = SpellAdditionalInfo.objects.all()
     serializer_class = SpellAdditionalInfoSerializer
-    permission_classes = (permissions.IsAuthenticated & permissions.IsPost | permissions.IsOwnerOrReadOnly | permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAuthenticated & permissions.IsPost | permissions.IsOwnerOrReadOnlyAdditionalInfo | permissions.IsAdminUser,)
 
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
 
 class SpellCAViewSet(viewsets.ModelViewSet):
     queryset = SpellCA.objects.all()

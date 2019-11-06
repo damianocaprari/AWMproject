@@ -132,8 +132,6 @@
             },
 
             submit() {
-                //console.log('spell', this.spell)
-
                 // copia i valori, non il puntatore all'oggetto
                 let form = JSON.parse(JSON.stringify(this.spell))
                 delete form['author']
