@@ -42,14 +42,14 @@
         <v-col cols="12" sm="6">
           <v-row>
             <v-col cols="6">
-              <v-select v-model="spell.level" :items="levelList" label="Level *" :rules="rules.required"></v-select>
+              <v-select v-model="spell.level" :items="levelList" label="Level *" :rules="rules.requiredN"></v-select>
             </v-col>
             <v-col cols="6">
               <v-select v-model="spell.school" :items="schoolList" label="School *" :rules="rules.required"></v-select>
             </v-col>
 
             <v-col cols="6">
-              <v-text-field v-model="spell.casting_time_amount" type="number" label="Casting time amount *" :rules="rules.required"></v-text-field>
+              <v-text-field v-model="spell.casting_time_amount" type="number" label="Casting time amount *" :rules="rules.requiredN"></v-text-field>
             </v-col>
             <v-col cols="6">
               <v-select v-model="spell.casting_time_unit" :items="castingTimeList" label="Casting time unit *" :rules="rules.required"></v-select>
@@ -151,6 +151,9 @@
                     required: [
                         v => !!v || 'Field is required'
                     ],
+                    requiredN: [
+                        v => (''+v).length > 0 || 'Field is required'
+                    ]
                 },
                 form_alert: null,
                 form_data_avatar_file : null,

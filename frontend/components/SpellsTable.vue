@@ -192,7 +192,7 @@
 
       // -- Filter for level col
       levelsFilter(value) {
-        if (!this.levelsFilterValue) {
+        if (this.levelsFilterValue == null || this.levelsFilterValue == undefined) {
           return true
         }
         return value == this.levelsFilterValue
