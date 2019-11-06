@@ -5,37 +5,59 @@
       <h2 class="mb-3 text-uppercase">new Monster</h2>
     </v-container>
 
+    <v-row justify="center" v-if="alert || form_alert">
+      <v-col cols="12" v-if="alert">
+        <v-alert>{{ alert.message }}</v-alert>
+      </v-col>
+      <v-col cols="12" v-if="form_alert">
+        <v-alert :type="form_alert.type">{{ form_alert.message }}</v-alert>
+      </v-col>
+    </v-row>
+
 
     <v-container v-if="canAdd()">
       <v-form @submit.prevent="submit">
         <!--<v-alert v-if="alert" :type="alert.type">{{ alert.message }}</v-alert>-->
         <v-row>
           <v-col cols="12" sm="6">
-            <v-text-field v-model="monster.name" label="Name*"/>
-            <v-select v-model="monster.alignment" :items="alignmentList" label="Alignment*"></v-select>
-            <v-select v-model="monster.challenge_rating" :items="CRList" label="Challenge rating*"></v-select>
-            <v-text-field v-model="monster.hit_point" type="number" label="Hit points*"></v-text-field>
-            <v-select v-model="monster.hit_dice" :items="hitDiceList" label="Hit Dice*"></v-select>
-            <v-text-field v-model="monster.armor_class" type="number" label="Armor Class*"></v-text-field>
-            <v-text-field v-model="monster.armor_class_notes" label="Armor Class Notes"></v-text-field>
+            <v-text-field v-model="monster.name" label="Name*" :rules="rules.required"/>
+            <v-select v-model="monster.alignment" :items="alignmentList" label="Alignment*"
+                      :rules="rules.required"></v-select>
+            <v-select v-model="monster.challenge_rating" :items="CRList" label="Challenge rating*"
+                      :rules="rules.required"></v-select>
+            <v-text-field v-model="monster.hit_point" type="number" label="Hit points*"
+                          :rules="rules.required"></v-text-field>
+            <v-select v-model="monster.hit_dice" :items="hitDiceList" label="Hit Dice*"
+                      :rules="rules.required"></v-select>
+            <v-text-field v-model="monster.armor_class" type="number" label="Armor Class*"
+                          :rules="rules.required"></v-text-field>
+            <v-text-field v-model="monster.armor_class_notes" label="Armor Class Notes"
+            ></v-text-field>
           </v-col>
 
           <v-col cols="12" sm="6">
+
             <div class="form-group mt-6">
-              <label for>Monster picture</label>
+              <label for>Monster picture* </label>
               <input type="file" name="file" @change="onFileChange">
             </div>
 
-            <v-row class="mt-1">
+            <v-row class="mt-3">
               <v-col>
-                <v-text-field v-model="monster.ability_str" type="number" label="STRENGTH*"></v-text-field>
-                <v-text-field v-model="monster.ability_dex" type="number" label="DEXTERITY*"></v-text-field>
-                <v-text-field v-model="monster.ability_con" type="number" label="CONSTITUTION*"></v-text-field>
+                <v-text-field v-model="monster.ability_str" type="number" label="STRENGTH*"
+                              :rules="rules.required"></v-text-field>
+                <v-text-field v-model="monster.ability_dex" type="number" label="DEXTERITY*"
+                              :rules="rules.required"></v-text-field>
+                <v-text-field v-model="monster.ability_con" type="number" label="CONSTITUTION*"
+                              :rules="rules.required"></v-text-field>
               </v-col>
               <v-col>
-                <v-text-field v-model="monster.ability_int" type="number" label="INTELLIGENCE*"></v-text-field>
-                <v-text-field v-model="monster.ability_wis" type="number" label="WISDOM*"></v-text-field>
-                <v-text-field v-model="monster.ability_cha" type="number" label="CHARISMA*"></v-text-field>
+                <v-text-field v-model="monster.ability_int" type="number" label="INTELLIGENCE*"
+                              :rules="rules.required"></v-text-field>
+                <v-text-field v-model="monster.ability_wis" type="number" label="WISDOM*"
+                              :rules="rules.required"></v-text-field>
+                <v-text-field v-model="monster.ability_cha" type="number" label="CHARISMA*"
+                              :rules="rules.required"></v-text-field>
               </v-col>
             </v-row>
 
@@ -45,28 +67,51 @@
 
         <v-row>
           <v-col>
-            <v-select v-model="monster.size" :items="sizeList" label="Size*"></v-select>
+            <v-select v-model="monster.size" :items="sizeList" label="Size*" :rules="rules.required"></v-select>
           </v-col>
           <v-col>
-            <v-text-field v-model="monster.type" label="Type*"></v-text-field>
+            <v-text-field v-model="monster.type" label="Type*" :rules="rules.required"></v-text-field>
           </v-col>
-          <v-col>
+          <v-col v-if="monster.type">
             <v-text-field v-model="monster.subtype" label="Subtype"></v-text-field>
           </v-col>
         </v-row>
 
-
         <v-row>
-          <v-col>
-          <v-textarea
-              v-model="monster.traits"
-              auto-grow
-              outlined
-              clearable
-              name="input-7-4"
-              label="Traits"
-              value="No traits.."
-          ></v-textarea>
+          <v-col cols="12" md="6">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-textarea
+                    v-model="monster.traits"
+                    auto-grow
+                    filled
+                    clearable
+                    name="input-7-4"
+                    v-on="on"
+                    label="Traits"
+                    value="No traits.."
+                ></v-textarea>
+              </template>
+              <span>Put < br > to make a new line.</span>
+            </v-tooltip>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-textarea
+                    v-model="monster.actions"
+                    auto-grow
+                    filled
+                    clearable
+                    v-on="on"
+                    name="input-7-4"
+                    label="Actions"
+                    value="No actions.."
+                ></v-textarea>
+              </template>
+              <span>Put < br > to make a new line.</span>
+            </v-tooltip>
           </v-col>
         </v-row>
 
@@ -104,47 +149,41 @@
           </v-col>
         </v-row>
 
+
         <v-row>
-          <v-col>
-            <v-textarea
-                v-model="monster.actions"
-                auto-grow
-                outlined
-                clearable
-                name="input-7-4"
-                label="Actions"
-                value="No actions.."
-            ></v-textarea>
+          <v-col cols="12" md="6">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-textarea
+                    v-model="monster.special_abilities"
+                    auto-grow
+                    filled
+                    clearable
+                    v-on="on"
+                    name="input-7-4"
+                    label="Special abilities"
+                    value="No special abilities.."
+                ></v-textarea>
+              </template>
+              <span>Put < br > to make a new line.</span>
+            </v-tooltip>
           </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-
-            <v-textarea
-                v-model="monster.special_abilities"
-                auto-grow
-                outlined
-                clearable
-                name="input-7-4"
-                label="Special abilities"
-                value="No special abilities.."
-            ></v-textarea>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-
-            <v-textarea
-                v-model="monster.legendary_actions"
-                auto-grow
-                outlined
-                clearable
-                name="input-7-4"
-                label="Legendary Actions"
-                value="No legendary actions.."
-            ></v-textarea>
+          <v-col cols="12" md="6">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-textarea
+                    v-model="monster.legendary_actions"
+                    auto-grow
+                    filled
+                    clearable
+                    v-on="on"
+                    name="input-7-4"
+                    label="Legendary Actions"
+                    value="No legendary actions.."
+                ></v-textarea>
+              </template>
+              <span>Put < br > to make a new line.</span>
+            </v-tooltip>
           </v-col>
         </v-row>
 
@@ -183,6 +222,13 @@
         },
         data() {
             return {
+                rules: {
+                    required: [
+                        v => !!v || 'Field is required'
+                    ],
+                },
+                form_alert: null,
+                alert: null,
                 form_data_avatar_file: null,
                 monster: {
                     name: "",
@@ -310,14 +356,55 @@
                     formData.append(data, this.monster[data]);
                 }
                 console.log(formData)
+                this.$axios.$post(`/monsters/`, formData, config)
+                    .then(new_monster => {
+                        console.log('/monsters/add.vue $axios->mosnter OK', new_monster)
+                        this.$router.push(`/monsters/`);
+                    })
+                    .catch(e => {
+                        console.log('/monsters/add.vue $axios->monster ERROR:', e.response || e)
+                        if (e.response && e.response.data) {
+                            this.form_alert = {
+                                type: 'error',
+                                message: this.handleErrorMsg(e.response.data)
+                            }
+                        }
+                    })
+
+                /*
                 try {
                     let response = this.$axios.$post("/monsters/", formData, config);
-                    this.$router.push("/monsters/");
+                    //this.$router.push("/monsters/");
                 } catch (e) {
-                    console.log(e);
-                }
-
+                    console.log('/monsters/add.vue $axios->monster ERROR:', e.response || e)
+                    if (e.response && e.response.data) {
+                        this.form_alert = {
+                            type: 'error',
+                            message: this.handleErrorMsg(e.response.data)
+                        }
+                    }
+                }*/
             },
+
+            handleErrorMsg(data) {
+                if (data.name) return `Error with "name": ${data.name[0]}`
+                if (data.alignment) return `Error with "alignment": ${data.alignment[0]}`
+                if (data.challenge_rating) return `Error with "challenge_rating": ${data.challenge_rating[0]}`
+                if (data.hit_point) return `Error with "hit_point": ${data.hit_point[0]}`
+                if (data.hit_dice) return `Error with "hit_dice": ${data.hit_dice[0]}`
+                if (data.armor_class) return `Error with "armor_class": ${data.armor_class[0]}`
+                if (data.size) return `Error with "size": ${data.size[0]}`
+                if (data.type) return `Error with "type": ${data.type[0]}`
+                if (data.image) return `Error with "image: ${data.image[0]}`
+                if (data.ability_str) return `Error with "ability_str": ${data.ability_str[0]}`
+                if (data.ability_dex) return `Error with "ability_dex": ${data.ability_dex[0]}`
+                if (data.ability_con) return `Error with "ability_con: ${data.ability_con[0]}`
+                if (data.ability_int) return `Error with "ability_int": ${data.ability_int[0]}`
+                if (data.ability_wis) return `Error with "ability_wis": ${data.ability_wis[0]}`
+                if (data.ability_cha) return `Error with "ability_cha: ${data.ability_cha[0]}`
+                return `Error`
+            },
+
             submitCORRECT() {
                 this.alert = null
                 this.loading = true

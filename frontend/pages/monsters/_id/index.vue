@@ -287,7 +287,6 @@
             },
 
             submit() {
-
                 if (!!this.monster.image) {
                     let form_data = new FormData();
                     form_data.append('image', this.monster.image)
@@ -300,11 +299,8 @@
                             console.log(e.response)
                         })
                 }
-
                 //this.$axios.$put(`monsters/${this.monster.id}/`, this.monster)
-
                 this.$router.push('/monsters')
-
             },
         },
     }

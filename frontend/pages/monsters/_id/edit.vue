@@ -1,136 +1,119 @@
 <template>
   <!--<v-container fluid>-->
   <v-container v-if="canEdit()">
+
+    <v-row justify="center" v-if="alert || form_alert">
+      <v-col cols="12" v-if="alert">
+        <v-alert>{{ alert.message }}</v-alert>
+      </v-col>
+      <v-col cols="12" v-if="form_alert">
+        <v-alert :type="form_alert.type">{{ form_alert.message }}</v-alert>
+      </v-col>
+    </v-row>
+
     <v-row>
       <v-col>
         <v-card-text>
           <v-form @submit.prevent="submit">
 
             <v-row>
-              <v-col>
-                <v-text-field class="title" label="Name" v-model="form_data.name"/>
-              </v-col>
-            </v-row>
-
-            <v-row>
               <v-col cols="12" sm="8">
                 <v-row>
-                  <v-col cols="12" md="3">
-                    <v-select outlined v-model="form_data.alignment" :items="alignmentList"
-                              label="Alignment"></v-select>
+                  <v-text-field class="title" label="Name *" v-model="form_data.name" :rules="rules.required"/>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" sm="6">
+                    <v-select label="Size *" :items="sizeList" v-model="form_data.size"
+                              :rules="rules.required"/>
                   </v-col>
-                  <v-col cols="12" md="3">
-                    <v-select outlined label="Size" :items="sizeList" v-model="form_data.size"/>
+                  <v-col cols="12" sm="6">
+                    <v-select v-model="form_data.alignment" :items="alignmentList" :rules="rules.required"
+                              label="Alignment *"></v-select>
                   </v-col>
-                  <v-col cols="12" md="3">
-                    <v-text-field label="Type" v-model="form_data.type"/>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" sm="6">
+                    <v-text-field label="Type *" v-model="form_data.type" :rules="rules.required"/>
                   </v-col>
-                  <v-col cols="12" md="3">
+                  <v-col cols="12" sm="6">
                     <v-text-field v-if="form_data.type" label="Subtype" v-model="form_data.subtype"/>
                   </v-col>
                 </v-row>
 
                 <v-row>
-                  <v-col cols="12" md="3">
-                    <v-text-field outlined v-model="form_data.hit_point" type="number" label="Hit points"/>
+                  <v-col cols="12" sm="6">
+                    <v-text-field v-model="form_data.hit_point" :rules="rules.required" type="number"
+                                  label="Hit points *"/>
                   </v-col>
-                  <v-col cols="12" md="3">
-                    <v-select outlined v-model="form_data.hit_dice" :items="hitDiceList" label="Hit Dice"/>
+                  <v-col cols="12" sm="6">
+                    <v-select v-model="form_data.hit_dice" :rules="rules.required" :items="hitDiceList"
+                              label="Hit Dice *"/>
                   </v-col>
-                  <v-col cols="12" md="3">
-                    <v-text-field type="number" label="Armor class" v-model="form_data.armor_class"/>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" sm="6">
+                    <v-text-field type="number" label="Armor class *" v-model="form_data.armor_class"
+                                  :rules="rules.required"/>
                   </v-col>
-                  <v-col cols="12" md="3">
+                  <v-col cols="12" sm="6">
                     <v-text-field label="Armor class Notes" v-model="form_data.armor_class_notes"/>
                   </v-col>
                 </v-row>
               </v-col>
 
-              <!--
-           <v-col>
-             <v-avatar tile size="160" class="mx-auto" color="grey">
-               <v-hover v-slot:default="{ hover }">
-                 <v-img
-                     :src="form_data.image || '/images/image-placeholder.png'"
-                 >
-                   <v-expand-transition>
-                     <div
-                         v-if="hover"
-                         class="d-flex transition-fast-in-fast-out grey darken-2 v-card--reveal white--text"
-                         style="height: 100%;"
-                         @click="pickImage"
-                     >
-                       Change
-                       <input
-                           type="file"
-                           style="display: none"
-                           ref="image"
-                           accept="image/*"
-                           @change="onImagePicked"
-                       >
-                     </div>
-                   </v-expand-transition>
-                 </v-img>
-               </v-hover>
-             </v-avatar>
-           </v-col>
-             -->
               <v-col cols="12" sm="4">
-                <v-row justify="center">
-                  <v-col align="center">
+                <v-card outlined elevation="1">
+                  <v-col>
+                    <v-row justify="center">
+                      <v-col align="center">
+                        <v-avatar color="grey" tile size="160" class="mx-auto">
+                          <v-img :src="monster.image"
+                                 v-if="(monster.image)"></v-img>
+                        </v-avatar>
+                      </v-col>
+                    </v-row>
 
-
-                    <!--
-                    <v-avatar color="grey" tile size="160" class="mx-auto">
-                      <v-img :src="monster.image"
-                             v-if="(monster.image)"
-                      ></v-img>
-                    </v-avatar>
-                    -->
-                    <!--
-                    <div class="form-group">
-                      <label for>Edit picture</label>
-                      <input type="file" name="file" @change="onFileChange">
-                    </div>
-                    -->
-
-
+                    <v-row>
+                      <v-col>
+                        <v-text-field v-model="monster.ability_str" type="number" label="STR *"
+                                      :rules="rules.required"></v-text-field>
+                        <v-text-field v-model="monster.ability_dex" type="number" label="DEX *"
+                                      :rules="rules.required"></v-text-field>
+                        <v-text-field v-model="monster.ability_con" type="number" label="CON *"
+                                      :rules="rules.required"></v-text-field>
+                      </v-col>
+                      <v-col>
+                        <v-text-field v-model="monster.ability_int" type="number" label="INT *"
+                                      :rules="rules.required"></v-text-field>
+                        <v-text-field v-model="monster.ability_wis" type="number" label="WIS *"
+                                      :rules="rules.required"></v-text-field>
+                        <v-text-field v-model="monster.ability_cha" type="number" label="CHA *"
+                                      :rules="rules.required"></v-text-field>
+                      </v-col>
+                    </v-row>
                   </v-col>
-                </v-row>
-              </v-col>
-            </v-row>
-
-
-            <v-row>
-              <v-col cols="12" md="1">
-                <v-text-field v-model="monster.ability_str" type="number" label="STR"></v-text-field>
-                <v-text-field v-model="monster.ability_dex" type="number" label="DEX"></v-text-field>
-                <v-text-field v-model="monster.ability_con" type="number" label="CON"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="1">
-                <v-text-field v-model="monster.ability_int" type="number" label="INT"></v-text-field>
-                <v-text-field v-model="monster.ability_wis" type="number" label="WIS"></v-text-field>
-                <v-text-field v-model="monster.ability_cha" type="number" label="CHA"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="4">
-                <v-row>
-                  <v-text-field v-model="form_data.speeds" label="Speeds"/>
-                </v-row>
-                <v-row>
-                  <v-text-field v-model="form_data.senses" label="Senses"/>
-                </v-row>
-                <v-row>
-                  <v-text-field v-model="form_data.languages" label="Languages"/>
-                </v-row>
+                </v-card>
               </v-col>
             </v-row>
 
             <v-row>
               <v-col cols="12" sm="3">
-                <v-select v-model="form_data.challenge_rating" :items="CRList" label="Challenge rating - CR"/>
+                <v-select v-model="form_data.challenge_rating" :items="CRList" label="Challenge rating *"
+                          :rules="rules.required"/>
               </v-col>
             </v-row>
 
+            <v-row>
+              <v-col cols="12" sm="4">
+                <v-text-field v-model="form_data.speeds" label="Speeds"/>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-text-field v-model="form_data.senses" label="Senses"/>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-text-field v-model="form_data.languages" label="Languages"/>
+              </v-col>
+            </v-row>
 
             <v-row>
               <v-col>
@@ -142,90 +125,80 @@
             </v-row>
 
             <v-row>
-              <v-col cols="12" md="6">
+              <v-col cols="12" lg="3">
                 <v-text-field v-model="form_data.damage_vulnerabilities" label="Damage Vulnerabilities"/>
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col cols="12" lg="3">
                 <v-text-field v-model="form_data.damage_resistances" label="Damage Resistances"/>
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col cols="12" lg="3">
                 <v-text-field v-model="form_data.condition_immunities" label="Condition Immunities"/>
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col cols="12" lg="3">
                 <v-text-field v-model="form_data.damage_immunities" label="Damage Immunities"/>
               </v-col>
             </v-row>
 
             <v-row>
-              <v-col>
-                <v-row class="body-1">Traits</v-row>
+              <v-col cols="12" sm="6">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
-                    <v-row>
-                      <v-textarea
-                          outlined
-                          auto-grow
-                          v-on="on"
-                          v-model="form_data.traits"
-                      />
-                    </v-row>
+                    <v-textarea
+                        filled
+                        auto-grow
+                        v-on="on"
+                        label="Traits"
+                        v-model="form_data.traits"
+                    />
+                  </template>
+                  <span>Put < br > to make a new line.</span>
+                </v-tooltip>
+              </v-col>
+
+              <v-col cols="12" sm="6">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+
+                    <v-textarea
+                        filled
+                        auto-grow
+                        v-on="on"
+                        label="Actions"
+                        v-model="form_data.actions"
+                    />
                   </template>
                   <span>Put < br > to make a new line.</span>
                 </v-tooltip>
               </v-col>
             </v-row>
 
+
             <v-row>
-              <v-col>
-                <v-row class="body-1">Actions</v-row>
+              <v-col cols="12" sm="6">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
-                    <v-row>
-                      <v-textarea
-                          outlined
-                          auto-grow
-                          v-on="on"
-                          v-model="form_data.actions"
-                      />
-                    </v-row>
+                    <v-textarea
+                        filled
+                        auto-grow
+                        v-on="on"
+                        label="Special abilities"
+                        v-model="form_data.special_abilities"
+                    />
                   </template>
                   <span>Put < br > to make a new line.</span>
                 </v-tooltip>
               </v-col>
-            </v-row>
 
-            <v-row>
-              <v-col>
-                <v-row class="body-1">Special Abilities</v-row>
+              <v-col cols="12" sm="6">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
-                    <v-row>
-                      <v-textarea
-                          outlined
-                          auto-grow
-                          v-on="on"
-                          v-model="form_data.special_abilities"
-                      />
-                    </v-row>
-                  </template>
-                  <span>Put < br > to make a new line.</span>
-                </v-tooltip>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col>
-                <v-row class="body-1">Legendary Actions</v-row>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-row>
-                      <v-textarea
-                          outlined
-                          auto-grow
-                          v-on="on"
-                          v-model="form_data.legendary_actions"
-                      />
-                    </v-row>
+                    <v-textarea
+                        filled
+                        auto-grow
+                        v-on="on"
+                        label="Legendary Actions"
+                        v-model="form_data.legendary_actions"
+                    />
                   </template>
                   <span>Put < br > to make a new line.</span>
                 </v-tooltip>
@@ -247,101 +220,6 @@
     </v-row>
 
 
-    <!-- ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd -->
-    <!--
-    <v-card-text v-else>
-
-      <v-row>
-        <v-text-field class="title" label="Name" v-model="form_data.name" :readonly="!isEditing"/>
-      </v-row>
-      <v-row>
-
-        <v-col>
-          <v-row>
-            <v-text-field outlined label="Size" :items="sizeList" v-model="form_data.size" :readonly="!isEditing"/>
-            <v-text-field outlined label="Type" v-model="form_data.type" :readonly="!isEditing"/>
-            <v-text-field outlined label="Subtype" v-model="form_data.subtype" :readonly="!isEditing"/>
-          </v-row>
-          <v-row>
-            <v-select v-model="form_data.alignment" :items="alignmentList" label="Alignment"
-                      :readonly="!isEditing"></v-select>
-          </v-row>
-
-          <p></p>
-
-          <v-row>
-            <v-col cols="12" md="4">
-              <v-text-field type="number" label="Armor class" v-model="form_data.armor_class" :readonly="!isEditing"/>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-text-field v-model="form_data.hit_point" type="number" label="Hit points"
-                            :readonly="!isEditing"></v-text-field>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-select v-model="form_data.hit_dice" :items="hitDiceList" label="Hit Dice"
-                        :readonly="!isEditing"></v-select>
-            </v-col>
-          </v-row>
-
-          <p></p>
-
-          <v-row>
-            <v-col cols="6" md="2">
-              <v-text-field v-model="form_data.ability_str" type="number" label="STR"></v-text-field>
-              <v-text-field v-model="form_data.ability_dex" type="number" label="DEX"></v-text-field>
-              <v-text-field v-model="form_data.ability_con" type="number" label="CON"></v-text-field>
-            </v-col>
-            <v-col cols="6" md="2">
-              <v-text-field v-model="form_data.ability_int" type="number" label="INT"></v-text-field>
-              <v-text-field v-model="form_data.ability_wis" type="number" label="WIS"></v-text-field>
-              <v-text-field v-model="form_data.ability_cha" type="number" label="CHA"></v-text-field>
-            </v-col>
-          </v-row>
-
-
-          <p></p>
-          <v-select v-model="form_data.challenge_rating" :items="CRList" label="Challenge rating - CR"
-                    :readonly="!isEditing"></v-select>
-
-          <p></p>
-
-
-        <v-row v-for="(speed, index) in form_data.speeds">
-          <v-text-field v-model="speed.value" label="Speeds" :readonly="!isEditing"/>
-        </v-row>
-
-
-        </v-col>
-        <v-col v-if="monster.image != null">
-          <v-img
-              :src="monster.image"
-              max-width="250">
-          </v-img>
-        </v-col>
-
-      </v-row>
-
-      <v-textarea
-          style="white-space: pre"
-          v-model="form_data.traits"
-          auto-grow
-          outlined
-          name="input-7-4"
-          label="Traits"
-          value=""
-      ></v-textarea>
-
-
-      <v-row justify="center">
-        <v-col class="text-center">
-          <v-btn type="" outlined color="accent" @click="isEditing = true">Edit</v-btn>
-        </v-col>
-      </v-row>
-
-
-    </v-card-text>
-    -->
-
   </v-container>
 </template>
 
@@ -351,7 +229,7 @@
     import FormData from 'form-data'
 
     export default {
-        head(){
+        head() {
             return {
                 title: `AWM Project - Edit ${this.monster.name}`
             };
@@ -415,6 +293,14 @@
             return {
                 monster: {},
                 loading: false,
+                rules: {
+                    required: [
+                        v => !!v || 'Field is required'
+                    ],
+                },
+                form_alert: null,
+                alert: null,
+
 
                 form_data: {
                     name: '',
@@ -627,8 +513,21 @@
 
                         //this.user.last_name = this.form_data.last_name
                         //this.user.email = this.form_data.email
+                        this.$router.push('/monsters')
                     })
                     .catch(error => {
+
+                        console.log('/monsters/add.vue $axios->monster ERROR:', error.response || error)
+                        if (error.response && error.response.data) {
+                            this.form_alert = {
+                                type: 'error',
+                                message: this.handleErrorMsg(error.response.data)
+                            }
+
+                        }
+                        this.loading = false
+
+                        /*
                         console.log('/account/edit.vue .catch() error', error)
                         console.log('/account/edit.vue .catch() error.response', error.response)
                         this.loading = false
@@ -637,11 +536,31 @@
                                 type: 'error',
                                 message: error.response.data || 'Error'
                             }
-                        }
+                        }*/
                     })
-                this.$router.push('/monsters')
+                //this.$router.push('/monsters')
 
             },
+
+            handleErrorMsg(data) {
+                if (data.name) return `Error with "name": ${data.name[0]}`
+                if (data.alignment) return `Error with "alignment": ${data.alignment[0]}`
+                if (data.challenge_rating) return `Error with "challenge_rating": ${data.challenge_rating[0]}`
+                if (data.hit_point) return `Error with "hit_point": ${data.hit_point[0]}`
+                if (data.hit_dice) return `Error with "hit_dice": ${data.hit_dice[0]}`
+                if (data.armor_class) return `Error with "armor_class": ${data.armor_class[0]}`
+                if (data.size) return `Error with "size": ${data.size[0]}`
+                if (data.type) return `Error with "type": ${data.type[0]}`
+                //if (data.image) return `Error with "image: ${data.image[0]}`
+                if (data.ability_str) return `Error with "ability_str": ${data.ability_str[0]}`
+                if (data.ability_dex) return `Error with "ability_dex": ${data.ability_dex[0]}`
+                if (data.ability_con) return `Error with "ability_con: ${data.ability_con[0]}`
+                if (data.ability_int) return `Error with "ability_int": ${data.ability_int[0]}`
+                if (data.ability_wis) return `Error with "ability_wis": ${data.ability_wis[0]}`
+                if (data.ability_cha) return `Error with "ability_cha: ${data.ability_cha[0]}`
+                return `Error`
+            },
+
             onDelete(id) {
                 console.log(id)
             },
@@ -658,37 +577,6 @@
                     console.log('monsters/_id/edit.vue canEdit() .catch e:', e)
                 }
                 this.$router.push('/')
-            },
-
-            pickImage() {
-                this.$refs.image.click()
-            },
-            onImagePicked(e) {
-                const files = e.target.files
-                if (files[0] !== undefined) {
-                    if (files[0].name.lastIndexOf('.') <= 0) {
-                        console.log('/components/SpellForm.vue onImagePicked() files[0].name.lastIndexOf(\'.\') <= 0')
-                        return
-                    }
-                    const fr = new FileReader()
-                    fr.readAsDataURL(files[0])
-                    fr.addEventListener('load', () => {
-                        let form_data = new FormData()
-                        form_data.append('avatar', files[0], files[0].name)
-
-                        this.spell_avatar_form_data = {
-                            form_data: form_data,
-                            config: {headers: {'Content-Type': 'multipart/form-data'}}
-                        }
-
-                        alert("Preparato spell_avatar_form_data da inviare con la form al submit, vedi console.log()")
-                        console.log(this.spell_avatar_form_data)
-
-                        this.spell_additional_info.avatar = fr.result
-                    })
-                } else {
-                    this.spell_additional_info.avatar = '/images/image-placeholder.png'
-                }
             },
 
 
