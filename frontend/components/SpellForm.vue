@@ -266,6 +266,10 @@
                             form_data, {headers: {'Content-Type': 'multipart/form-data'}})
                             .then(data => {
                                 console.log('/spells/_id/edit.vue $axios->spell_additional_info OK')
+                                this.form_alert = {
+                                    type: 'success',
+                                    message: 'Success'
+                                }
                             })
                             .catch(e => {
                                 console.log('/spells/_id/edit.vue $axios->spell_additional_info ERROR:', e.response || e)
@@ -276,6 +280,12 @@
                                     }
                                 }
                             })
+                    }
+                    else {
+                        this.form_alert = {
+                            type: 'success',
+                            message: 'Success'
+                        }
                     }
                 })
                 .catch(e => {
