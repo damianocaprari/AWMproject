@@ -126,7 +126,7 @@
         <v-col cols="6" sm="6" class="d-none d-sm-block"> <!-- show only for screen >=600 px -->
           <v-row>
             <v-col cols="12">
-              <v-textarea v-model="spell.description" label="Description *" counter="8000" auto-grow height="588" filled :rules="rules.required"></v-textarea>
+              <v-textarea v-model="spell.description" v-html="" label="Description *" counter="8000" auto-grow height="588" filled :rules="rules.required"></v-textarea>
             </v-col>
           </v-row>
         </v-col>
