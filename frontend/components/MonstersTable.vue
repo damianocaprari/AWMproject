@@ -59,7 +59,6 @@
       </v-container>
     </template>
 
-
   </v-data-table>
 </template>
 
@@ -70,7 +69,6 @@
         data() {
             return {
                 // monsters: [],
-
                 CRList: [
                     {text: "All", value: null},
                     {text: "1/8", value: "1/8"},
@@ -96,6 +94,16 @@
                     {text: "18", value: "18"},
                     {text: "19", value: "19"},
                     {text: "20", value: "20"},
+                    {text: "21", value: "21"},
+                    {text: "22", value: "22"},
+                    {text: "23", value: "23"},
+                    {text: "24", value: "24"},
+                    {text: "25", value: "25"},
+                    {text: "26", value: "26"},
+                    {text: "27", value: "27"},
+                    {text: "28", value: "28"},
+                    {text: "29", value: "29"},
+                    {text: "30", value: "30"},
                 ],
                 AlignmentList: [
                     {text: "All", value: null},
@@ -145,8 +153,7 @@
                     return true;
                 }
                 return value.toLowerCase().includes(this.monsterFilterValue.toLowerCase());
-            }
-            ,
+            },
 
             // -- Filter for challenge rating
             crFilter(value) {
@@ -154,8 +161,7 @@
                     return true;
                 }
                 return value == this.CRFilterValue;
-            }
-            ,
+            },
 
             // -- Filter for ALIGNMENT
             alignmentFilter(value) {
@@ -177,7 +183,6 @@
             goToSinglePage(item) {
                 this.$router.push(`/monsters/${item.id}`)
             },
-
         },
     }
 </script>

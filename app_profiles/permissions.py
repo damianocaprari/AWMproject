@@ -14,9 +14,6 @@ class IsOwnUser(permissions.BasePermission):
         return False
 
 
-
-# IsAuthenticatedOrReadOnly in view
-
 class IsAnonPostUser(permissions.BasePermission):
     """permette di accettare richieste POST anche da utenti non autenticati
     per registrazione utenti"""

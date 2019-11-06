@@ -136,6 +136,12 @@
 
 <script>
     export default {
+        head(){
+            return {
+                title: `AWM Project - ${this.spell.name}`
+            };
+        },
+
         data () {
             return {
                 spell: {},

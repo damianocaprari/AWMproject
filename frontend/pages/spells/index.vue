@@ -24,11 +24,6 @@
 
     <spells-table :spells="spells" :spelltags="spelltags" :characterclasses="characterclasses"></spells-table>
 
-    <!--
-    <v-btn class="ma-2" v-scroll="onScroll" fab right bottom fixed color="primary" @click="toTop">
-        <v-icon>mdi-arrow-up</v-icon>
-    </v-btn>
-    -->
   </v-container>
 
 </template>
@@ -40,7 +35,7 @@
     export default {
         head() {
             return {
-                title: "Spells list",
+                title: "AWM Project - Spells",
             };
         },
 
@@ -193,30 +188,6 @@
                 this.$vuetify.goTo(0)
             },
 
-            /*
-            VECCHIA TABELLA
-            filterSpells() {
-                return this.spells.filter((spell) => {
-                    if (this.search.length > 0)
-                        return spell.name.toLowerCase().match(this.search.toLowerCase())
-                    if (this.search_desc.length > 0)
-                        return spell.description.toLowerCase().match(this.search_desc.toLowerCase())
-                    if (this.search_lvl.length > 0)
-                        return spell.level == this.search_lvl
-
-
-                    if (this.search_class.length > 0) {
-                        console.log(spell.classes[0, 0].length)
-
-                        //console.log(this.characterclasses)
-                    }
-                    //return spell........description.toLowerCase().match(this.search_class.toLowerCase())
-                    else
-                        return this.spells
-                })
-            },
-            */
-
             // ----- NEW FILTER -----
             // -- Filter for spell name col
             nameFilter(value) {
@@ -269,12 +240,6 @@
         },
 
         computed: {
-            /*
-            VECCHIA TABELLA
-            filteredSpells: function () {
-                return this.filterSpells()
-            },
-            */
         },
 
     };

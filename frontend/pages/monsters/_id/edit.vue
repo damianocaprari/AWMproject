@@ -351,9 +351,9 @@
     import FormData from 'form-data'
 
     export default {
-        head() {
+        head(){
             return {
-                title: "Edit Monster"
+                title: `AWM Project - Edit ${this.monster.name}`
             };
         },
         async asyncData({$axios, params}) {

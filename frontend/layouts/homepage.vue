@@ -41,15 +41,21 @@
         <v-content class="bg-img">
             <nuxt/>
         </v-content>
+
+        <v-footer app padless absolute>
+          <footer-component :dense="true"></footer-component>
+        </v-footer>
     </v-app>
 </template>
 
 <script>
     import HeaderAccount from "~/components/HeaderAccount.vue";
+    import FooterComponent from "~/components/FooterComponent"
 
     export default {
         components: {
-            HeaderAccount
+            HeaderAccount,
+            FooterComponent,
         },
         data() {
             return {

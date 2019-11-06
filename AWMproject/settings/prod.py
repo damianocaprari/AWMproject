@@ -20,10 +20,14 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
-    #'DEFAULT_PARSERS_CLASSES' : [
-#        'rest_framework.parsers.JSONParser',
-#        'rest_framework.parsers.FileUploadParser',
-#        'rest_framework.parsers.MultiPartParser',
-#        'rest_framework.parsers.FormParser',
-#    ]
+}
+
+JWT_AUTH = {
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_LEEWAY': 0,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=1200),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'AWMproject.utils.jwt_response_payload_handler',
 }

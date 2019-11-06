@@ -27,6 +27,11 @@
 
 <script>
   export default {
+      head(){
+            return {
+                title: `AWM Project - Sign In`
+            };
+        },
     layout: 'fullscreen',
     data () {
       return {

@@ -30,6 +30,11 @@
 
 <script>
   export default {
+    head(){
+      return {
+        title: `AWM Project - Register`
+      };
+    },
     layout: 'fullscreen',
     data () {
       return {

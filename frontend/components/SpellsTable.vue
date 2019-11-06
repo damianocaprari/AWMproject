@@ -145,10 +145,6 @@
 
     data () {
       return {
-        //spells: [],
-        //spelltags: [],
-        //characterclasses: [],
-
         expanded: [],
         headers: [
           {text: 'LEVEL', value: 'level', align: 'left', filter: this.levelsFilter},

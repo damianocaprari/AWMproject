@@ -168,9 +168,9 @@
 
     export default {
 
-        head() {
+        head(){
             return {
-                title: "Add Monster"
+                title: `AWM Project - Add Monster`
             };
         },
         data() {

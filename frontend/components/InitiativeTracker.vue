@@ -352,8 +352,8 @@
 </script>
 
 <style>
-.v-data-table tbody tr.v-data-table__expanded__content {
-  box-shadow: none;
-  background-color: rgba(0, 0, 0, 0.03);
-}
+  .v-data-table tbody tr.v-data-table__expanded__content {
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0.03);
+  }
 </style>

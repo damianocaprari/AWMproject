@@ -13,7 +13,7 @@ export default ({ app, $axios }, inject) => {
 
     /* used in /account/edit.vue.OLD */
     async function getMySpells (myId) {
-        console.log("getMySpells")
+        //console.log("getMySpells")
         let retval = {my_spells: [], characterclasses: [], spelltags: []}
         try {
             let query_spell = await $axios.$get(`/spells/`);
@@ -94,7 +94,7 @@ export default ({ app, $axios }, inject) => {
     // -----------------------
     // ----- per MONSTERS -----
     async function getMyMonsters (myId) {
-        console.log("getMyMonsters")
+        //console.log("getMyMonsters")
         let retval = {my_monsters: []}
         try {
             let query_monster = await $axios.$get(`/monsters/`);

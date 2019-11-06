@@ -23,6 +23,11 @@
 <script>
     import SpellForm from "~/components/SpellForm";
     export default {
+        head(){
+            return {
+                title: `AWM Project - Edit ${this.spell.name}`
+            };
+        },
         components: {
             SpellForm,
         },

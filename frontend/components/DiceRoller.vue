@@ -23,14 +23,6 @@
       <v-form @submit.prevent="rollDice" class="mt-5">
         <v-text-field label="Dice to roll" v-model="diceExpr" :rules="diceRules" placeholder="2d6 +5"/>
       </v-form>
-      <!--
-      <v-row justify="center" no-gutters>
-        <v-col class="text-center">
-          <v-btn outlined color="accent" @click="rollDice">Roll</v-btn>
-          <v-btn text color="accent" @click="clearHistory">Clear</v-btn>
-        </v-col>
-      </v-row>
-      -->
 
       <v-divider class="mt-5"
         v-if="history.length > 0"

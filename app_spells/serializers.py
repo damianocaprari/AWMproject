@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 
 class SpellCASerializer(serializers.ModelSerializer):
-    #url = serializers.HyperlinkedIdentityField(view_name='api:spellca-detail')
 
     class Meta:
         model = SpellCA
@@ -20,15 +19,12 @@ class SpellTagSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class SpellAdditionalInfoSerializer(serializers.ModelSerializer):
-    #url = serializers.HyperlinkedIdentityField(view_name='api:spelladditionalinfo-detail')
-    #spell = serializers.PrimaryKeyRelatedField(queryset=Spell.objects.all())
     tags = SpellTagSerializer(many=True, allow_null=True, required=False)
 
     class Meta:
         model = SpellAdditionalInfo
         fields = ['id', ] + SpellAdditionalInfo.fields + SpellAdditionalInfo.readonly_fields + ['tags',]
         read_only_fields = ['id', 'spell', 'tags',]
-
 
 
 class SpellSerializer(serializers.HyperlinkedModelSerializer):

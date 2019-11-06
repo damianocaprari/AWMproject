@@ -33,9 +33,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = ProfileSerializer(read_only=True, required=False, allow_null=True)
     custom_attributes = UserCASerializer(many=True, allow_null=True, required=False)
 
-    # TODO riferimenti ai Models che hanno User come author/owner
-    # spells = serializers.HyperlinkedRelatedField(view_name='api:spell-detail', many=True, read_only=True)
-
     class Meta:
         model = User
         fields = ['id', 'url',
@@ -66,11 +63,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializerForJWT(serializers.ModelSerializer):
-    # profile = ProfileSerializer()
-    # custom_attributes = UserCASerializer(many=True)
-
-    # TODO riferimenti ai Models che hanno User come author/owner
-
+    """returned with the JWT authentication api"""
     class Meta:
         model = User
         fields = ['id', 'username', 'email', # 'first_name', 'last_name',

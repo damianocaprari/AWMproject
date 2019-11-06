@@ -59,7 +59,7 @@ INSTALLED_APPS = PROJECT_APPS + PREREQ_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',                    # NUXT
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -82,10 +82,11 @@ JWT_AUTH = {
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://localhost',
-)                                                               # NUXT
+)
 
 
 ROOT_URLCONF = 'AWMproject.urls'
+
 
 TEMPLATES = [
     {
@@ -108,6 +109,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'AWMproject.wsgi.application'
 
@@ -176,6 +178,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
 
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
@@ -193,10 +196,4 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework.renderers.JSONRenderer',
     ],
-    #'DEFAULT_PARSERS_CLASSES' : [
-#        'rest_framework.parsers.JSONParser',
-#        'rest_framework.parsers.FileUploadParser',
-#        'rest_framework.parsers.MultiPartParser',
-#        'rest_framework.parsers.FormParser',
-#    ]
 }

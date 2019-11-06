@@ -18,6 +18,11 @@
             InitiativeTracker,
             NpcGenerator,
         },
+        head(){
+            return {
+                title: "AWM Project - Tools"
+            };
+        },
     }
 </script>
 

@@ -42,19 +42,21 @@
             <nuxt/>
         </v-content>
 
-        <v-footer app>
-            <!-- -->
+        <v-footer app padless absolute>
+          <footer-component></footer-component>
         </v-footer>
 
     </v-app>
 </template>
 
 <script>
-    import HeaderAccount from "~/components/HeaderAccount.vue";
+    import HeaderAccount from "~/components/HeaderAccount.vue"
+    import FooterComponent from "~/components/FooterComponent"
 
     export default {
         components: {
-            HeaderAccount
+            HeaderAccount,
+            FooterComponent,
         },
         data() {
             return {

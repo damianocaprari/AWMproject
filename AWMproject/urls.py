@@ -41,13 +41,10 @@ admin.site.site_header = gettext_lazy('AWMproject administration')
 urlpatterns = [
     path('', RedirectView.as_view(url='/admin')),
     path('admin/', admin.site.urls),
-    #path('api/', include('rest_framework.urls')),  # todo da rimuovere
     path('api/', include('app_api.urls', namespace='api')),
-    # todo da aggiungere api/ per altri apps
     path('api/auth/', obtain_jwt_token),
 ]
 
 
-# add this
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

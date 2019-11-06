@@ -2,14 +2,11 @@ from app_profiles.models import Profile, ProfileCA, UserCA
 from app_profiles.permissions import IsOwnUser, IsAnonPostUser
 from app_profiles.serializers import ProfileSerializer, ProfileCASerializer, UserSerializer, UserCASerializer
 from django.contrib.auth.models import User
-from rest_framework.response import Response
-from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
-from rest_framework import viewsets, permissions, parsers, status
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework import viewsets
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    #parser_classes = (JSONParser, MultiPartParser, FormParser,)
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticated & IsOwnUser | IsAdminUser,)

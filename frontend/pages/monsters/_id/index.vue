@@ -164,9 +164,9 @@
 
 <script>
     export default {
-        head() {
+        head(){
             return {
-                title: "View Monster"
+                title: `AWM Project - ${this.monster.name}`
             };
         },
         async asyncData({$axios, params}) {

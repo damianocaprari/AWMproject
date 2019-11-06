@@ -260,11 +260,13 @@
             rollAbilityScore() {
                 return this.getRandomInt(1, 6+1) + this.getRandomInt(1, 6+1) + this.getRandomInt(1, 6+1)
             },
+
             getRandomInt(min_included, max_excluded) { //Il max è escluso e il min è incluso
                 min_included = Math.ceil(min_included);
                 max_excluded = Math.floor(max_excluded);
                 return Math.floor(Math.random() * (max_excluded - min_included)) + min_included;
             },
+
             generateCharacter(class_choice, race_choice, sex_choice) {
                 let name = this.names[this.getRandomInt(0, this.names.length)]
                 let alignment = this.alignments[this.getRandomInt(0, this.alignments.length)]
@@ -315,16 +317,12 @@
                     trivia: trivia,
                 }
 
-                /*
-                this.history.unshift(`${name.text}: ${sex.text} ${race.text} ${clazz.text}, ${alignment.text}.\n` +
-                  `Str ${str} | Con ${con} | Dex ${dex} | Int ${int} | Wis ${wis} | Cha ${cha}\n` +
-                  `${name.text} ${appearance.text} ${sex.pronoun} ${equipment.text} ${name.text} ${trivia.text}`)
-                 */
                 this.history.unshift(character)
 
                 if (this.history.length > 10)
                     this.history.pop()
             },
+
             clearHistory() {
                 this.history = []
                 this.form_data = {
@@ -332,8 +330,8 @@
                     sex: {value: 'random', text: 'Random'},
                     class: {value: 'random', text: 'Random'},
                 }
-            }
-        }
+            },
+        },
     }
 </script>
 

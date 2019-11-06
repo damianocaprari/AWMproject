@@ -1,17 +1,19 @@
 <template>
-  <div class="hp-text-box hp-header">
-    <h1>DnD 5.0</h1>
-    <p class="mt-3">A simple wiki of the best rpg ever! </p>
+  <v-container>
+    <div class="hp-text-box hp-header">
+      <h1>DnD 5.0</h1>
+      <p class="mt-3">A simple wiki of the best rpg ever! </p>
 
-    <v-col class="text-center" cols="">
-      <div style="margin-bottom: 10px;"> <v-btn to="/conditions" block>View Conditions</v-btn> </div>
-      <div style="margin-bottom: 10px;"> <v-btn to="/spells" block>View Spells</v-btn> </div>
-      <div style="margin-bottom: 10px;"> <v-btn to="/monsters" block>View Monsters</v-btn> </div>
-      <div style="margin-bottom: 10px;"> <v-btn to="/musics" block>View Musics links</v-btn> </div>
+      <v-col class="text-center" cols="">
+        <div style="margin-bottom: 10px;"> <v-btn to="/conditions" block>View Conditions</v-btn> </div>
+        <div style="margin-bottom: 10px;"> <v-btn to="/spells" block>View Spells</v-btn> </div>
+        <div style="margin-bottom: 10px;"> <v-btn to="/monsters" block>View Monsters</v-btn> </div>
+        <div style="margin-bottom: 10px;"> <v-btn to="/musics" block>View Musics links</v-btn> </div>
 
-    </v-col>
+      </v-col>
 
-  </div>
+    </div>
+  </v-container>
 </template>
 
 
@@ -20,7 +22,7 @@ export default {
   layout: 'homepage',
   head(){
       return {
-          title: "Home page"
+          title: "AWM Project"
       };
   },
 };

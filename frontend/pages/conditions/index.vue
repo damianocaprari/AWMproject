@@ -28,11 +28,11 @@
 <script>
  import ConditionCard from "~/components/ConditionCard.vue";
  export default {
-  head() {
-    return {
-      title: "Conditions list"
-    };
-  },
+  head(){
+            return {
+                title: `AWM Project - Conditions`
+            };
+        },
   components: {
     ConditionCard
   },

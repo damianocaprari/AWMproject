@@ -5,8 +5,6 @@ from app_api.permissions import ReadOnly
 
 
 class CharacterClassViewSet(viewsets.ModelViewSet):
-
     queryset = CharacterClass.objects.all()
     serializer_class = CharacterClassSerializer
     permission_classes = (ReadOnly | permissions.IsAdminUser,)
-    # permission_classes = (permissions.AllowAny,)

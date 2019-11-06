@@ -31,9 +31,9 @@
     import MonstersTable from "../../components/MonstersTable";
 
     export default {
-        head() {
+        head(){
             return {
-                title: "Monsters list",
+                title: `AWM Project - Monsters`
             };
         },
 

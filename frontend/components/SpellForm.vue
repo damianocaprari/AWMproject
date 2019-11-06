@@ -7,11 +7,6 @@
       <v-col cols="12" v-if="form_alert">
         <v-alert :type="form_alert.type">{{ form_alert.message }}</v-alert>
       </v-col>
-      <!--
-      <v-col class="text-center">
-        <v-btn class="accent onaccent--text" @click="goBack">Back</v-btn>
-      </v-col>
-      -->
     </v-row>
 
     <v-form @submit.prevent="submit">
@@ -211,20 +206,6 @@
                     {text: 'Hour', value: 'HOUR'},
                     {text: 'Day', value: 'DAY'},
                 ],
-                /*characterClassesList: [
-                    {text: "Barbarian", value: 1},
-                    {text: "Bard", value: 2},
-                    {text: "Cleric", value: 3},
-                    {text: "Druid", value: 4},
-                    {text: "Fighter", value: 5},
-                    {text: "Monk", value: 6},
-                    {text: "Paladin", value: 7},
-                    {text: "Ranger", value: 8},
-                    {text: "Rogue", value: 9},
-                    {text: "Sorcerer", value: 10},
-                    {text: "Warlock", value: 11},
-                    {text: "Wizard", value: 12}
-                ],*/
             }
         },
 
@@ -260,46 +241,6 @@
                 }
                 return tags
             },
-
-            /*
-            submit() {
-                console.log('spell', this.spell)
-
-                // copia i valori, non il puntatore all'oggetto
-                let form = JSON.parse(JSON.stringify(this.spell))
-                delete form['author']
-                delete form['creation_time']
-                delete form['custom_attributes']
-                delete form['id']
-                delete form['last_modified']
-                delete form['url']
-                delete form['spell_additional_info']
-
-                this.$axios.$put(`/spells/${this.$route.params.id}/`, form)
-                .then(data => {
-                    console.log("tutto ok")
-                })
-                .catch(e => {
-                    if (e.response)
-                        console.log(e.response)
-                    else
-                        console.log(e)
-                })
-
-                if(!!this.form_data_avatar_file && !!this.spell.spell_additional_info && !!this.spell.spell_additional_info.id) {
-                    let form_data = new FormData();
-                    form_data.append('avatar', this.form_data_avatar_file, this.form_data_avatar_file.name)
-                    this.$axios.$put(`/spell_additional_info/${this.spell.spell_additional_info.id}/`,
-                        form_data, {headers: {'Content-Type': 'multipart/form-data'}})
-                        .then(data => {
-                            console.log(data)
-                        })
-                        .catch(e => {
-                            console.log(e.response)
-                        })
-                }
-            },
-             */
 
             submitEdit() {
                 // copia i valori, non il puntatore all'oggetto
@@ -439,6 +380,7 @@
             pickImage() {
                 this.$refs.image.click()
             },
+
             onImagePicked (e) {
                 const files = e.target.files
                 if(files[0] !== undefined) {
@@ -449,21 +391,17 @@
                     const fr = new FileReader ()
                     fr.readAsDataURL(files[0])
                     fr.addEventListener('load', () => {
-                        //let form_data = new FormData()
-                        //form_data.append('avatar', files[0], files[0].name)
                         this.form_data_avatar_file = files[0]
-                        //alert("Preparato spell_avatar_form_data da inviare con la form al submit, vedi console.log()")
-                        //console.log(this.spell_avatar_form_data)
                         this.spell_additional_info.avatar = fr.result
                     })
                 }
-            }
+            },
         },
     }
 </script>
 
 <style scoped>
-.v-card--reveal {
+  .v-card--reveal {
     align-items: center;
     bottom: 0;
     justify-content: center;

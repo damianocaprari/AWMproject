@@ -119,6 +119,11 @@
     import MonstersTable from '~/components/MonstersTable'
 
     export default {
+        head(){
+            return {
+                title: `AWM Project - Profile`
+            };
+        },
         components: {
             SpellsTable,
             MonstersTable
@@ -152,7 +157,6 @@
             try {
                 my_spells = await context.app.getMySpells(userId)
             } catch (e2) {
-                console.log("AAAAAAAAAAAAAAAAAAAAAA")
                 console.log('/account/index.vue asyncData() catch(e2)', e2)
                 my_spells = {}
             }
@@ -165,18 +169,6 @@
                 my_monsters = {}
             }
             return Object.assign(retval, my_spells, my_monsters)
-
-            /*
-            FUNZIONE MA E' TUTTO UNITO
-            try {
-                let my_spells = await context.app.getMySpells(userId)
-                let my_monsters = await context.app.getMyMonsters(userId)
-                return Object.assign(retval, my_spells, my_monsters)
-            } catch (e2) {
-                console.log('/account/index.vue asyncData() catch(e2)', e2)
-                return retval
-            }
-            */
         },
 
         data: () => ({

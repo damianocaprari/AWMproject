@@ -13,6 +13,7 @@ export default {
             last_name: data.last_name
         })
     },
+
     updateUserProfile: ($axios, userId, data) => $axios.$put(`users/${userId}/`, {
         email: data.email,
         first_name: data.first_name,
@@ -53,13 +54,10 @@ export default {
         special_abilities: data.special_abilities,
         actions: data.actions,
         legendary_actions: data.legendary_actions,
-        //first_name: data.first_name,
-        //last_name: data.last_name
     }),
 
     createMonster: ($axios, data) => $axios.$post(`monsters/`, data),
 
-    createSpell: ($axios, data) => $axios.$post(`spells/`, data)
-    // o gli passi data così come' se tutti i nomi sono uguali, oppure mappi come sopra con le graffe intorno perche oggetto
+    createSpell: ($axios, data) => $axios.$post(`spells/`, data),
 
 }

@@ -139,7 +139,11 @@
 
 <script>
     export default {
-        name: "index",
+        head(){
+            return {
+                title: `AWM Project - Musics`
+            };
+        },
         methods: {
             onScroll(e) {
                 if (typeof window === 'undefined')
